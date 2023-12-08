@@ -2,8 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator for VSCode editor",
-  "version": "0.1.0",
-  "preview": true,
+  "version": "1.0.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -31,6 +30,7 @@
     "angular",
     "angular2",
     "angularjs",
+    "boilerplate",
     "commands",
     "extension",
     "file",
@@ -39,7 +39,10 @@
     "js",
     "make",
     "ng",
+    "schema",
+    "schematics",
     "snippet",
+    "snippets",
     "template",
     "terminal",
     "ts",
@@ -65,14 +68,124 @@
   },
   "activationEvents": [
     "onCommand:angular.file.class",
+    "onCommand:angular.file.component",
+    "onCommand:angular.file.directive",
+    "onCommand:angular.file.enum",
+    "onCommand:angular.file.guard",
+    "onCommand:angular.file.interceptor",
+    "onCommand:angular.file.interface",
+    "onCommand:angular.file.module",
+    "onCommand:angular.file.pipe",
+    "onCommand:angular.file.resolver",
+    "onCommand:angular.file.service",
+    "onCommand:angular.file.spec",
+    "onCommand:angular.terminal.analytics.disable",
+    "onCommand:angular.terminal.analytics.enable",
+    "onCommand:angular.terminal.analytics.info",
+    "onCommand:angular.terminal.analytics.prompt",
+    "onCommand:angular.terminal.cache.clear",
+    "onCommand:angular.terminal.cache.disable",
+    "onCommand:angular.terminal.cache.enable",
+    "onCommand:angular.terminal.cache.info",
+    "onCommand:angular.terminal.component",
+    "onCommand:angular.terminal.environments",
     "onCommand:angular.terminal.start"
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "snippets": [
+      {
+        "path": "./snippets/custom.code-snippets"
+      }
+    ],
     "commands": [
       {
         "command": "angular.file.class",
-        "title": "Angular: Make Class"
+        "title": "Angular: Generate Class"
+      },
+      {
+        "command": "angular.file.component",
+        "title": "Angular: Generate Component File"
+      },
+      {
+        "command": "angular.file.directive",
+        "title": "Angular: Generate Directive"
+      },
+      {
+        "command": "angular.file.enum",
+        "title": "Angular: Generate Enum"
+      },
+      {
+        "command": "angular.file.guard",
+        "title": "Angular: Generate Guard"
+      },
+      {
+        "command": "angular.file.interceptor",
+        "title": "Angular: Generate Interceptor"
+      },
+      {
+        "command": "angular.file.interface",
+        "title": "Angular: Generate Interface"
+      },
+      {
+        "command": "angular.file.module",
+        "title": "Angular: Generate Module"
+      },
+      {
+        "command": "angular.file.pipe",
+        "title": "Angular: Generate Pipe"
+      },
+      {
+        "command": "angular.file.resolver",
+        "title": "Angular: Generate Resolver"
+      },
+      {
+        "command": "angular.file.service",
+        "title": "Angular: Generate Service"
+      },
+      {
+        "command": "angular.file.spec",
+        "title": "Angular: Generate Test"
+      },
+      {
+        "command": "angular.terminal.analytics.disable",
+        "title": "Angular: Disable Analytics"
+      },
+      {
+        "command": "angular.terminal.analytics.enable",
+        "title": "Angular: Enable Analytics"
+      },
+      {
+        "command": "angular.terminal.analytics.info",
+        "title": "Angular: Info Analytics"
+      },
+      {
+        "command": "angular.terminal.analytics.prompt",
+        "title": "Angular: Prompt Analytics"
+      },
+      {
+        "command": "angular.terminal.cache.clear",
+        "title": "Angular: Clear Cache"
+      },
+      {
+        "command": "angular.terminal.cache.disable",
+        "title": "Angular: Disable Cache"
+      },
+      {
+        "command": "angular.terminal.cache.enable",
+        "title": "Angular: Enable Cache"
+      },
+      {
+        "command": "angular.terminal.cache.info",
+        "title": "Angular: Info Cache"
+      },
+      {
+        "command": "angular.terminal.component",
+        "title": "Angular: Generate Component with CLI"
+      },
+      {
+        "command": "angular.terminal.environments",
+        "title": "Angular: Generate Environments"
       },
       {
         "command": "angular.terminal.start",
@@ -82,7 +195,7 @@
     "submenus": [
       {
         "id": "angular.submenu",
-        "label": "AngularJS File Generator"
+        "label": "Angular File Generator"
       }
     ],
     "menus": {
@@ -96,6 +209,42 @@
       "angular.submenu": [
         {
           "command": "angular.file.class"
+        },
+        {
+          "command": "angular.file.component"
+        },
+        {
+          "command": "angular.terminal.component"
+        },
+        {
+          "command": "angular.file.directive"
+        },
+        {
+          "command": "angular.file.enum"
+        },
+        {
+          "command": "angular.file.guard"
+        },
+        {
+          "command": "angular.file.interceptor"
+        },
+        {
+          "command": "angular.file.interface"
+        },
+        {
+          "command": "angular.file.module"
+        },
+        {
+          "command": "angular.file.pipe"
+        },
+        {
+          "command": "angular.file.resolver"
+        },
+        {
+          "command": "angular.file.service"
+        },
+        {
+          "command": "angular.file.spec"
         }
       ]
     }

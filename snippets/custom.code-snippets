@@ -1,0 +1,208 @@
+{
+  "Module": {
+    "prefix": ["ng_class_module", "class Module"],
+    "scope": "plaintext,typescript",
+    "body": [
+      "import { CommonModule } from '@angular/common';",
+      "import { NgModule } from '@angular/core';",
+      "",
+      "@NgModule({",
+      "  declarations: [],",
+      "  imports: [CommonModule],",
+      "  providers: [],",
+      "  bootstrap: [],",
+      "})",
+      "export class $1Module {}"
+    ]
+  },
+  "Routing Module": {
+    "prefix": ["ng_class_routing_module", "class Routing Module"],
+    "scope": "plaintext,typescript",
+    "body": [
+      "import { NgModule } from '@angular/core';",
+      "import { RouterModule, Routes } from '@angular/router';",
+      "",
+      "const routes: Routes = [",
+      "  {",
+      "    path: '',",
+      "    component: $1Component,",
+      "    children: [",
+      "      {",
+      "$2",
+      "      },",
+      "      { path: '', redirectTo: 'list', pathMatch: 'full' },",
+      "      { path: '**', redirectTo: 'list', pathMatch: 'full' },",
+      "    ],",
+      "  },",
+      "];",
+      "",
+      "@NgModule({",
+      "  imports: [RouterModule.forChild(routes)],",
+      "  exports: [RouterModule],",
+      "})",
+      "export class $1RoutingModule {}"
+    ]
+  },
+  "Component": {
+    "prefix": ["ng_class_component", "class Component"],
+    "scope": "plaintext,typescript",
+    "body": [
+      "import { Component } from '@angular/core';",
+      "",
+      "@Component({",
+      "  selector: 'app-$1',",
+      "  templateUrl: './$1.component.html',",
+      "  styleUrls: ['./$1.component.scss'],",
+      "})",
+      "export class $2Component {",
+      "  constructor() {",
+      "$0",
+      "  }",
+      "}"
+    ]
+  },
+  "Service": {
+    "prefix": ["ng_class_service", "class Service"],
+    "scope": "plaintext,typescript",
+    "body": [
+      "import { Injectable } from '@angular/core';",
+      "",
+      "@Injectable({",
+      "  providedIn: 'root',",
+      "})",
+      "export class $1Service {",
+      "  constructor() {",
+      "$0",
+      "  }",
+      "}"
+    ]
+  },
+  "unsubscribe": {
+    "prefix": ["ng_unsubscribe", "unsubscribe"],
+    "scope": "plaintext,typescript",
+    "body": "private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/"
+  },
+  "subscribe": {
+    "prefix": ["ng_subscribe", "subscribe"],
+    "scope": "plaintext,typescript",
+    "body": [
+      "this.$1Subject = new BehaviorSubject<$2Type>(undefined);",
+      "this.$1$ = this.$1Subject.asObservable();",
+      "this.$1Subscr = this.get$2().subscribe();",
+      "this.unsubscribe.push(this.$1Subscr);"
+    ]
+  },
+  "ngOnDestroy": {
+    "prefix": ["ng_on_destroy", "ngOnDestroy", "onDestroy"],
+    "scope": "plaintext,typescript",
+    "body": [
+      "ngOnDestroy() {",
+      "  this.unsubscribe.forEach((sb) => sb.unsubscribe());",
+      "}"
+    ]
+  },
+  "ngOnInit": {
+    "prefix": ["ng_oninit", "ngOnInit", "onInit"],
+    "scope": "plaintext,typescript",
+    "body": ["ngOnInit() {", "$0", "}"]
+  },
+  "environment": {
+    "prefix": ["ng_const_environment", "const environment"],
+    "scope": "plaintext,typescript",
+    "body": [
+      "export const environment = {",
+      "  production: false,",
+      "  apiUrl: 'http://localhost:8080/api/v1',",
+      "};"
+    ]
+  },
+  "ng-if": {
+    "prefix": ["ng_if", "ng-if", "@if"],
+    "scope": "plaintext,html",
+    "body": ["@if ($1$ | async; as $1) {", "  $0", "}"]
+  },
+  "ng-if-else": {
+    "prefix": ["ng_if_else", "ng-if-else", "@if-else"],
+    "scope": "plaintext,html",
+    "body": ["@if ($1$ | async; as $1) {", "  $0", "} @else {", "  $2", "}"]
+  },
+  "ng-if-else-if": {
+    "prefix": ["ng_if_else_if", "ng-if-else-if", "@if-else-if"],
+    "scope": "plaintext,html",
+    "body": [
+      "@if ($1$ | async; as $1) {",
+      "  $0",
+      "} @else if ($2$ | async; as $2) {",
+      "  $3",
+      "}"
+    ]
+  },
+  "ng-else-if": {
+    "prefix": ["ng_else_if", "ng-else-if", "@else-if"],
+    "scope": "plaintext,html",
+    "body": ["@else if ($1$ | async) {", "  $0", "}"]
+  },
+  "ng-else": {
+    "prefix": ["ng_else", "ng-else", "@else"],
+    "scope": "plaintext,html",
+    "body": ["@else {", "  $0", "}"]
+  },
+  "ng-for": {
+    "prefix": ["ng_for", "ng-for", "@for"],
+    "scope": "plaintext,html",
+    "body": ["@for ($1 of $1s; track $1._id) {", "  $0", "}"]
+  },
+  "ng-empty": {
+    "prefix": ["ng_empty", "ng-empty", "@empty"],
+    "scope": "plaintext,html",
+    "body": ["@empty {", "  $0", "}"]
+  },
+  "ng-switch": {
+    "prefix": ["ng_switch", "ng-switch", "@switch"],
+    "scope": "plaintext,html",
+    "body": ["@switch ($1) {", "  $0", "}"]
+  },
+  "ng-case": {
+    "prefix": ["ng_case", "ng-case", "@case"],
+    "scope": "plaintext,html",
+    "body": ["@case ($1) {", "  $0", "}"]
+  },
+  "ng-default": {
+    "prefix": ["ng_default", "ng-default", "@default"],
+    "scope": "plaintext,html",
+    "body": ["@default {", "  $0", "}"]
+  },
+  "router-outlet": {
+    "prefix": ["ng_router_outlet", "router-outlet"],
+    "scope": "plaintext,html",
+    "body": "<router-outlet></router-outlet>"
+  },
+  "router-link": {
+    "prefix": ["ng_router_link", "router-link"],
+    "scope": "plaintext,html",
+    "body": "<a routerLink=\"$1\">$2</a>"
+  },
+  "ng-container-if": {
+    "prefix": ["ng_container_if", "ng-container-if"],
+    "scope": "plaintext,html",
+    "body": [
+      "<ng-container *ngIf=\"$1$ | async as $1\">",
+      "  <div>",
+      "    <select formControlName=\"$1\" name=\"$1\"",
+      "      [ngClass]=\"{",
+      "        'is-invalid': form.controls['$1'].invalid,",
+      "        'is-valid': form.controls['$1'].valid",
+      "      }\">",
+      "      <option *ngFor=\"let $2 of $1\" [value]=\"$2._id\">{{ $2.name }}</option>",
+      "    </select>",
+      "    <ng-container [ngTemplateOutlet]=\"formError\" [ngTemplateOutletContext]=\"{",
+      "        validation: 'required',",
+      "        message: '$0',",
+      "        control: form.controls['$1']",
+      "      }\">",
+      "    </ng-container>",
+      "  </div>",
+      "</ng-container>"
+    ]
+  }
+}
