@@ -38,7 +38,9 @@ const newPipe = async (vscode: any, fs: any, path: any, args: any = null) => {
     'E.g. User, Role, Auth...',
   );
 
-  const body = content.replace(/\{className\}/g, className);
+  const body = content
+    .replace(/\{className\}/g, className)
+    .replace(/\{entityName\}/g, toKebabCase(className));
 
   const filename = '/' + folder + toKebabCase(className) + '.pipe.ts';
 

@@ -46,9 +46,7 @@ const newService = async (
 
   className = className.replace(/service/gi, '');
 
-  const body = content
-    .replace(/\{className\}/g, className)
-    .replace(/\{entityName\}/g, toKebabCase(className));
+  const body = content.replace(/\{className\}/g, className);
 
   const filename = '/' + folder + toKebabCase(className) + '.service.ts';
 

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-12-10
+
+### Added
+
+- Add configs
+- Add standalone component snippets
+- Add component options
+
+### Fixed
+
+- Fix service generation
+
 ## [1.0.0] - 2023-12-08
 
 ### Added
@@ -44,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/ManuelGil/vscode-angular-generator/releases/tag/v0.1.0

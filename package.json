@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator for VSCode editor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -29,7 +29,18 @@
     "angular-generator",
     "angular",
     "angular2",
-    "angularjs",
+    "angular 14",
+    "angular 15",
+    "angular 16",
+    "angular 17",
+    "angular-14",
+    "angular-15",
+    "angular-16",
+    "angular-17",
+    "angular14",
+    "angular15",
+    "angular16",
+    "angular17",
     "boilerplate",
     "commands",
     "extension",
@@ -93,6 +104,21 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Angular File Generator",
+      "properties": {
+        "angular.styles": {
+          "type": "string",
+          "default": "css",
+          "description": "Sets the style file extension when generating a new component"
+        },
+        "angular.standalone": {
+          "type": "boolean",
+          "default": "true",
+          "description": "Sets the standalone option when generating a new component"
+        }
+      }
+    },
     "snippets": [
       {
         "path": "./snippets/custom.code-snippets"

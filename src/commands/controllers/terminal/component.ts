@@ -1,17 +1,8 @@
-import {
-  execute,
-  getClass,
-  getFolder,
-  parsePath,
-  toKebabCase,
-} from '../../utils/functions';
+import { execute, getFolder, parsePath } from '../../utils/functions';
 
 const generateComponent = async (vscode: any, path: any, args: any = null) => {
   let relativePath = '';
-  let skipTests;
-  let skipStyles;
-  let test = '';
-  let style = '';
+  let options;
 
   if (args) {
     relativePath = parsePath(vscode, path, args);
@@ -24,33 +15,51 @@ const generateComponent = async (vscode: any, path: any, args: any = null) => {
     relativePath,
   );
 
-  skipTests = await vscode.window.showQuickPick(['Yes', 'No'], {
-    placeHolder: 'Skip tests?',
+  const standalone = vscode.workspace
+    .getConfiguration()
+    .get('angular.standalone');
+
+  const items = [
+    {
+      label: '--dry-run',
+      description:
+        'Run through and reports activity without writing out results.',
+    },
+    {
+      label: '--skip-import',
+      description: 'Do not import this component into the owning NgModule.',
+    },
+    {
+      label: '--skip-selector',
+      description: 'Specifies if the component should have a selector or not.',
+    },
+    {
+      label: '--skip-tests',
+      description: 'Do not create "spec.ts" test files for the new component.',
+    },
+    {
+      label: '--standalone',
+      description: 'Whether the generated component is standalone.',
+      picked: standalone,
+    },
+  ];
+
+  options = await vscode.window.showQuickPick(items, {
+    placeHolder: 'Select the options for the component generation (optional)',
+    canPickMany: true,
   });
 
-  if (skipTests === 'Yes') {
-    test = ' --skip-tests';
-  }
+  filename = filename.replace('src/', '').replace('app/', '').slice(0, -1);
 
-  skipStyles = await vscode.window.showQuickPick(['Yes', 'No'], {
-    placeHolder: 'Skip styles?',
-  });
+  const style = vscode.workspace.getConfiguration().get('angular.styles');
 
-  if (skipStyles === 'Yes') {
-    style = ' --style=none';
-  }
-
-  filename = filename.replace('src/', '/').replace('app/', '/');
-
-  execute(
-    vscode,
-    'generate component',
+  const command =
     'ng generate component ' +
-      filename +
-      test +
-      style,
-    false,
-  );
+    filename +
+    (options ? ' ' + options.map((item: any) => item.label).join(' ') : '') +
+    (style ? ' --style=' + style : '');
+
+  execute(vscode, 'generate component', command, true);
 };
 
 export { generateComponent };

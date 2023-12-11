@@ -11,6 +11,12 @@ Are you tired of manually creating files for your Angular projects in Visual Stu
 
 With this powerful extension, you can streamline your Angular development workflow by generating files with just a few clicks. Whether you need a new class, interface, module, or any other Angular component, our extension has you covered.
 
+![menu](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/menu.png)
+
+![config](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/config.png)
+
+![standalone](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/standalone.gif)
+
 ## Requirements
 
 - VSCode 1.46.0 or later
@@ -57,6 +63,7 @@ With this powerful extension, you can streamline your Angular development workfl
 | ng_class_module | export class Module {} |
 | ng_class_routing_module | export class RoutingModule {} |
 | ng_class_component | export class Component {} |
+| ng_class_standalone_component | export class Component {} |
 | ng_class_service | export class Service {} |
 | ng_unsubscribe | private unsubscribe: Subscription[] = []; |
 | ng_subscribe | this.unsubscribe.push(this.subscr); |

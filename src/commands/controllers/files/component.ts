@@ -6,17 +6,35 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { Component } from '@angular/core';
+const component = `import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-{entityName}',
   templateUrl: './{entityName}.component.html',
-  styleUrls: ['./{entityName}.component.css'],
+  styleUrls: ['./{entityName}.component.{style}'],
 })
 export class {className}Component {}
 `;
 
-const newComponent = async (vscode: any, fs: any, path: any, args: any = null) => {
+const standalone = `import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-{entityName}',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './{entityName}.component.html',
+  styleUrls: ['./{entityName}.component.{style}'],
+})
+export class {className}Component {}
+`;
+
+const newComponent = async (
+  vscode: any,
+  fs: any,
+  path: any,
+  args: any = null,
+) => {
   let relativePath = '';
 
   if (args) {
@@ -43,7 +61,20 @@ const newComponent = async (vscode: any, fs: any, path: any, args: any = null) =
 
   className = className.replace(/component/gi, '');
 
-  const body = content.replace(/\{className\}/g, className);
+  let content;
+
+  if (vscode.workspace.getConfiguration().get('angular.standalone')) {
+    content = standalone;
+  } else {
+    content = component;
+  }
+
+  const style = vscode.workspace.getConfiguration().get('angular.styles');
+
+  const body = content
+    .replace(/\{className\}/g, className)
+    .replace(/\{entityName\}/g, toKebabCase(className))
+    .replace(/\{style\}/g, style);
 
   const filename = '/' + folder + toKebabCase(className) + '.component.ts';
 
