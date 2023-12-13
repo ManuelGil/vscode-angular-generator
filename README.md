@@ -11,9 +11,9 @@ With this powerful extension, you can streamline your Angular development workfl
 
 ![menu](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/menu.png)
 
-![config](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/config.png)
+![commands](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/commands.png)
 
-![standalone](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/standalone.gif)
+![config](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/config.png)
 
 ## Table of Contents
 
