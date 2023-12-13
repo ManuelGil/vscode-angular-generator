@@ -1,5 +1,3 @@
-![icon](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/icon.png)
-
 # Angular File Generator for VSCode
 
 [![Latest Release](https://img.shields.io/visual-studio-marketplace/v/imgildev.vscode-angular-generator?style=flat&label=VS%20Marketplace&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-angular-generator)
@@ -17,9 +15,47 @@ With this powerful extension, you can streamline your Angular development workfl
 
 ![standalone](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/standalone.gif)
 
+## Table of Contents
+
+- [Angular File Generator for VSCode](#angular-file-generator-for-vscode)
+  - [Table of Contents](#table-of-contents)
+  - [Requirements](#requirements)
+  - [Project Settings](#project-settings)
+  - [Features](#features)
+    - [Files](#files)
+    - [Commands](#commands)
+    - [Snippets](#snippets)
+  - [Other Repositories](#other-repositories)
+  - [Changelog](#changelog)
+  - [Authors](#authors)
+  - [License](#license)
+
 ## Requirements
 
 - VSCode 1.46.0 or later
+
+## Project Settings
+
+Configure your project by creating or updating a settings.json file at the project's root. If you already have a `.vscode/settings.json` file, skip the first two steps.
+
+1. Open the command palette in VSCode:
+   - `CTRL + SHIFT + P` (Windows)
+   - `CMD + SHIFT + P` (Mac OS)
+
+2. Type `Preferences: Open Workspace Settings (JSON)`.
+
+3. In the `.vscode/settings.json` file, copy and paste the following settings:
+
+    ```jsonc
+    {
+      "angular.standalone": true,
+      "angular.style": "css"
+    }
+    ```
+
+4. **Restart VS Code**
+
+Your project is now set up to automatically format code upon saving.
 
 ## Features
 

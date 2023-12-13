@@ -35,6 +35,14 @@ const newComponent = async (
   path: any,
   args: any = null,
 ) => {
+  let resource;
+
+  if (vscode.workspace.workspaceFolders) {
+    resource = vscode.workspace.workspaceFolders[0].uri;
+  }
+
+  const angularConfig = vscode.workspace.getConfiguration('angular', resource);
+
   let relativePath = '';
 
   if (args) {
@@ -63,13 +71,13 @@ const newComponent = async (
 
   let content;
 
-  if (vscode.workspace.getConfiguration().get('angular.standalone')) {
+  if (angularConfig.get('standalone')) {
     content = standalone;
   } else {
     content = component;
   }
 
-  const style = vscode.workspace.getConfiguration().get('angular.styles');
+  const style = angularConfig.get('style');
 
   const body = content
     .replace(/\{className\}/g, className)

@@ -1,6 +1,14 @@
 import { execute, getFolder, parsePath } from '../../utils/functions';
 
 const generateComponent = async (vscode: any, path: any, args: any = null) => {
+  let resource;
+
+  if (vscode.workspace.workspaceFolders) {
+    resource = vscode.workspace.workspaceFolders[0].uri;
+  }
+
+  const angularConfig = vscode.workspace.getConfiguration('angular', resource);
+
   let relativePath = '';
   let options;
 
@@ -51,13 +59,13 @@ const generateComponent = async (vscode: any, path: any, args: any = null) => {
 
   filename = filename.replace('src/', '').replace('app/', '').slice(0, -1);
 
-  const style = vscode.workspace.getConfiguration().get('angular.styles');
+  const style = angularConfig.get('style');
 
   const command =
     'ng generate component ' +
     filename +
     (options ? ' ' + options.map((item: any) => item.label).join(' ') : '') +
-    (style ? ' --style=' + style : '');
+    (style ? ' --style ' + style : '');
 
   execute(vscode, 'generate component', command, true);
 };

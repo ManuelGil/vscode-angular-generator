@@ -1,8 +1,8 @@
 {
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
-  "description": "Angular File Generator for VSCode editor",
-  "version": "1.1.0",
+  "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
+  "version": "1.2.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -100,22 +100,32 @@
     "onCommand:angular.terminal.cache.info",
     "onCommand:angular.terminal.component",
     "onCommand:angular.terminal.environments",
-    "onCommand:angular.terminal.start"
+    "onCommand:angular.terminal.start",
+    "workspaceContains:.vscode/settings.json"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
       "title": "Angular File Generator",
       "properties": {
-        "angular.styles": {
-          "type": "string",
-          "default": "css",
-          "description": "Sets the style file extension when generating a new component"
-        },
         "angular.standalone": {
           "type": "boolean",
-          "default": "true",
+          "default": true,
+          "scope": "resource",
           "description": "Sets the standalone option when generating a new component"
+        },
+        "angular.style": {
+          "type": "string",
+          "default": "css",
+          "enum": [
+            "css",
+            "scss",
+            "sass",
+            "less",
+            "none"
+          ],
+          "scope": "resource",
+          "description": "Sets the style file extension when generating a new component"
         }
       }
     },
@@ -273,7 +283,13 @@
           "command": "angular.file.spec"
         }
       ]
-    }
+    },
+    "jsonValidation": [
+      {
+        "fileMatch": ".vscode/settings.json",
+        "url": "./schemas/config.schema.json"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
