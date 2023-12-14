@@ -43,6 +43,21 @@
       "export class $1RoutingModule {}"
     ]
   },
+  "Standalone Routing Module": {
+    "prefix": ["ng_const_routes", "const routes"],
+    "scope": "plaintext,typescript",
+    "body": [
+      "import { Routes } from '@angular/router';",
+      "",
+      "export const routes: Routes = [",
+      "  {",
+      "    path: '',",
+      "    loadComponent: () => import($1),",
+      "  },",
+      "  { path: '**', redirectTo: '' },"
+      "];"
+    ]
+  },
   "Component": {
     "prefix": ["ng_class_component", "class Component"],
     "scope": "plaintext,typescript",
@@ -192,6 +207,21 @@
     "prefix": ["ng_default", "ng-default", "@default"],
     "scope": "plaintext,html",
     "body": ["@default {", "  $0", "}"]
+  },
+  "ng-defer": {
+    "prefix": ["ng_defer", "ng-defer", "@defer"],
+    "scope": "plaintext,html",
+    "body": ["@defer ($1) {", "  $0", "}"]
+  },
+  "ng-placeholder": {
+    "prefix": ["ng_placeholder", "ng-placeholder", "@placeholder"],
+    "scope": "plaintext,html",
+    "body": ["@placeholder {", "  $0", "}"]
+  },
+  "ng-loading": {
+    "prefix": ["ng_loading", "ng-loading", "@loading"],
+    "scope": "plaintext,html",
+    "body": ["@loading {", "  $0", "}"]
   },
   "router-outlet": {
     "prefix": ["ng_router_outlet", "router-outlet"],

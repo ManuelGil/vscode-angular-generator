@@ -98,6 +98,7 @@ Your project is now set up to automatically format code upon saving.
 | --- | --- |
 | ng_class_module | export class Module {} |
 | ng_class_routing_module | export class RoutingModule {} |
+| ng_const_routes | export const routes: Routes = [] |
 | ng_class_component | export class Component {} |
 | ng_class_standalone_component | export class Component {} |
 | ng_class_service | export class Service {} |
@@ -116,6 +117,9 @@ Your project is now set up to automatically format code upon saving.
 | ng_switch | @switch (condition) {} |
 | ng_case | @case (condition) {} |
 | ng_default | @default {} |
+| ng-defer | @defer (condition) {}  |
+| ng-placeholder | @placeholder {} |
+| ng-loading | @loading {} |
 | ng_router_outlet | \<router-outlet>\</router-outlet> |
 | ng_router_link | \<a routerLink="">\</a> |
 
