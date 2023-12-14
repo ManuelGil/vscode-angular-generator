@@ -11,6 +11,7 @@ const generateComponent = async (vscode: any, path: any, args: any = null) => {
 
   let relativePath = '';
   let options;
+  let isStandalone = false;
 
   if (args) {
     relativePath = parsePath(vscode, path, args);
@@ -57,17 +58,21 @@ const generateComponent = async (vscode: any, path: any, args: any = null) => {
     canPickMany: true,
   });
 
+  isStandalone = !!options.find((item: any) => item.label === '--standalone');
+  options = options.filter((item: any) => item.label !== '--standalone');
+
   filename = filename.replace('src/', '').replace('app/', '').slice(0, -1);
 
   const style = angularConfig.get('style');
 
   const command =
-    'ng generate component ' +
+    'ng g c ' +
     filename +
-    (options ? ' ' + options.map((item: any) => item.label).join(' ') : '') +
-    (style ? ' --style ' + style : '');
+    (style ? ' --style ' + style : '') +
+    (isStandalone ? ' --standalone true' : ' --standalone false') +
+    (options ? ' ' + options.map((item: any) => item.label).join(' ') : '');
 
-  execute(vscode, 'generate component', command, true);
+    execute(vscode, 'generate component', command, true);
 };
 
 export { generateComponent };

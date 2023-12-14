@@ -91,6 +91,7 @@ Your project is now set up to automatically format code upon saving.
 | Angular: Generate Component with CLI | Creates a new, generic component definition |
 | Angular: Generate Environments | Generates and configures environment files for a project |
 | Angular: Start Server | Builds and serves your application, rebuilding on file changes |
+| Angular: Run Tests | Runs unit tests in a project. |
 
 ### Snippets
 

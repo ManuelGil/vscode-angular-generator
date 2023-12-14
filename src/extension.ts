@@ -11,6 +11,7 @@ import {
   cacheDisable,
   cacheEnable,
   cacheInfo,
+  generateComponent,
   generateEnvironments,
   newClass,
   newComponent,
@@ -25,8 +26,8 @@ import {
   newService,
   newTest,
   start,
+  test,
 } from './commands';
-import { generateComponent } from './commands/controllers/terminal/component';
 
 export function activate(context: vscode.ExtensionContext) {
   const angularFileClass = vscode.commands.registerCommand(
@@ -167,6 +168,12 @@ export function activate(context: vscode.ExtensionContext) {
       start(vscode);
     },
   );
+  const angularTerminalTest = vscode.commands.registerCommand(
+    'angular.terminal.test',
+    () => {
+      test(vscode);
+    },
+  );
 
   context.subscriptions.push(angularFileClass);
   context.subscriptions.push(angularFileComponent);
@@ -191,6 +198,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(angularTerminalComponent);
   context.subscriptions.push(angularTerminalEnvironments);
   context.subscriptions.push(angularTerminalStart);
+  context.subscriptions.push(angularTerminalTest);
 }
 
 export function deactivate() {}

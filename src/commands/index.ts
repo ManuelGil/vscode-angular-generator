@@ -12,5 +12,7 @@ export * from './controllers/files/service';
 export * from './controllers/files/spec';
 export * from './controllers/terminal/analytics';
 export * from './controllers/terminal/cache';
+export * from './controllers/terminal/component';
 export * from './controllers/terminal/environments';
 export * from './controllers/terminal/serve';
+export * from './controllers/terminal/test';
