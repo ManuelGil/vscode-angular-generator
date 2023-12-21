@@ -6,85 +6,11 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  CanActivateChild,
-  CanDeactivate,
-  CanLoad,
-  CanMatch,
-  Route,
-  RouterStateSnapshot,
-  UrlSegment,
-  UrlTree,
-} from '@angular/router';
-import { Observable } from 'rxjs';
+const content = `import { CanActivateFn } from '@angular/router';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class {className}Guard
-  implements
-    CanActivate,
-    CanActivateChild,
-    CanDeactivate<unknown>,
-    CanLoad,
-    CanMatch
-{
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return true;
-  }
-  canActivateChild(
-    childRoute: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return true;
-  }
-  canDeactivate(
-    component: unknown,
-    currentRoute: ActivatedRouteSnapshot,
-    currentState: RouterStateSnapshot,
-    nextState?: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return true;
-  }
-  canMatch(
-    route: Route,
-    segments: UrlSegment[]
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return true;
-  }
-  canLoad(
-    route: Route,
-    segments: UrlSegment[]
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return true;
-  }
-}
+export const {{entityName}}Guard: CanActivateFn = (route, state) => {
+  return true;
+};
 `;
 
 const newGuard = async (vscode: any, fs: any, path: any, args: any = null) => {
@@ -101,22 +27,22 @@ const newGuard = async (vscode: any, fs: any, path: any, args: any = null) => {
     relativePath,
   );
 
-  let className = await getClass(
+  let entityName = await getClass(
     vscode,
-    'Guard class name',
-    'E.g. User, Role, Auth...',
+    'Guard name',
+    'E.g. user, role, auth...',
   );
 
-  if (className === 'Guard') {
+  if (entityName === 'Guard') {
     vscode.window.showErrorMessage('The file has not been created!');
     return;
   }
 
-  className = className.replace(/guard/gi, '');
+  entityName = entityName.replace(/guard/gi, '');
 
-  const body = content.replace(/\{className\}/g, className);
+  const body = content.replace(/\{entityName\}/g, entityName);
 
-  const filename = '/' + folder + toKebabCase(className) + '.guard.ts';
+  const filename = '/' + folder + toKebabCase(entityName) + '.guard.ts';
 
   save(vscode, fs, path, filename, body);
 };

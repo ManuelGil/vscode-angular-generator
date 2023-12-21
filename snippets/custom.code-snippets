@@ -1,7 +1,7 @@
 {
   "Module": {
     "prefix": ["ng_class_module", "class Module"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": [
       "import { CommonModule } from '@angular/common';",
       "import { NgModule } from '@angular/core';",
@@ -17,7 +17,7 @@
   },
   "Routing Module": {
     "prefix": ["ng_class_routing_module", "class Routing Module"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": [
       "import { NgModule } from '@angular/core';",
       "import { RouterModule, Routes } from '@angular/router';",
@@ -45,7 +45,7 @@
   },
   "Standalone Routing Module": {
     "prefix": ["ng_const_routes", "const routes"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": [
       "import { Routes } from '@angular/router';",
       "",
@@ -54,13 +54,13 @@
       "    path: '',",
       "    loadComponent: () => import($1),",
       "  },",
-      "  { path: '**', redirectTo: '' },"
+      "  { path: '**', redirectTo: '' },",
       "];"
     ]
   },
   "Component": {
     "prefix": ["ng_class_component", "class Component"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": [
       "import { Component } from '@angular/core';",
       "",
@@ -78,7 +78,7 @@
   },
   "Standalone Component": {
     "prefix": ["ng_class_standalone_component", "class Standalone Component"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": [
       "import { Component } from '@angular/core';",
       "import { CommonModule } from '@angular/common';",
@@ -99,7 +99,7 @@
   },
   "Service": {
     "prefix": ["ng_class_service", "class Service"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": [
       "import { Injectable } from '@angular/core';",
       "",
@@ -115,12 +115,12 @@
   },
   "unsubscribe": {
     "prefix": ["ng_unsubscribe", "unsubscribe"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": "private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/"
   },
   "subscribe": {
     "prefix": ["ng_subscribe", "subscribe"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": [
       "this.$1Subject = new BehaviorSubject<$2Type>(undefined);",
       "this.$1$ = this.$1Subject.asObservable();",
@@ -130,7 +130,7 @@
   },
   "ngOnDestroy": {
     "prefix": ["ng_on_destroy", "ngOnDestroy", "onDestroy"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": [
       "ngOnDestroy() {",
       "  this.unsubscribe.forEach((sb) => sb.unsubscribe());",
@@ -139,12 +139,12 @@
   },
   "ngOnInit": {
     "prefix": ["ng_oninit", "ngOnInit", "onInit"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": ["ngOnInit() {", "$0", "}"]
   },
   "environment": {
     "prefix": ["ng_const_environment", "const environment"],
-    "scope": "plaintext,typescript",
+    "scope": "typescript",
     "body": [
       "export const environment = {",
       "  production: false,",
@@ -154,17 +154,17 @@
   },
   "ng-if": {
     "prefix": ["ng_if", "ng-if", "@if"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@if ($1$ | async; as $1) {", "  $0", "}"]
   },
   "ng-if-else": {
     "prefix": ["ng_if_else", "ng-if-else", "@if-else"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@if ($1$ | async; as $1) {", "  $0", "} @else {", "  $2", "}"]
   },
   "ng-if-else-if": {
     "prefix": ["ng_if_else_if", "ng-if-else-if", "@if-else-if"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": [
       "@if ($1$ | async; as $1) {",
       "  $0",
@@ -175,85 +175,62 @@
   },
   "ng-else-if": {
     "prefix": ["ng_else_if", "ng-else-if", "@else-if"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@else if ($1$ | async) {", "  $0", "}"]
   },
   "ng-else": {
     "prefix": ["ng_else", "ng-else", "@else"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@else {", "  $0", "}"]
   },
   "ng-for": {
     "prefix": ["ng_for", "ng-for", "@for"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@for ($1 of $1s; track $1._id) {", "  $0", "}"]
   },
   "ng-empty": {
     "prefix": ["ng_empty", "ng-empty", "@empty"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@empty {", "  $0", "}"]
   },
   "ng-switch": {
     "prefix": ["ng_switch", "ng-switch", "@switch"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@switch ($1) {", "  $0", "}"]
   },
   "ng-case": {
     "prefix": ["ng_case", "ng-case", "@case"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@case ($1) {", "  $0", "}"]
   },
   "ng-default": {
     "prefix": ["ng_default", "ng-default", "@default"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@default {", "  $0", "}"]
   },
   "ng-defer": {
     "prefix": ["ng_defer", "ng-defer", "@defer"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@defer ($1) {", "  $0", "}"]
   },
   "ng-placeholder": {
     "prefix": ["ng_placeholder", "ng-placeholder", "@placeholder"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@placeholder {", "  $0", "}"]
   },
   "ng-loading": {
     "prefix": ["ng_loading", "ng-loading", "@loading"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": ["@loading {", "  $0", "}"]
   },
   "router-outlet": {
     "prefix": ["ng_router_outlet", "router-outlet"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": "<router-outlet></router-outlet>"
   },
   "router-link": {
     "prefix": ["ng_router_link", "router-link"],
-    "scope": "plaintext,html",
+    "scope": "html",
     "body": "<a routerLink=\"$1\">$2</a>"
-  },
-  "ng-container-if": {
-    "prefix": ["ng_container_if", "ng-container-if"],
-    "scope": "plaintext,html",
-    "body": [
-      "<ng-container *ngIf=\"$1$ | async as $1\">",
-      "  <div>",
-      "    <select formControlName=\"$1\" name=\"$1\"",
-      "      [ngClass]=\"{",
-      "        'is-invalid': form.controls['$1'].invalid,",
-      "        'is-valid': form.controls['$1'].valid",
-      "      }\">",
-      "      <option *ngFor=\"let $2 of $1\" [value]=\"$2._id\">{{ $2.name }}</option>",
-      "    </select>",
-      "    <ng-container [ngTemplateOutlet]=\"formError\" [ngTemplateOutletContext]=\"{",
-      "        validation: 'required',",
-      "        message: '$0',",
-      "        control: form.controls['$1']",
-      "      }\">",
-      "    </ng-container>",
-      "  </div>",
-      "</ng-container>"
-    ]
   }
 }

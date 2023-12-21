@@ -16,6 +16,24 @@ const getClass = async (vscode: any, prompt: string, placeHolder: string) => {
   return name;
 };
 
+const getEntity = async (vscode: any, prompt: string, placeHolder: string) => {
+  const name = await vscode.window.showInputBox({
+    prompt,
+    placeHolder,
+    validateInput: (text: string) => {
+      if (!/^[a-z][\w-]+$/.test(text)) {
+        return 'Invalid format! Entity names MUST be declared in camelCase.';
+      }
+    },
+  });
+
+  if (name.length === 0) {
+    return;
+  }
+
+  return name;
+};
+
 const getFolder = async (
   vscode: any,
   prompt: string,
@@ -145,6 +163,7 @@ const toKebabCase = (text: string) => {
 export {
   execute,
   getClass,
+  getEntity,
   getFolder,
   getType,
   parsePath,
