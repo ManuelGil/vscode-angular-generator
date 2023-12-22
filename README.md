@@ -67,7 +67,7 @@ Your project is now set up to automatically format code upon saving.
 | Angular: Generate Component File | Creates a new, generic component definition |
 | Angular: Generate Directive | Creates a new, generic directive definition |
 | Angular: Generate Enum | Generates a new, generic enum definition |
-| Angular: Generate Can Activate Guard | Generates a new, generic route guard definition |
+| Angular: Generate Guard | Generates a new, generic route guard definition |
 | Angular: Generate Interceptor | Creates a new, generic interceptor definition |
 | Angular: Generate Interface | Creates a new, generic interface definition |
 | Angular: Generate Module | Creates a new, generic NgModule definition |
