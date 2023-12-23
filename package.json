@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -136,95 +136,118 @@
     "commands": [
       {
         "command": "angular.file.class",
-        "title": "Angular: Generate Class"
+        "title": "Generate Class",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.component",
-        "title": "Angular: Generate Component File"
+        "title": "Generate Component File",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.directive",
-        "title": "Angular: Generate Directive"
+        "title": "Generate Directive",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.enum",
-        "title": "Angular: Generate Enum"
+        "title": "Generate Enum",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.guard",
-        "title": "Angular: Generate Guard"
+        "title": "Generate Guard",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.interceptor",
-        "title": "Angular: Generate Interceptor"
+        "title": "Generate Interceptor",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.interface",
-        "title": "Angular: Generate Interface"
+        "title": "Generate Interface",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.module",
-        "title": "Angular: Generate Module"
+        "title": "Generate Module",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.pipe",
-        "title": "Angular: Generate Pipe"
+        "title": "Generate Pipe",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.resolver",
-        "title": "Angular: Generate Resolver"
+        "title": "Generate Resolver",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.service",
-        "title": "Angular: Generate Service"
+        "title": "Generate Service",
+        "gruop": "Angular"
       },
       {
         "command": "angular.file.spec",
-        "title": "Angular: Generate Test"
+        "title": "Generate Test",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.analytics.disable",
-        "title": "Angular: Disable Analytics"
+        "title": "Disable Analytics",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.analytics.enable",
-        "title": "Angular: Enable Analytics"
+        "title": "Enable Analytics",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.analytics.info",
-        "title": "Angular: Info Analytics"
+        "title": "Info Analytics",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.analytics.prompt",
-        "title": "Angular: Prompt Analytics"
+        "title": "Prompt Analytics",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.cache.clear",
-        "title": "Angular: Clear Cache"
+        "title": "Clear Cache",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.cache.disable",
-        "title": "Angular: Disable Cache"
+        "title": "Disable Cache",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.cache.enable",
-        "title": "Angular: Enable Cache"
+        "title": "Enable Cache",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.cache.info",
-        "title": "Angular: Info Cache"
+        "title": "Info Cache",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.component",
-        "title": "Angular: Generate Component with CLI"
+        "title": "Generate Component with CLI",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.environments",
-        "title": "Angular: Generate Environments"
+        "title": "Generate Environments",
+        "gruop": "Angular"
       },
       {
         "command": "angular.terminal.start",
-        "title": "Angular: Start Server"
+        "title": "Start Server",
+        "gruop": "Angular"
       }
     ],
     "submenus": [
@@ -237,49 +260,62 @@
       "explorer/context": [
         {
           "submenu": "angular.submenu",
-          "group": "1_modification",
-          "when": "explorerViewletFocus && explorerResourceIsFolder"
+          "group": "2_workspace",
+          "when": "explorerViewletFocus && explorerResourceIsFolder && !explorerResourceIsRoot"
         }
       ],
       "angular.submenu": [
         {
-          "command": "angular.file.class"
+          "command": "angular.terminal.component",
+          "group": "1_terminal"
         },
         {
-          "command": "angular.file.component"
+          "command": "angular.file.class",
+          "group": "2_file"
         },
         {
-          "command": "angular.terminal.component"
+          "command": "angular.file.component",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.directive"
+          "command": "angular.file.directive",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.enum"
+          "command": "angular.file.enum",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.guard"
+          "command": "angular.file.guard",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.interceptor"
+          "command": "angular.file.interceptor",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.interface"
+          "command": "angular.file.interface",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.module"
+          "command": "angular.file.module",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.pipe"
+          "command": "angular.file.pipe",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.resolver"
+          "command": "angular.file.resolver",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.service"
+          "command": "angular.file.service",
+          "group": "2_file"
         },
         {
-          "command": "angular.file.spec"
+          "command": "angular.file.spec",
+          "group": "2_file"
         }
       ]
     },
