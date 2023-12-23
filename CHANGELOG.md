@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2023-12-22
+
+### Fixed
+
+- Fix title of the context menu
+
 ## [1.6.0] - 2023-12-22
 
 ### Changed
@@ -106,7 +112,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.4.0...v1.5.0
