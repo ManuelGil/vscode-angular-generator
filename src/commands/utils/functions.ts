@@ -155,8 +155,8 @@ const toCapitalize = (text: string) => {
 
 const toKebabCase = (text: string) => {
   return text
-    .replace(/[A-Z]/g, (letter: string) => `-${letter}`)
-    .slice(1)
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z])([A-Z])(?=[a-z])/g, '$1-$2')
     .toLowerCase();
 };
 
