@@ -3,6 +3,7 @@
 [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/imgildev.vscode-angular-generator?style=for-the-badge&label=VS%20Marketplace&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-angular-generator)
 [![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/imgildev.vscode-angular-generator?style=for-the-badge&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-angular-generator)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/imgildev.vscode-angular-generator?style=for-the-badge&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-angular-generator)
+[![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/imgildev.vscode-angular-generator?style=for-the-badge&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-angular-generator&ssr=false#review-details)
 [![GitHub Repo stars](https://img.shields.io/github/stars/ManuelGil/vscode-angular-generator?style=for-the-badge&logo=github)](https://github.com/ManuelGil/vscode-angular-generator)
 [![GitHub license](https://img.shields.io/github/license/ManuelGil/vscode-angular-generator?style=for-the-badge&logo=github)](https://github.com/ManuelGil/vscode-angular-generator/blob/main/LICENSE)
 
@@ -16,7 +17,7 @@ With this powerful extension, you can streamline your Angular development workfl
 
 ![commands](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/commands.png)
 
-![config](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/config.png)
+![snippets](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/snippets.png)
 
 ## Table of Contents
 
@@ -93,7 +94,11 @@ Your project is now set up to automatically format code upon saving.
 | Angular: Enable Cache | Enables disk cache for all projects in the workspace |
 | Angular: Info Cache | Prints persistent disk cache configuration and statistics in the console |
 | Angular: Generate Component with CLI | Creates a new, generic component definition |
+| Angular: Generate Guard with CLI | Creates a new, generic guard definition |
+| Angular: Generate Pipe with CLI | Creates a new, generic pipe definition |
+| Angular: Generate Service with CLI | Creates a new, service service definition |
 | Angular: Generate Environments | Generates and configures environment files for a project |
+| Angular: Generate Library | Creates a new, generic library project in the current workspace |
 | Angular: Start Server | Builds and serves your application, rebuilding on file changes |
 | Angular: Run Tests | Runs unit tests in a project. |
 

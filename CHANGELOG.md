@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2024-01-09
+
+### Added
+
+- Add Generate Guard command
+- Add Generate Pipe command
+- Add Generate Service command
+- Add Generate Library command
+
+### Changed
+
+- Improve interface generation
+- Improve component generation
+
 ## [1.6.3] - 2023-12-30
 
 ### Fixed
@@ -124,7 +138,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.3...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.3...v1.7.0
 [1.6.3]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.2...v1.6.3
 [1.6.2]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.1...v1.6.2
 [1.6.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.0...v1.6.1

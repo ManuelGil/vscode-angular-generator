@@ -1,6 +1,6 @@
 import { execute, getFolder, parsePath } from '../../utils/functions';
 
-const generateComponent = async (vscode: any, path: any, args: any = null) => {
+const generatePipe = async (vscode: any, path: any, args: any = null) => {
   let resource;
 
   if (vscode.workspace.workspaceFolders) {
@@ -19,8 +19,8 @@ const generateComponent = async (vscode: any, path: any, args: any = null) => {
 
   let filename = await getFolder(
     vscode,
-    'Component name',
-    'Component name. E.g. src/app/modules/users, modules/users, modules/projects...',
+    'Pipe name',
+    'Pipe name. E.g. modules/transform-letters, modules/searh-user, modules/search-projects...',
     relativePath,
   );
 
@@ -39,29 +39,25 @@ const generateComponent = async (vscode: any, path: any, args: any = null) => {
     {
       label: '--flat',
       description:
-        'Create the new files at the top level of the current project.',
+        'When true (the default) creates files at the top level of the project.',
     },
     {
       label: '--skip-import',
-      description: 'Do not import this component into the owning NgModule.',
-    },
-    {
-      label: '--skip-selector',
-      description: 'Specifies if the component should have a selector or not.',
+      description: 'Do not import this pipe into the owning NgModule.',
     },
     {
       label: '--skip-tests',
-      description: 'Do not create "spec.ts" test files for the new component.',
+      description: 'Do not create "spec.ts" test files for the new pipe.',
     },
     {
       label: '--standalone',
-      description: 'Whether the generated component is standalone.',
+      description: 'Whether the generated pipe is standalone.',
       picked: standalone,
     },
   ];
 
   options = await vscode.window.showQuickPick(items, {
-    placeHolder: 'Select the options for the component generation (optional)',
+    placeHolder: 'Select the options for the pipe generation (optional)',
     canPickMany: true,
   });
 
@@ -70,16 +66,13 @@ const generateComponent = async (vscode: any, path: any, args: any = null) => {
 
   filename = filename.replace('src/app/', '').slice(0, -1);
 
-  const style = angularConfig.get('style');
-
   const command =
-    'ng g c ' +
+    'ng g p ' +
     filename +
-    (style ? ' --style ' + style : '') +
     (isStandalone ? ' --standalone true' : ' --standalone false') +
     (options ? ' ' + options.map((item: any) => item.label).join(' ') : '');
 
-  execute(vscode, 'generate component', command, true);
+  execute(vscode, 'generate pipe', command, true);
 };
 
-export { generateComponent };
+export { generatePipe };

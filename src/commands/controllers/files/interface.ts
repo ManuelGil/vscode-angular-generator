@@ -1,6 +1,7 @@
 import {
   getClass,
   getFolder,
+  getType,
   parsePath,
   save,
   toKebabCase,
@@ -9,7 +10,12 @@ import {
 const content = `export interface {className} {}
 `;
 
-const newInterface = async (vscode: any, fs: any, path: any, args: any = null) => {
+const newInterface = async (
+  vscode: any,
+  fs: any,
+  path: any,
+  args: any = null,
+) => {
   let relativePath = '';
 
   if (args) {
@@ -34,11 +40,19 @@ const newInterface = async (vscode: any, fs: any, path: any, args: any = null) =
     return;
   }
 
+  let type = await getType(
+    vscode,
+    'Type interface name',
+    'E.g. interface, dto, entity, model...',
+  );
+
   className = className.replace(/interface/gi, '');
 
   const body = content.replace(/\{className\}/g, className);
 
-  const filename = '/' + folder + toKebabCase(className) + '.interface.ts';
+  type = type.length !== 0 ? '.' + type : '';
+
+  const filename = '/' + folder + toKebabCase(className) + type + '.ts';
 
   save(vscode, fs, path, filename, body);
 };

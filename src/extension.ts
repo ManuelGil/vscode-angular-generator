@@ -13,6 +13,10 @@ import {
   cacheInfo,
   generateComponent,
   generateEnvironments,
+  generateGuard,
+  generateLibrary,
+  generatePipe,
+  generateService,
   newClass,
   newComponent,
   newDirective,
@@ -162,6 +166,30 @@ export function activate(context: vscode.ExtensionContext) {
       generateEnvironments(vscode);
     },
   );
+  const angularTerminalGuard = vscode.commands.registerCommand(
+    'angular.terminal.guard',
+    (args) => {
+      generateGuard(vscode, path, args);
+    },
+  );
+  const angularTerminalLibrary = vscode.commands.registerCommand(
+    'angular.terminal.library',
+    () => {
+      generateLibrary(vscode);
+    },
+  );
+  const angularTerminalPipe = vscode.commands.registerCommand(
+    'angular.terminal.pipe',
+    (args) => {
+      generatePipe(vscode, path, args);
+    },
+  );
+  const angularTerminalService = vscode.commands.registerCommand(
+    'angular.terminal.service',
+    (args) => {
+      generateService(vscode, path, args);
+    },
+  );
   const angularTerminalStart = vscode.commands.registerCommand(
     'angular.terminal.start',
     () => {
@@ -197,6 +225,10 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(angularTerminalCacheInfo);
   context.subscriptions.push(angularTerminalComponent);
   context.subscriptions.push(angularTerminalEnvironments);
+  context.subscriptions.push(angularTerminalGuard);
+  context.subscriptions.push(angularTerminalLibrary);
+  context.subscriptions.push(angularTerminalPipe);
+  context.subscriptions.push(angularTerminalService);
   context.subscriptions.push(angularTerminalStart);
   context.subscriptions.push(angularTerminalTest);
 }
