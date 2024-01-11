@@ -56,18 +56,11 @@ const newComponent = async (
     relativePath,
   );
 
-  let className = await getClass(
+  const className = await getClass(
     vscode,
     'Component class name',
     'E.g. User, Role, Auth...',
   );
-
-  if (className === 'Component') {
-    vscode.window.showErrorMessage('The file has not been created!');
-    return;
-  }
-
-  className = className.replace(/component/gi, '');
 
   let content;
 

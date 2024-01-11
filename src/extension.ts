@@ -11,6 +11,7 @@ import {
   cacheDisable,
   cacheEnable,
   cacheInfo,
+  e2e,
   generateComponent,
   generateEnvironments,
   generateGuard,
@@ -31,6 +32,7 @@ import {
   newTest,
   start,
   test,
+  version,
 } from './commands';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -202,6 +204,18 @@ export function activate(context: vscode.ExtensionContext) {
       test(vscode);
     },
   );
+  const angularTerminalE2E = vscode.commands.registerCommand(
+    'angular.terminal.e2e',
+    () => {
+      e2e(vscode);
+    },
+  );
+  const angularTerminalVersion = vscode.commands.registerCommand(
+    'angular.terminal.version',
+    () => {
+      version(vscode);
+    },
+  );
 
   context.subscriptions.push(angularFileClass);
   context.subscriptions.push(angularFileComponent);
@@ -231,6 +245,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(angularTerminalService);
   context.subscriptions.push(angularTerminalStart);
   context.subscriptions.push(angularTerminalTest);
+  context.subscriptions.push(angularTerminalE2E);
+  context.subscriptions.push(angularTerminalVersion);
 }
 
 export function deactivate() {}

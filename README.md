@@ -13,11 +13,11 @@ Are you tired of manually creating files for your Angular projects in Visual Stu
 
 With this powerful extension, you can streamline your Angular development workflow by generating files with just a few clicks. Whether you need a new class, interface, module, or any other Angular component, our extension has you covered.
 
+![snippets](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/snippets.png)
+
 ![menu](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/menu.png)
 
 ![commands](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/commands.png)
-
-![snippets](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/snippets.png)
 
 ## Table of Contents
 
@@ -100,7 +100,9 @@ Your project is now set up to automatically format code upon saving.
 | Angular: Generate Environments | Generates and configures environment files for a project |
 | Angular: Generate Library | Creates a new, generic library project in the current workspace |
 | Angular: Start Server | Builds and serves your application, rebuilding on file changes |
-| Angular: Run Tests | Runs unit tests in a project. |
+| Angular: Run Tests | Runs unit tests in a project |
+| Angular: Run E2E | Builds and serves an Angular application, then runs end-to-end tests |
+| Angular: Version | Outputs Angular CLI version |
 
 ### Snippets
 

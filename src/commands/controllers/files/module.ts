@@ -30,18 +30,11 @@ const newModule = async (vscode: any, fs: any, path: any, args: any = null) => {
     relativePath,
   );
 
-  let className = await getClass(
+  const className = await getClass(
     vscode,
     'Module class name',
     'E.g. User, Role, Auth...',
   );
-
-  if (className === 'Module') {
-    vscode.window.showErrorMessage('The file has not been created!');
-    return;
-  }
-
-  className = className.replace(/module/gi, '');
 
   const body = content.replace(/\{className\}/g, className);
 

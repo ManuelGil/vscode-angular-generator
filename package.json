@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -99,12 +99,15 @@
     "onCommand:angular.terminal.cache.enable",
     "onCommand:angular.terminal.cache.info",
     "onCommand:angular.terminal.component",
+    "onCommand:angular.terminal.e2e",
     "onCommand:angular.terminal.environments",
     "onCommand:angular.terminal.guard",
     "onCommand:angular.terminal.library",
     "onCommand:angular.terminal.pipe",
     "onCommand:angular.terminal.service",
-    "onCommand:angular.terminal.start"
+    "onCommand:angular.terminal.start",
+    "onCommand:angular.terminal.test",
+    "onCommand:angular.terminal.version"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -140,138 +143,153 @@
     "commands": [
       {
         "command": "angular.file.class",
-        "title": "Angular: Generate Class",
-        "gruop": "Angular"
+        "title": "Generate Class",
+        "category": "Angular"
       },
       {
         "command": "angular.file.component",
-        "title": "Angular: Generate Component File",
-        "gruop": "Angular"
+        "title": "Generate Component File",
+        "category": "Angular"
       },
       {
         "command": "angular.file.directive",
-        "title": "Angular: Generate Directive",
-        "gruop": "Angular"
+        "title": "Generate Directive",
+        "category": "Angular"
       },
       {
         "command": "angular.file.enum",
-        "title": "Angular: Generate Enum",
-        "gruop": "Angular"
+        "title": "Generate Enum",
+        "category": "Angular"
       },
       {
         "command": "angular.file.guard",
-        "title": "Angular: Generate Guard",
-        "gruop": "Angular"
+        "title": "Generate Guard",
+        "category": "Angular"
       },
       {
         "command": "angular.file.interceptor",
-        "title": "Angular: Generate Interceptor",
-        "gruop": "Angular"
+        "title": "Generate Interceptor",
+        "category": "Angular"
       },
       {
         "command": "angular.file.interface",
-        "title": "Angular: Generate Interface",
-        "gruop": "Angular"
+        "title": "Generate Interface",
+        "category": "Angular"
       },
       {
         "command": "angular.file.module",
-        "title": "Angular: Generate Module",
-        "gruop": "Angular"
+        "title": "Generate Module",
+        "category": "Angular"
       },
       {
         "command": "angular.file.pipe",
-        "title": "Angular: Generate Pipe",
-        "gruop": "Angular"
+        "title": "Generate Pipe",
+        "category": "Angular"
       },
       {
         "command": "angular.file.resolver",
-        "title": "Angular: Generate Resolver",
-        "gruop": "Angular"
+        "title": "Generate Resolver",
+        "category": "Angular"
       },
       {
         "command": "angular.file.service",
-        "title": "Angular: Generate Service",
-        "gruop": "Angular"
+        "title": "Generate Service",
+        "category": "Angular"
       },
       {
         "command": "angular.file.spec",
-        "title": "Angular: Generate Test",
-        "gruop": "Angular"
+        "title": "Generate Test",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.analytics.disable",
-        "title": "Angular: Disable Analytics",
-        "gruop": "Angular"
+        "title": "Disable Analytics",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.analytics.enable",
-        "title": "Angular: Enable Analytics",
-        "gruop": "Angular"
+        "title": "Enable Analytics",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.analytics.info",
-        "title": "Angular: Info Analytics",
-        "gruop": "Angular"
+        "title": "Info Analytics",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.analytics.prompt",
-        "title": "Angular: Prompt Analytics",
-        "gruop": "Angular"
+        "title": "Prompt Analytics",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.cache.clear",
-        "title": "Angular: Clear Cache",
-        "gruop": "Angular"
+        "title": "Clear Cache",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.cache.disable",
-        "title": "Angular: Disable Cache",
-        "gruop": "Angular"
+        "title": "Disable Cache",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.cache.enable",
-        "title": "Angular: Enable Cache",
-        "gruop": "Angular"
+        "title": "Enable Cache",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.cache.info",
-        "title": "Angular: Info Cache",
-        "gruop": "Angular"
+        "title": "Info Cache",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.component",
-        "title": "Angular: Generate Component with CLI",
-        "gruop": "Angular"
+        "title": "Generate Component with CLI",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.environments",
-        "title": "Angular: Generate Environments",
-        "gruop": "Angular"
+        "title": "Generate Environments",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.guard",
-        "title": "Angular: Generate Guard with CLI",
-        "gruop": "Angular"
+        "title": "Generate Guard with CLI",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.library",
-        "title": "Angular: Generate Library",
-        "gruop": "Angular"
+        "title": "Generate Library",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.pipe",
-        "title": "Angular: Generate Pipe with CLI",
-        "gruop": "Angular"
+        "title": "Generate Pipe with CLI",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.service",
-        "title": "Angular: Generate Service with CLI",
-        "gruop": "Angular"
+        "title": "Generate Service with CLI",
+        "category": "Angular"
       },
       {
         "command": "angular.terminal.start",
-        "title": "Angular: Start Server",
-        "gruop": "Angular"
+        "title": "Start Server",
+        "category": "Angular"
+      },
+      {
+        "command": "angular.terminal.test",
+        "title": "Run Test",
+        "category": "Angular"
+      },
+      {
+        "command": "angular.terminal.e2e",
+        "title": "Run E2E",
+        "category": "Angular"
+      },
+      {
+        "command": "angular.terminal.version",
+        "title": "Version",
+        "category": "Angular"
       }
     ],
     "submenus": [

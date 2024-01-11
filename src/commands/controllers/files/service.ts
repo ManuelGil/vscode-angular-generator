@@ -33,18 +33,11 @@ const newService = async (
     relativePath,
   );
 
-  let className = await getClass(
+  const className = await getClass(
     vscode,
     'Service class name',
     'E.g. User, Role, Auth...',
   );
-
-  if (className === 'Service') {
-    vscode.window.showErrorMessage('The file has not been created!');
-    return;
-  }
-
-  className = className.replace(/service/gi, '');
 
   const body = content.replace(/\{className\}/g, className);
 

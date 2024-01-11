@@ -4,6 +4,7 @@ import {
   getType,
   parsePath,
   save,
+  toCapitalize,
   toKebabCase,
 } from '../../utils/functions';
 
@@ -29,16 +30,11 @@ const newInterface = async (
     relativePath,
   );
 
-  let className = await getClass(
+  const className = await getClass(
     vscode,
     'Interface class name',
     'E.g. User, Role, Auth...',
   );
-
-  if (className === 'Interface') {
-    vscode.window.showErrorMessage('The file has not been created!');
-    return;
-  }
 
   let type = await getType(
     vscode,
@@ -46,9 +42,10 @@ const newInterface = async (
     'E.g. interface, dto, entity, model...',
   );
 
-  className = className.replace(/interface/gi, '');
-
-  const body = content.replace(/\{className\}/g, className);
+  const body = content.replace(
+    /\{className\}/g,
+    className + toCapitalize(type),
+  );
 
   type = type.length !== 0 ? '.' + type : '';
 

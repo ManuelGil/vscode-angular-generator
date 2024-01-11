@@ -33,18 +33,11 @@ const newDirective = async (
     relativePath,
   );
 
-  let className = await getClass(
+  const className = await getClass(
     vscode,
     'Directive class name',
     'E.g. User, Role, Auth...',
   );
-
-  if (className === 'Directive') {
-    vscode.window.showErrorMessage('The file has not been created!');
-    return;
-  }
-
-  className = className.replace(/interceptor/gi, '');
 
   const body = content.replace(/\{className\}/g, className);
 

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2024-01-11
+
+### Added
+
+- Add e2e and version commands
+
+### Changed
+
+- Improve context menu options
+
+### Removed
+
+- Remove file name restriction
+
 ## [1.7.0] - 2024-01-09
 
 ### Added
@@ -138,7 +152,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.7.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.3...v1.8.0
 [1.7.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.3...v1.7.0
 [1.6.3]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.2...v1.6.3
 [1.6.2]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.1...v1.6.2
