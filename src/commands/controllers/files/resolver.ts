@@ -6,28 +6,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { Injectable } from '@angular/core';
-import {
-  Router,
-  Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot,
-} from '@angular/router';
-import { Observable, of } from 'rxjs';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class {className}Resolver implements Resolve<boolean> {
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> {
-    return of(true);
-  }
-}
-`;
-
 const newResolver = async (vscode: any, fs: any, path: any, args: any = null) => {
   let relativePath = '';
 
@@ -48,11 +26,31 @@ const newResolver = async (vscode: any, fs: any, path: any, args: any = null) =>
     'E.g. User, Role, Auth...',
   );
 
-  const body = content.replace(/\{className\}/g, className);
+const content = `import { Injectable } from '@angular/core';
+import {
+  Router,
+  Resolve,
+  RouterStateSnapshot,
+  ActivatedRouteSnapshot,
+} from '@angular/router';
+import { Observable, of } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ${className}Resolver implements Resolve<boolean> {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> {
+    return of(true);
+  }
+}
+`;
 
   const filename = '/' + folder + toKebabCase(className) + '.resolver.ts';
 
-  save(vscode, fs, path, filename, body);
+  save(vscode, fs, path, filename, content);
 };
 
 export { newResolver };

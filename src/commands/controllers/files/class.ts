@@ -8,9 +8,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `export class {className} {}
-`;
-
 const newClass = async (vscode: any, fs: any, path: any, args: any = null) => {
   let relativePath = '';
 
@@ -37,16 +34,14 @@ const newClass = async (vscode: any, fs: any, path: any, args: any = null) => {
     'E.g. class, dto, entity, model...',
   );
 
-  const body = content.replace(
-    /\{className\}/g,
-    className + toCapitalize(type),
-  );
+  const content = `export class ${className}${toCapitalize(type)} {}
+`;
 
-  type = type.length !== 0 ? '.' + type : '';
+  type = type.length !== 0 ? `.${type}` : '';
 
-  const filename = '/' + folder + toKebabCase(className) + type + '.ts';
+  const filename = `/${folder}${toKebabCase(className)}${type}.ts`;
 
-  save(vscode, fs, path, filename, body);
+  save(vscode, fs, path, filename, content);
 };
 
 export { newClass };

@@ -6,16 +6,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-@NgModule({
-  declarations: [],
-  imports: [CommonModule],
-})
-export class {className}Module {}
-`;
-
 const newModule = async (vscode: any, fs: any, path: any, args: any = null) => {
   let relativePath = '';
 
@@ -36,11 +26,19 @@ const newModule = async (vscode: any, fs: any, path: any, args: any = null) => {
     'E.g. User, Role, Auth...',
   );
 
-  const body = content.replace(/\{className\}/g, className);
+const content = `import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-  const filename = '/' + folder + toKebabCase(className) + '.module.ts';
+@NgModule({
+  declarations: [],
+  imports: [CommonModule],
+})
+export class ${className}Module {}
+`;
 
-  save(vscode, fs, path, filename, body);
+  const filename = `/${folder}${toKebabCase(className)}.module.ts`;
+
+  save(vscode, fs, path, filename, content);
 };
 
 export { newModule };

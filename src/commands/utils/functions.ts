@@ -160,6 +160,20 @@ const toKebabCase = (text: string) => {
     .toLowerCase();
 };
 
+const tryParseJSONObject = (text: string) => {
+  try {
+    var object = JSON.parse(text);
+
+    if (object && typeof object === 'object') {
+      return object;
+    }
+  } catch (e) {
+    return false;
+  }
+
+  return false;
+};
+
 export {
   execute,
   getClass,
@@ -170,4 +184,5 @@ export {
   save,
   toCapitalize,
   toKebabCase,
+  tryParseJSONObject,
 };

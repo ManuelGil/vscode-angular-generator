@@ -6,18 +6,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { Pipe, PipeTransform } from '@angular/core';
-
-@Pipe({
-  name: '{entityName}',
-})
-export class {className}Pipe implements PipeTransform {
-  transform(value: unknown, ...args: unknown[]): unknown {
-    return null;
-  }
-}
-`;
-
 const newPipe = async (vscode: any, fs: any, path: any, args: any = null) => {
   let relativePath = '';
 
@@ -38,13 +26,21 @@ const newPipe = async (vscode: any, fs: any, path: any, args: any = null) => {
     'E.g. User, Role, Auth...',
   );
 
-  const body = content
-    .replace(/\{className\}/g, className)
-    .replace(/\{entityName\}/g, toKebabCase(className));
+  const content = `import { Pipe, PipeTransform } from '@angular/core';
 
-  const filename = '/' + folder + toKebabCase(className) + '.pipe.ts';
+@Pipe({
+  name: '${toKebabCase(className)}',
+})
+export class ${className}Pipe implements PipeTransform {
+  transform(value: unknown, ...args: unknown[]): unknown {
+    return null;
+  }
+}
+`;
 
-  save(vscode, fs, path, filename, body);
+  const filename = `/${folder}${toKebabCase(className)}.pipe.ts`;
+
+  save(vscode, fs, path, filename, content);
 };
 
 export { newPipe };

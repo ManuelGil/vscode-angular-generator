@@ -6,13 +6,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { {guardType} } from '@angular/router';
-
-export const {entityName}Guard: {guardType} = ({args}) => {
-  return true;
-};
-`;
-
 const newGuard = async (vscode: any, fs: any, path: any, args: any = null) => {
   let relativePath = '';
 
@@ -33,13 +26,6 @@ const newGuard = async (vscode: any, fs: any, path: any, args: any = null) => {
     'E.g. user, role, auth...',
   );
 
-  if (entityName === 'Guard') {
-    vscode.window.showErrorMessage('The file has not been created!');
-    return;
-  }
-
-  entityName = entityName.replace(/guard/gi, '');
-
   const guardType = await vscode.window.showQuickPick(
     ['CanActivate', 'CanActivateChild', 'CanDeactivate', 'CanMatch'],
     {
@@ -47,45 +33,52 @@ const newGuard = async (vscode: any, fs: any, path: any, args: any = null) => {
     },
   );
 
+  const content = `import { {guardType} } from '@angular/router';
+
+export const {entityName}Guard: {guardType} = ({args}) => {
+  return true;
+};
+`;
+
   let body = '';
 
   switch (guardType) {
     case 'CanActivate':
       body = content
-        .replace(/\{entityName\}/g, entityName)
-        .replace(/\{guardType\}/g, 'CanActivateFn')
-        .replace(/\{args\}/g, 'route, state');
+        .replaceAll('{entityName}', entityName)
+        .replaceAll('{guardType}', 'CanActivateFn')
+        .replaceAll('{args}', 'route, state');
       break;
 
     case 'CanActivateChild':
       body = content
-        .replace(/\{entityName\}/g, entityName)
-        .replace(/\{guardType\}/g, 'CanActivateChildFn')
-        .replace(/\{args\}/g, 'childRoute, state');
+        .replaceAll('{entityName}', entityName)
+        .replaceAll('{guardType}', 'CanActivateChildFn')
+        .replaceAll('{args}', 'childRoute, state');
       break;
 
     case 'CanDeactivate':
       body = content
-        .replace(/\{entityName\}/g, entityName)
-        .replace(/\{guardType\}/g, 'CanDeactivateFn')
-        .replace(
-          /\{args\}/g,
+        .replaceAll('{entityName}', entityName)
+        .replaceAll('{guardType}', 'CanDeactivateFn')
+        .replaceAll(
+          '{args}',
           'component, currentRoute, currentState, nextState',
         );
       break;
 
     case 'CanMatch':
       body = content
-        .replace(/\{entityName\}/g, entityName)
-        .replace(/\{guardType\}/g, 'CanMatchFn')
-        .replace(/\{args\}/g, 'route, segments');
+        .replaceAll('{entityName}', entityName)
+        .replaceAll('{guardType}', 'CanMatchFn')
+        .replaceAll('{args}', 'route, segments');
       break;
 
     default:
       break;
   }
 
-  const filename = '/' + folder + toKebabCase(entityName) + '.guard.ts';
+  const filename = `/${folder}${toKebabCase(entityName)}.guard.ts`;
 
   save(vscode, fs, path, filename, body);
 };

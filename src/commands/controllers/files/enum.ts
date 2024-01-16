@@ -6,9 +6,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `export enum {className} {}
-`;
-
 const newEnum = async (vscode: any, fs: any, path: any, args: any = null) => {
   let relativePath = '';
 
@@ -29,11 +26,12 @@ const newEnum = async (vscode: any, fs: any, path: any, args: any = null) => {
     'E.g. User, Role, Auth...',
   );
 
-  const body = content.replace(/\{className\}/g, className);
+  const content = `export enum ${className} {}
+`;
 
-  const filename = '/' + folder + toKebabCase(className) + '.enum.ts';
+  const filename = `/${folder}${toKebabCase(className)}.enum.ts`;
 
-  save(vscode, fs, path, filename, body);
+  save(vscode, fs, path, filename, content);
 };
 
 export { newEnum };

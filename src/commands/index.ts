@@ -22,3 +22,4 @@ export * from './controllers/terminal/serve';
 export * from './controllers/terminal/service';
 export * from './controllers/terminal/test';
 export * from './controllers/terminal/version';
+export * from './controllers/transform/typescript';

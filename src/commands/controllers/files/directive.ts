@@ -6,14 +6,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { Directive } from '@angular/core';
-
-@Directive({
-  selector: '[app{className}]',
-})
-export class {className}Directive {}
-`;
-
 const newDirective = async (
   vscode: any,
   fs: any,
@@ -39,11 +31,17 @@ const newDirective = async (
     'E.g. User, Role, Auth...',
   );
 
-  const body = content.replace(/\{className\}/g, className);
+  const content = `import { Directive } from '@angular/core';
 
-  const filename = '/' + folder + toKebabCase(className) + '.interceptor.ts';
+@Directive({
+  selector: '[app${className}]',
+})
+export class ${className}Directive {}
+`;
 
-  save(vscode, fs, path, filename, body);
+  const filename = `/${folder}${toKebabCase(className)}.interceptor.ts`;
+
+  save(vscode, fs, path, filename, content);
 };
 
 export { newDirective };

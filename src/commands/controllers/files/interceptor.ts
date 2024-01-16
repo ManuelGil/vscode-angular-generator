@@ -6,26 +6,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-@Injectable()
-export class {className}Interceptor implements HttpInterceptor {
-  intercept(
-    request: HttpRequest<unknown>,
-    next: HttpHandler
-  ): Observable<HttpEvent<unknown>> {
-    return next.handle(request);
-  }
-}
-`;
-
 const newInterceptor = async (
   vscode: any,
   fs: any,
@@ -51,11 +31,29 @@ const newInterceptor = async (
     'E.g. User, Role, Auth...',
   );
 
-  const body = content.replace(/\{className\}/g, className);
+  const content = `import { Injectable } from '@angular/core';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+} from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-  const filename = '/' + folder + toKebabCase(className) + '.interceptor.ts';
+@Injectable()
+export class ${className}Interceptor implements HttpInterceptor {
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    return next.handle(request);
+  }
+}
+`;
 
-  save(vscode, fs, path, filename, body);
+  const filename = `/${folder}${toKebabCase(className)}.interceptor.ts`;
+
+  save(vscode, fs, path, filename, content);
 };
 
 export { newInterceptor };

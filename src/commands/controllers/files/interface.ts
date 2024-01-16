@@ -8,9 +8,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `export interface {className} {}
-`;
-
 const newInterface = async (
   vscode: any,
   fs: any,
@@ -42,16 +39,15 @@ const newInterface = async (
     'E.g. interface, dto, entity, model...',
   );
 
-  const body = content.replace(
-    /\{className\}/g,
-    className + toCapitalize(type),
-  );
+  const content = `export interface ${className}${toCapitalize(type)} {}
+`;
 
-  type = type.length !== 0 ? '.' + type : '';
 
-  const filename = '/' + folder + toKebabCase(className) + type + '.ts';
+  type = type.length !== 0 ? `.${type}` : '';
 
-  save(vscode, fs, path, filename, body);
+  const filename = `/${folder}${toKebabCase(className)}${type}.ts`;
+
+  save(vscode, fs, path, filename, content);
 };
 
 export { newInterface };

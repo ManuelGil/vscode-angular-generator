@@ -6,14 +6,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class {className}Service {}
-`;
-
 const newService = async (
   vscode: any,
   fs: any,
@@ -39,11 +31,17 @@ const newService = async (
     'E.g. User, Role, Auth...',
   );
 
-  const body = content.replace(/\{className\}/g, className);
+  const content = `import { Injectable } from '@angular/core';
 
-  const filename = '/' + folder + toKebabCase(className) + '.service.ts';
+@Injectable({
+  providedIn: 'root',
+})
+export class ${className}Service {}
+`;
 
-  save(vscode, fs, path, filename, body);
+  const filename = `/${folder}${toKebabCase(className)}.service.ts`;
+
+  save(vscode, fs, path, filename, content);
 };
 
 export { newService };

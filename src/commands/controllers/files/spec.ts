@@ -8,24 +8,6 @@ import {
   toKebabCase,
 } from '../../utils/functions';
 
-const content = `import { TestBed } from '@angular/core/testing';
-
-import { {className} } from './{entityName}.{type}';
-
-describe('{className}', () => {
-  let {type}: {className};
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    {type} = TestBed.inject({className});
-  });
-
-  it('should be created', () => {
-    expect({type}).toBeTruthy();
-  });
-});
-`;
-
 const newTest = async (vscode: any, fs: any, path: any, args: any = null) => {
   let relativePath = '';
 
@@ -56,14 +38,27 @@ const newTest = async (vscode: any, fs: any, path: any, args: any = null) => {
     return;
   }
 
-  const body = content
-    .replace(/\{className\}/g, className + toCapitalize(type))
-    .replace(/\{entityName\}/g, toKebabCase(className))
-    .replace(/\{type\}/g, type);
+const content = `import { TestBed } from '@angular/core/testing';
 
-  const filename = '/' + folder + toKebabCase(className) + '.spec.ts';
+import { ${className}${toCapitalize(type)} } from './${toKebabCase(className)}.{type}';
 
-  save(vscode, fs, path, filename, body);
+describe('${className}${toCapitalize(type)}', () => {
+  let {type}: ${className}${toCapitalize(type)};
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    {type} = TestBed.inject(${className}${toCapitalize(type)});
+  });
+
+  it('should be created', () => {
+    expect(${type}).toBeTruthy();
+  });
+});
+`;
+
+  const filename = `/${folder}${toKebabCase(className)}.spec.ts`;
+
+  save(vscode, fs, path, filename, content);
 };
 
 export { newTest };
