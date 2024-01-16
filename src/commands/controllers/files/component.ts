@@ -12,29 +12,6 @@ const newComponent = async (
   path: any,
   args: any = null,
 ) => {
-  const standalone = `import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-@Component({
-  selector: 'app-{entityName}',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './{entityName}.component.html',
-  styleUrls: ['./{entityName}.component.{style}'],
-})
-export class {className}Component {}
-`;
-
-  const component = `import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-{entityName}',
-  templateUrl: './{entityName}.component.html',
-  styleUrls: ['./{entityName}.component.{style}'],
-})
-export class {className}Component {}
-`;
-
   let resource;
 
   if (vscode.workspace.workspaceFolders) {
@@ -42,7 +19,6 @@ export class {className}Component {}
   }
 
   const angularConfig = vscode.workspace.getConfiguration('angular', resource);
-  const content = angularConfig.get('standalone') ? standalone : component;
   const style = angularConfig.get('style');
 
   let relativePath = '';
@@ -64,14 +40,36 @@ export class {className}Component {}
     'E.g. User, Role, Auth...',
   );
 
-  const body = content
-    .replaceAll('{className}', className)
-    .replaceAll('{entityName}', toKebabCase(className))
-    .replaceAll('{style}', style);
+  let content;
+
+  if (angularConfig.get('standalone')) {
+    content = `import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-${toKebabCase(className)}',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './${toKebabCase(className)}.component.html',
+  styleUrls: ['./${toKebabCase(className)}.component.${style}'],
+})
+export class ${className}Component {}
+`;
+  } else {
+    content = `import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-${toKebabCase(className)}',
+  templateUrl: './${toKebabCase(className)}.component.html',
+  styleUrls: ['./${toKebabCase(className)}.component.${style}'],
+})
+export class ${className}Component {}
+`;
+  }
 
   const filename = `/${folder}${toKebabCase(className)}.component.ts`;
 
-  save(vscode, fs, path, filename, body);
+  save(vscode, fs, path, filename, content);
 };
 
 export { newComponent };
