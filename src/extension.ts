@@ -1,165 +1,211 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import * as vscode from 'vscode';
 
+import { Config, EXTENSION_ID } from './app/configs';
 import {
-  analyticsDisable,
-  analyticsEnable,
-  analyticsInfo,
-  analyticsPrompt,
-  cacheClear,
-  cacheDisable,
-  cacheEnable,
-  cacheInfo,
-  e2e,
-  generateComponent,
-  generateEnvironments,
-  generateGuard,
-  generateLibrary,
-  generatePipe,
-  generateService,
-  json2ts,
-  newClass,
-  newComponent,
-  newDirective,
-  newEnum,
-  newGuard,
-  newInterceptor,
-  newInterface,
-  newModule,
-  newPipe,
-  newResolver,
-  newService,
-  newTest,
-  start,
-  test,
-  version,
-} from './commands';
+  FeedbackController,
+  FileController,
+  TerminalController,
+  TransformController,
+} from './app/controllers';
+import { FeedbackProvider } from './app/providers';
 
 export function activate(context: vscode.ExtensionContext) {
+  // The code you place here will be executed every time your command is executed
+  let resource: vscode.Uri | null = null;
+
+  // Get the resource for the workspace
+  if (vscode.workspace.workspaceFolders) {
+    resource = vscode.workspace.workspaceFolders[0].uri;
+  }
+
+  // -----------------------------------------------------------------
+  // Initialize the extension
+  // -----------------------------------------------------------------
+
+  // Get the configuration for the extension
+  const config = new Config(
+    vscode.workspace.getConfiguration(EXTENSION_ID, resource ?? null),
+  );
+
+  // -----------------------------------------------------------------
+  // Register FileController and commands
+  // -----------------------------------------------------------------
+
+  // Create a new FileController
+  const fileController = new FileController(config);
+
   const angularFileClass = vscode.commands.registerCommand(
-    'angular.file.class',
-    (args) => newClass(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.class`,
+    (args) => fileController.newClass(args),
   );
   const angularFileComponent = vscode.commands.registerCommand(
-    'angular.file.component',
-    (args) => newComponent(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.component`,
+    (args) => fileController.newComponent(args),
   );
   const angularFileDirective = vscode.commands.registerCommand(
-    'angular.file.directive',
-    (args) => newDirective(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.directive`,
+    (args) => fileController.newDirective(args),
   );
   const angularFileEnum = vscode.commands.registerCommand(
-    'angular.file.enum',
-    (args) => newEnum(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.enum`,
+    (args) => fileController.newEnum(args),
   );
   const angularFileGuard = vscode.commands.registerCommand(
-    'angular.file.guard',
-    (args) => newGuard(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.guard`,
+    (args) => fileController.newGuard(args),
   );
   const angularFileInterceptor = vscode.commands.registerCommand(
-    'angular.file.interceptor',
-    (args) => newInterceptor(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.interceptor`,
+    (args) => fileController.newInterceptor(args),
   );
   const angularFileInterface = vscode.commands.registerCommand(
-    'angular.file.interface',
-    (args) => newInterface(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.interface`,
+    (args) => fileController.newInterface(args),
   );
   const angularFileModule = vscode.commands.registerCommand(
-    'angular.file.module',
-    (args) => newModule(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.module`,
+    (args) => fileController.newModule(args),
   );
   const angularFilePipe = vscode.commands.registerCommand(
-    'angular.file.pipe',
-    (args) => newPipe(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.pipe`,
+    (args) => fileController.newPipe(args),
   );
   const angularFileResolver = vscode.commands.registerCommand(
-    'angular.file.resolver',
-    (args) => newResolver(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.resolver`,
+    (args) => fileController.newResolver(args),
   );
   const angularFileService = vscode.commands.registerCommand(
-    'angular.file.service',
-    (args) => newService(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.service`,
+    (args) => fileController.newService(args),
   );
   const angularFileTest = vscode.commands.registerCommand(
-    'angular.file.spec',
-    (args) => newTest(vscode, fs, path, args),
+    `${EXTENSION_ID}.file.spec`,
+    (args) => fileController.newTest(args),
   );
+
+  // -----------------------------------------------------------------
+  // Register TerminalController and commands
+  // -----------------------------------------------------------------
+
+  // Create a new TerminalController
+  const terminalController = new TerminalController(config);
+
   const angularTerminalAnalyticsDisable = vscode.commands.registerCommand(
-    'angular.terminal.analytics.disable',
-    () => analyticsDisable(vscode),
+    `${EXTENSION_ID}.terminal.analytics.disable`,
+    () => terminalController.analyticsDisable(),
   );
   const angularTerminalAnalyticsEnable = vscode.commands.registerCommand(
-    'angular.terminal.analytics.enable',
-    () => analyticsEnable(vscode),
+    `${EXTENSION_ID}.terminal.analytics.enable`,
+    () => terminalController.analyticsEnable(),
   );
   const angularTerminalAnalyticsInfo = vscode.commands.registerCommand(
-    'angular.terminal.analytics.info',
-    () => analyticsInfo(vscode),
+    `${EXTENSION_ID}.terminal.analytics.info`,
+    () => terminalController.analyticsInfo(),
   );
   const angularTerminalAnalyticsPrompt = vscode.commands.registerCommand(
-    'angular.terminal.analytics.prompt',
-    () => analyticsPrompt(vscode),
+    `${EXTENSION_ID}.terminal.analytics.prompt`,
+    () => terminalController.analyticsPrompt(),
   );
   const angularTerminalCacheClear = vscode.commands.registerCommand(
-    'angular.terminal.cache.clear',
-    () => cacheClear(vscode),
+    `${EXTENSION_ID}.terminal.cache.clear`,
+    () => terminalController.cacheClear(),
   );
   const angularTerminalCacheDisable = vscode.commands.registerCommand(
-    'angular.terminal.cache.disable',
-    () => cacheDisable(vscode),
+    `${EXTENSION_ID}.terminal.cache.disable`,
+    () => terminalController.cacheDisable(),
   );
   const angularTerminalCacheEnable = vscode.commands.registerCommand(
-    'angular.terminal.cache.enable',
-    () => cacheEnable(vscode),
+    `${EXTENSION_ID}.terminal.cache.enable`,
+    () => terminalController.cacheEnable(),
   );
   const angularTerminalCacheInfo = vscode.commands.registerCommand(
-    'angular.terminal.cache.info',
-    () => cacheInfo(vscode),
+    `${EXTENSION_ID}.terminal.cache.info`,
+    () => terminalController.cacheInfo(),
   );
   const angularTerminalComponent = vscode.commands.registerCommand(
-    'angular.terminal.component',
-    (args) => generateComponent(vscode, path, args),
+    `${EXTENSION_ID}.terminal.component`,
+    (args) => terminalController.generateComponent(args),
   );
   const angularTerminalEnvironments = vscode.commands.registerCommand(
-    'angular.terminal.environments',
-    () => generateEnvironments(vscode),
+    `${EXTENSION_ID}.terminal.environments`,
+    () => terminalController.generateEnvironments(),
   );
   const angularTerminalGuard = vscode.commands.registerCommand(
-    'angular.terminal.guard',
-    (args) => generateGuard(vscode, path, args),
+    `${EXTENSION_ID}.terminal.guard`,
+    (args) => terminalController.generateGuard(args),
   );
   const angularTerminalLibrary = vscode.commands.registerCommand(
-    'angular.terminal.library',
-    () => generateLibrary(vscode),
+    `${EXTENSION_ID}.terminal.library`,
+    () => terminalController.generateLibrary(),
   );
   const angularTerminalPipe = vscode.commands.registerCommand(
-    'angular.terminal.pipe',
-    (args) => generatePipe(vscode, path, args),
+    `${EXTENSION_ID}.terminal.pipe`,
+    (args) => terminalController.generatePipe(args),
   );
   const angularTerminalService = vscode.commands.registerCommand(
-    'angular.terminal.service',
-    (args) => generateService(vscode, path, args),
+    `${EXTENSION_ID}.terminal.service`,
+    (args) => terminalController.generateService(args),
   );
   const angularTerminalStart = vscode.commands.registerCommand(
-    'angular.terminal.start',
-    () => start(vscode),
+    `${EXTENSION_ID}.terminal.start`,
+    () => terminalController.start(),
   );
   const angularTerminalTest = vscode.commands.registerCommand(
-    'angular.terminal.test',
-    () => test(vscode),
+    `${EXTENSION_ID}.terminal.test`,
+    () => terminalController.test(),
   );
   const angularTerminalE2E = vscode.commands.registerCommand(
-    'angular.terminal.e2e',
-    () => e2e(vscode),
+    `${EXTENSION_ID}.terminal.e2e`,
+    () => terminalController.e2e(),
   );
   const angularTerminalVersion = vscode.commands.registerCommand(
-    'angular.terminal.version',
-    () => version(vscode),
+    `${EXTENSION_ID}.terminal.version`,
+    () => terminalController.version(),
   );
+
+  // -----------------------------------------------------------------
+  // Register TransformController and commands
+  // -----------------------------------------------------------------
+
+  // Create a new TransformController
+  const transformController = new TransformController(config);
+
   const angularTransformJson2Ts = vscode.commands.registerCommand(
-    'angular.transform.json.ts',
-    () => json2ts(vscode),
+    `${EXTENSION_ID}.transform.json.ts`,
+    () => transformController.json2ts(),
+  );
+
+  // -----------------------------------------------------------------
+  // Register FeedbackProvider and Feedback commands
+  // -----------------------------------------------------------------
+
+  // Create a new FeedbackProvider
+  const feedbackProvider = new FeedbackProvider(new FeedbackController());
+
+  // Register the feedback provider
+  const angularFeedbackTreeView = vscode.window.createTreeView(
+    `${EXTENSION_ID}.feedbackView`,
+    {
+      treeDataProvider: feedbackProvider,
+    },
+  );
+
+  // Register the commands
+  const angularFeedbackAboutUs = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.feedback.aboutUs`,
+    () => feedbackProvider.controller.aboutUs(),
+  );
+  const angularFeedbackReportIssues = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.feedback.reportIssues`,
+    () => feedbackProvider.controller.reportIssues(),
+  );
+  const angularFeedbackRateUs = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.feedback.rateUs`,
+    () => feedbackProvider.controller.rateUs(),
+  );
+  const angularFeedbackSupportUs = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.feedback.supportUs`,
+    () => feedbackProvider.controller.supportUs(),
   );
 
   context.subscriptions.push(angularFileClass);
@@ -193,6 +239,11 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(angularTerminalE2E);
   context.subscriptions.push(angularTerminalVersion);
   context.subscriptions.push(angularTransformJson2Ts);
+  context.subscriptions.push(angularFeedbackTreeView);
+  context.subscriptions.push(angularFeedbackAboutUs);
+  context.subscriptions.push(angularFeedbackReportIssues);
+  context.subscriptions.push(angularFeedbackRateUs);
+  context.subscriptions.push(angularFeedbackSupportUs);
 }
 
 export function deactivate() {}

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2024-02-11
+
+### Changed
+
+- Refactor the folder structure of the extension to improve the codebase
+- Improve the generation of the files to use the new folder structure
+
 ## [1.9.0] - 2024-01-15
 
 ### Added
@@ -162,9 +169,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.9.0...HEAD
-[1.9.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.3...v1.9.0
-[1.8.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.3...v1.8.0
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.9.0...v2.0.0
+[1.9.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.8.0...v1.9.0
+[1.8.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.3...v1.7.0
 [1.6.3]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.2...v1.6.3
 [1.6.2]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.6.1...v1.6.2

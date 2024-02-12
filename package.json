@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "1.9.0",
+  "version": "2.0.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -78,37 +78,7 @@
     "url": "https://github.com/ManuelGil/vscode-angular-generator/issues"
   },
   "activationEvents": [
-    "onCommand:angular.file.class",
-    "onCommand:angular.file.component",
-    "onCommand:angular.file.directive",
-    "onCommand:angular.file.enum",
-    "onCommand:angular.file.guard",
-    "onCommand:angular.file.interceptor",
-    "onCommand:angular.file.interface",
-    "onCommand:angular.file.module",
-    "onCommand:angular.file.pipe",
-    "onCommand:angular.file.resolver",
-    "onCommand:angular.file.service",
-    "onCommand:angular.file.spec",
-    "onCommand:angular.terminal.analytics.disable",
-    "onCommand:angular.terminal.analytics.enable",
-    "onCommand:angular.terminal.analytics.info",
-    "onCommand:angular.terminal.analytics.prompt",
-    "onCommand:angular.terminal.cache.clear",
-    "onCommand:angular.terminal.cache.disable",
-    "onCommand:angular.terminal.cache.enable",
-    "onCommand:angular.terminal.cache.info",
-    "onCommand:angular.terminal.component",
-    "onCommand:angular.terminal.e2e",
-    "onCommand:angular.terminal.environments",
-    "onCommand:angular.terminal.guard",
-    "onCommand:angular.terminal.library",
-    "onCommand:angular.terminal.pipe",
-    "onCommand:angular.terminal.service",
-    "onCommand:angular.terminal.start",
-    "onCommand:angular.terminal.test",
-    "onCommand:angular.terminal.version",
-    "onCommand:angular.transform.json.ts"
+    "workspaceContains:**/angular.json"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -300,26 +270,30 @@
     ],
     "submenus": [
       {
-        "id": "angular.submenu",
+        "id": "angular.explorer.submenu",
+        "label": "Angular File Generator"
+      },
+      {
+        "id": "angular.editor.submenu",
         "label": "Angular File Generator"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "submenu": "angular.submenu",
+          "submenu": "angular.explorer.submenu",
           "group": "2_workspace",
           "when": "explorerViewletFocus && explorerResourceIsFolder && !explorerResourceIsRoot"
         }
       ],
       "editor/context": [
         {
-          "command": "angular.transform.json.ts",
+          "submenu": "angular.editor.submenu",
           "group": "1_modification",
           "when": "editorHasSelection"
         }
       ],
-      "angular.submenu": [
+      "angular.explorer.submenu": [
         {
           "command": "angular.file.class",
           "alt": "Generate Class",
@@ -400,6 +374,22 @@
           "alt": "Generate Service with CLI",
           "group": "2_terminal"
         }
+      ],
+      "angular.editor.submenu": [
+        {
+          "command": "angular.transform.json.ts",
+          "alt": "Convert JSON to TypeScript",
+          "group": "1_file"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "angular.feedbackView",
+          "name": "Angular File Generator",
+          "visibility": "hidden"
+        }
       ]
     },
     "jsonValidation": [
@@ -419,27 +409,26 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.1",
-    "@commitlint/config-conventional": "^17.7.0",
-    "@types/glob": "^7.1.3",
-    "@types/minimatch": "^3.0.3",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^12.11.7",
-    "@types/rimraf": "^4.0.5",
-    "@types/vscode": "^1.46.0",
-    "@typescript-eslint/eslint-plugin": "^6.7.0",
-    "@typescript-eslint/parser": "^6.7.0",
-    "eslint": "^8.49.0",
-    "eslint-config-standard-with-typescript": "^39.0.0",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-n": "^16.1.0",
+    "@commitlint/cli": "^18.6.0",
+    "@commitlint/config-conventional": "^18.6.0",
+    "@types/glob": "^8.1.0",
+    "@types/minimatch": "^3.0.5",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.17",
+    "@types/vscode": "^1.86.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
-    "glob": "^7.1.6",
-    "husky": "^8.0.3",
-    "lint-staged": "^14.0.1",
-    "mocha": "^10.2.0",
-    "prettier": "3.0.3",
-    "typescript": "^4.9.5",
+    "glob": "^10.3.10",
+    "husky": "^9.0.10",
+    "lint-staged": "^15.2.2",
+    "mocha": "^10.3.0",
+    "prettier": "3.2.5",
+    "typescript": "^5.3.3",
     "vscode-test": "^1.5.0"
   },
   "dependencies": {
