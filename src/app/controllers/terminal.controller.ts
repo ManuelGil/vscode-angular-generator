@@ -1,4 +1,5 @@
 import { Uri, window } from 'vscode';
+
 import { Config } from '../configs';
 import { getName, getPath, getRelativePath, runCommand } from '../helpers';
 
@@ -23,6 +24,7 @@ export class TerminalController {
   /**
    * Constructor for the TerminalController class.
    *
+   * @constructor
    * @param {Config} config - The configuration
    * @public
    * @memberof TerminalController
@@ -34,10 +36,10 @@ export class TerminalController {
   // -----------------------------------------------------------------
 
   // Public methods
-
   /**
    * Disables analytics.
    *
+   * @function analyticsDisable
    * @public
    * @memberof TerminalController
    * @example
@@ -45,13 +47,14 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  analyticsDisable() {
+  analyticsDisable(): void {
     runCommand('analytics disable', 'ng analytics disable');
   }
 
   /**
    * Enables analytics.
    *
+   * @function analyticsEnable
    * @public
    * @memberof TerminalController
    * @example
@@ -59,13 +62,14 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  analyticsEnable() {
+  analyticsEnable(): void {
     runCommand('analytics enable', 'ng analytics enable');
   }
 
   /**
    * Gets analytics information.
    *
+   * @function analyticsInfo
    * @public
    * @memberof TerminalController
    * @example
@@ -73,13 +77,14 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  analyticsInfo() {
+  analyticsInfo(): void {
     runCommand('analytics info', 'ng analytics info');
   }
 
   /**
    * Prompts for analytics.
    *
+   * @function analyticsPrompt
    * @public
    * @memberof TerminalController
    * @example
@@ -87,13 +92,14 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  analyticsPrompt() {
+  analyticsPrompt(): void {
     runCommand('analytics prompt', 'ng analytics prompt');
   }
 
   /**
    * Clears the cache.
    *
+   * @function cacheClear
    * @public
    * @memberof TerminalController
    * @example
@@ -101,13 +107,14 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  cacheClear() {
+  cacheClear(): void {
     runCommand('cache clean', 'ng cache clean');
   }
 
   /**
    * Disables the cache.
    *
+   * @function cacheDisable
    * @public
    * @memberof TerminalController
    * @example
@@ -115,13 +122,14 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  cacheDisable() {
+  cacheDisable(): void {
     runCommand('cache disable', 'ng cache disable');
   }
 
   /**
    * Enables the cache.
    *
+   * @function cacheEnable
    * @public
    * @memberof TerminalController
    * @example
@@ -129,13 +137,14 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  cacheEnable() {
+  cacheEnable(): void {
     runCommand('cache enable', 'ng cache enable');
   }
 
   /**
    * Gets cache information.
    *
+   * @function cacheInfo
    * @public
    * @memberof TerminalController
    * @example
@@ -143,22 +152,24 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  cacheInfo() {
+  cacheInfo(): void {
     runCommand('cache info', 'ng cache info');
   }
 
   /**
    * Generates a component.
    *
+   * @function generateComponent
    * @param {Uri} [path] - The path
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.generateComponent();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  async generateComponent(path?: Uri) {
+  async generateComponent(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -241,6 +252,7 @@ export class TerminalController {
   /**
    * Generates environments.
    *
+   * @function e2e
    * @public
    * @memberof TerminalController
    * @example
@@ -248,13 +260,14 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  e2e() {
+  e2e(): void {
     runCommand('e2e', 'ng e');
   }
 
   /**
    * Generates environments.
    *
+   * @function generateEnvironments
    * @public
    * @memberof TerminalController
    * @example
@@ -262,22 +275,24 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  generateEnvironments() {
+  generateEnvironments(): void {
     runCommand('generate environments', 'ng g environments');
   }
 
   /**
    * Generates a guard.
    *
+   * @function generateGuard
    * @param {Uri} [path] - The path
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.generateGuard();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  async generateGuard(path?: Uri) {
+  async generateGuard(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -334,14 +349,16 @@ export class TerminalController {
   /**
    * Generates a library.
    *
+   * @function generateLibrary
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.generateLibrary();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  async generateLibrary() {
+  async generateLibrary(): Promise<void> {
     // Get the path to the folder
     let folder = await getName(
       'Library name',
@@ -412,15 +429,17 @@ export class TerminalController {
   /**
    * Generates a pipe.
    *
+   * @function generatePipe
    * @param {Uri} [path] - The path
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.generatePipe();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  async generatePipe(path?: Uri) {
+  async generatePipe(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -496,6 +515,7 @@ export class TerminalController {
   /**
    * Starts the server.
    *
+   * @function start
    * @public
    * @memberof TerminalController
    * @example
@@ -503,22 +523,24 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  start() {
+  start(): void {
     runCommand('start', 'ng s');
   }
 
   /**
    * Generates a service.
    *
+   * @function generateService
    * @param {Uri} [path] - The path
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.generateService();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  async generateService(path?: Uri) {
+  async generateService(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -580,6 +602,7 @@ export class TerminalController {
   /**
    * Runs the tests.
    *
+   * @function test
    * @public
    * @memberof TerminalController
    * @example
@@ -587,13 +610,14 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  test() {
+  test(): void {
     runCommand('test', 'ng t');
   }
 
   /**
    * Displays the version.
    *
+   * @function version
    * @public
    * @memberof TerminalController
    * @example
@@ -601,7 +625,7 @@ export class TerminalController {
    *
    * @returns {void} - No return value
    */
-  version() {
+  version(): void {
     runCommand('version', 'ng v');
   }
 }

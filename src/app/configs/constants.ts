@@ -98,3 +98,68 @@ export const EXTENSION_SPONSOR_URL = 'https://github.com/sponsors/ManuelGil';
  */
 export const EXTENSION_PAYPAL_URL =
   'https://www.paypal.com/paypalme/ManuelFGil';
+
+/**
+ * STYLE: The style file extension when generating a new component.
+ * @type {string}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(STYLE);
+ *
+ * @returns {string} - The style file extension
+ */
+export const STYLE = 'css';
+
+/**
+ * STANDALONE: The standalone option when generating a new component.
+ * @type {boolean}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(STANDALONE);
+ *
+ * @returns {boolean} - The standalone flag
+ */
+export const STANDALONE = true;
+
+/**
+ * INCLUDE: The files to include.
+ * @type {string[]}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(INCLUDE);
+ *
+ * @returns {string[]} - The files to include
+ */
+export const INCLUDE = ['ts'];
+/**
+ * EXCLUDE: The files to exclude.
+ * @type {string[]}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(EXCLUDE);
+ *
+ * @returns {string[]} - The files to exclude
+ */
+export const EXCLUDE = [
+  '**/node_modules/**',
+  '**/dist/**',
+  '**/out/**',
+  '**/build/**',
+  '**/.*/**',
+];
+
+/**
+ * WATCH: The files to watch.
+ * @type {string[]}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(WATCH);
+ *
+ * @returns {string[]} - The files to watch
+ */
+export const WATCH = ['modules', 'components', 'services'];

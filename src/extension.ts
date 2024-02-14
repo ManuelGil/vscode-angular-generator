@@ -4,10 +4,15 @@ import { Config, EXTENSION_ID } from './app/configs';
 import {
   FeedbackController,
   FileController,
+  ListFilesController,
   TerminalController,
   TransformController,
 } from './app/controllers';
-import { FeedbackProvider } from './app/providers';
+import {
+  FeedbackProvider,
+  ListFilesProvider,
+  ListModulesProvider,
+} from './app/providers';
 
 export function activate(context: vscode.ExtensionContext) {
   // The code you place here will be executed every time your command is executed
@@ -36,51 +41,51 @@ export function activate(context: vscode.ExtensionContext) {
 
   const angularFileClass = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.class`,
-    (args) => fileController.newClass(args),
+    (args) => fileController.generateClass(args),
   );
   const angularFileComponent = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.component`,
-    (args) => fileController.newComponent(args),
+    (args) => fileController.generateComponent(args),
   );
   const angularFileDirective = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.directive`,
-    (args) => fileController.newDirective(args),
+    (args) => fileController.generateDirective(args),
   );
   const angularFileEnum = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.enum`,
-    (args) => fileController.newEnum(args),
+    (args) => fileController.generateEnum(args),
   );
   const angularFileGuard = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.guard`,
-    (args) => fileController.newGuard(args),
+    (args) => fileController.generateGuard(args),
   );
   const angularFileInterceptor = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.interceptor`,
-    (args) => fileController.newInterceptor(args),
+    (args) => fileController.generateInterceptor(args),
   );
   const angularFileInterface = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.interface`,
-    (args) => fileController.newInterface(args),
+    (args) => fileController.generateInterface(args),
   );
   const angularFileModule = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.module`,
-    (args) => fileController.newModule(args),
+    (args) => fileController.generateModule(args),
   );
   const angularFilePipe = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.pipe`,
-    (args) => fileController.newPipe(args),
+    (args) => fileController.generatePipe(args),
   );
   const angularFileResolver = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.resolver`,
-    (args) => fileController.newResolver(args),
+    (args) => fileController.generateResolver(args),
   );
   const angularFileService = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.service`,
-    (args) => fileController.newService(args),
+    (args) => fileController.generateService(args),
   );
   const angularFileTest = vscode.commands.registerCommand(
     `${EXTENSION_ID}.file.spec`,
-    (args) => fileController.newTest(args),
+    (args) => fileController.generateTest(args),
   );
 
   // -----------------------------------------------------------------
@@ -168,12 +173,84 @@ export function activate(context: vscode.ExtensionContext) {
   // -----------------------------------------------------------------
 
   // Create a new TransformController
-  const transformController = new TransformController(config);
+  const transformController = new TransformController();
 
   const angularTransformJson2Ts = vscode.commands.registerCommand(
     `${EXTENSION_ID}.transform.json.ts`,
     () => transformController.json2ts(),
   );
+
+  // -----------------------------------------------------------------
+  // Register ListFilesController
+  // -----------------------------------------------------------------
+
+  // Create a new ListFilesController
+  const listFilesController = new ListFilesController(config);
+
+  // -----------------------------------------------------------------
+  // Register ListFilesProvider and list commands
+  // -----------------------------------------------------------------
+
+  // Create a new ListFilesProvider
+  const listFilesProvider = new ListFilesProvider(listFilesController);
+
+  // Register the list provider
+  const angularListFilesTreeView = vscode.window.createTreeView(
+    `${EXTENSION_ID}.listFilesView`,
+    {
+      treeDataProvider: listFilesProvider,
+    },
+  );
+
+  const angularListOpenFile = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.list.openFile`,
+    (uri) => listFilesProvider.controller.openFile(uri),
+  );
+
+  // -----------------------------------------------------------------
+  // Register ListModulesProvider and list commands
+  // -----------------------------------------------------------------
+
+  // Create a new ListModulesProvider
+  const listModulesProvider = new ListModulesProvider(listFilesController);
+
+  // Register the list provider
+  const angularListModulesTreeView = vscode.window.createTreeView(
+    `${EXTENSION_ID}.listModulesView`,
+    {
+      treeDataProvider: listModulesProvider,
+    },
+  );
+
+  const angularListGotoLine = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.list.gotoLine`,
+    (uri, line) => listModulesProvider.controller.gotoLine(uri, line),
+  );
+
+  // -----------------------------------------------------------------
+  // Register ListFilesProvider and ListMethodsProvider events
+  // -----------------------------------------------------------------
+
+  vscode.workspace.onDidChangeTextDocument(() => {
+    listFilesProvider.refresh();
+    listModulesProvider.refresh();
+  });
+  vscode.workspace.onDidCreateFiles(() => {
+    listFilesProvider.refresh();
+    listModulesProvider.refresh();
+  });
+  vscode.workspace.onDidDeleteFiles(() => {
+    listFilesProvider.refresh();
+    listModulesProvider.refresh();
+  });
+  vscode.workspace.onDidRenameFiles(() => {
+    listFilesProvider.refresh();
+    listModulesProvider.refresh();
+  });
+  vscode.workspace.onDidSaveTextDocument(() => {
+    listFilesProvider.refresh();
+    listModulesProvider.refresh();
+  });
 
   // -----------------------------------------------------------------
   // Register FeedbackProvider and Feedback commands
@@ -239,6 +316,10 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(angularTerminalE2E);
   context.subscriptions.push(angularTerminalVersion);
   context.subscriptions.push(angularTransformJson2Ts);
+  context.subscriptions.push(angularListFilesTreeView);
+  context.subscriptions.push(angularListOpenFile);
+  context.subscriptions.push(angularListModulesTreeView);
+  context.subscriptions.push(angularListGotoLine);
   context.subscriptions.push(angularFeedbackTreeView);
   context.subscriptions.push(angularFeedbackAboutUs);
   context.subscriptions.push(angularFeedbackReportIssues);

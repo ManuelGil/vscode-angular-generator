@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2024-02-14
+
+### Added
+
+- Add List of Modules View
+- Add List of Files View
+- Add Feedback View
+- Add file includes section to the settings
+- Add file excludes section to the settings
+- Add file to watch section to the settings
+- Add compodoc dependencies for the documentation generation
+
+### Changed
+
+- Update `Config` class to allow the file includes, file excludes and file to watch settings
+- Update `Constants` to allow the file includes, file excludes and file to watch settings
+- Update `NodeModel` class to allow the child nodes to be added
+- Update `package.json` to include the new commands and views
+- Update `package.json` to include the new dependencies
+- Update `package.json` to include the new scripts
+- Update `package.json` to include the new settings
+
+### Fixed
+
+- Fix documentation generation
+
 ## [2.0.0] - 2024-02-11
 
 ### Changed
@@ -169,7 +195,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.0.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.9.0...v2.0.0
 [1.9.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.7.0...v1.8.0

@@ -1,5 +1,6 @@
 import { Uri } from 'vscode';
 
+// Import the Config and helper functions
 import { Config } from '../configs';
 import {
   dasherize,
@@ -10,8 +11,6 @@ import {
   saveFile,
   titleize,
 } from '../helpers';
-
-// Import the Config and helper functions
 
 /**
  * The FileController class.
@@ -32,6 +31,7 @@ export class FileController {
   /**
    * Constructor for the FileController class.
    *
+   * @constructor
    * @param {Config} config - The configuration
    * @public
    * @memberof FileController
@@ -46,13 +46,17 @@ export class FileController {
   /**
    * Creates a new class.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateClass
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createClass();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newClass = async (path?: Uri) => {
+  async generateClass(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -81,6 +85,7 @@ export class FileController {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -96,6 +101,7 @@ export class FileController {
         if (!/[a-z]+/.test(type)) {
           return 'Invalid format!';
         }
+        return;
       },
     );
 
@@ -111,18 +117,22 @@ export class FileController {
     const filename = `${dasherize(className)}${type}.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new component.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateComponent
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createComponent();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newComponent = async (path?: Uri) => {
+  async generateComponent(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -151,6 +161,7 @@ export class FileController {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -188,18 +199,22 @@ export class ${className}Component {}
     const filename = `${dasherize(className)}.component.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new directive.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateDirective
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createDirective();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newDirective = async (path?: Uri) => {
+  async generateDirective(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -228,6 +243,7 @@ export class ${className}Component {}
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -246,18 +262,22 @@ export class ${className}Directive {}
     const filename = `${dasherize(className)}.interceptor.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new enum.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateEnum
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createEnum();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newEnum = async (path?: Uri) => {
+  async generateEnum(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -286,6 +306,7 @@ export class ${className}Directive {}
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -299,18 +320,22 @@ export class ${className}Directive {}
     const filename = `${dasherize(className)}.enum.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new guard.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateGuard
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createGuard();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newGuard = async (path?: Uri) => {
+  async generateGuard(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -339,6 +364,7 @@ export class ${className}Directive {}
         if (!/^[a-z][\w-]+$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -381,18 +407,22 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
     const filename = `${dasherize(entityName)}.guard.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new interceptor.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateInterceptor
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createInterceptor();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newInterceptor = async (path?: Uri) => {
+  async generateInterceptor(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -421,6 +451,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -451,18 +482,22 @@ export class ${className}Interceptor implements HttpInterceptor {
     const filename = `${dasherize(className)}.interceptor.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new interface.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateInterface
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createInterface();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newInterface = async (path?: Uri) => {
+  async generateInterface(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -491,6 +526,7 @@ export class ${className}Interceptor implements HttpInterceptor {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -506,6 +542,7 @@ export class ${className}Interceptor implements HttpInterceptor {
         if (!/[a-z]+/.test(type)) {
           return 'Invalid format!';
         }
+        return;
       },
     );
 
@@ -521,18 +558,22 @@ export class ${className}Interceptor implements HttpInterceptor {
     const filename = `${dasherize(className)}${type}.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new module.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateModule
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createModule();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newModule = async (path?: Uri) => {
+  async generateModule(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -561,6 +602,7 @@ export class ${className}Interceptor implements HttpInterceptor {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -581,18 +623,22 @@ export class ${className}Module {}
     const filename = `${dasherize(className)}.module.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new pipe.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generatePipe
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createPipe();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newPipe = async (path?: Uri) => {
+  async generatePipe(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -621,6 +667,7 @@ export class ${className}Module {}
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -643,18 +690,22 @@ export class ${className}Pipe implements PipeTransform {
     const filename = `${dasherize(className)}.pipe.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new resolver.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateResolver
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createResolver();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newResolver = async (path?: Uri) => {
+  async generateResolver(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -683,6 +734,7 @@ export class ${className}Pipe implements PipeTransform {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -715,18 +767,22 @@ export class ${className}Resolver implements Resolve<boolean> {
     const filename = `${dasherize(className)}.resolver.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new service.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateService
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createService();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newService = async (path?: Uri) => {
+  async generateService(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -755,6 +811,7 @@ export class ${className}Resolver implements Resolve<boolean> {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -773,18 +830,22 @@ export class ${className}Service {}
     const filename = `${dasherize(className)}.service.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 
   /**
    * Creates a new test.
    *
-   * @param {Uri} path - The path to the folder
+   * @function generateTest
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
    * @example
    * createTest();
    *
    * @returns {Promise<void>} - The result of the operation
    */
-  newTest = async (path?: Uri) => {
+  async generateTest(path?: Uri): Promise<void> {
     // Get the relative path
     const folderPath: string = path ? await getRelativePath(path.path) : '';
 
@@ -813,6 +874,7 @@ export class ${className}Service {}
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
           return 'Invalid format! Entity names MUST be declared in camelCase.';
         }
+        return;
       },
     );
 
@@ -828,6 +890,7 @@ export class ${className}Service {}
         if (!/[a-z]+/.test(type)) {
           return 'Invalid format!';
         }
+        return;
       },
     );
 
@@ -856,5 +919,5 @@ describe('${className}${titleize(type)}', () => {
     const filename = `${dasherize(className)}.spec.ts`;
 
     saveFile(folder, filename, content);
-  };
+  }
 }

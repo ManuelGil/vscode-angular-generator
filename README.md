@@ -37,7 +37,7 @@ With this powerful extension, you can streamline your Angular development workfl
 
 ## Requirements
 
-- VSCode 1.46.0 or later
+- VSCode 1.76.0 or later
 
 ## Project Settings
 

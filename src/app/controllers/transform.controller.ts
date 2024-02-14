@@ -1,7 +1,6 @@
-import { Range, window, workspace } from 'vscode';
+import { Range, TextEditor, window, workspace } from 'vscode';
 
 import JsonToTS from 'json-to-ts';
-import { Config } from '../configs';
 import { showError } from '../helpers';
 
 // Import the Config and helper functions
@@ -13,7 +12,6 @@ import { showError } from '../helpers';
  * @classdesc The class that represents the example controller.
  * @export
  * @public
- * @property {Config} config - The configuration
  * @example
  * const controller = new TransformController(config);
  */
@@ -25,19 +23,30 @@ export class TransformController {
   /**
    * Constructor for the TransformController class.
    *
-   * @param {Config} config - The configuration
+   * @constructor
    * @public
    * @memberof TransformController
    */
-  constructor(private readonly config: Config) {}
+  constructor() {}
 
   // -----------------------------------------------------------------
   // Methods
   // -----------------------------------------------------------------
 
   // Public methods
-
-  async json2ts() {
+  /**
+   * The json2ts method.
+   *
+   * @function json2ts
+   * @public
+   * @async
+   * @memberof TransformController
+   * @example
+   * await controller.json2ts();
+   *
+   * @returns {Promise<TextEditor | undefined>} The result
+   */
+  async json2ts(): Promise<TextEditor | undefined> {
     let editor;
 
     if (workspace.workspaceFolders) {
@@ -62,7 +71,7 @@ export class TransformController {
       const jsonSchema = this.tryParseJSONObject(text);
 
       if (!jsonSchema) {
-        window.showErrorMessage('Invalid JSON Schema!');
+        showError('Invalid JSON Schema!');
         return;
       }
 
@@ -77,9 +86,25 @@ export class TransformController {
 
       return await window.showTextDocument(document);
     }
+
+    showError('No text is selected!');
+    return;
   }
 
-  private tryParseJSONObject(str: string) {
+  // Private methods
+  /**
+   * The tryParseJSONObject method.
+   *
+   * @private
+   * @memberof TransformController
+   * @param {string} str - The string to parse
+   * @returns {boolean | object} The result
+   * @example
+   * const object = controller.tryParseJSONObject(str);
+   *
+   * @returns {boolean | object} The result
+   */
+  private tryParseJSONObject(str: string): boolean | object {
     try {
       var object = JSON.parse(str);
 

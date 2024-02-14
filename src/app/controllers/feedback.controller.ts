@@ -27,6 +27,7 @@ export class FeedbackController {
   /**
    * Constructor for the FeedbackController class.
    *
+   * @constructor
    * @public
    * @memberof FeedbackController
    */
@@ -40,30 +41,39 @@ export class FeedbackController {
   /**
    * The aboutUs method.
    *
+   * @function aboutUs
    * @public
    * @memberof FeedbackController
+   *
+   * @returns {void} - No return value
    */
-  aboutUs() {
+  aboutUs(): void {
     env.openExternal(Uri.parse(EXTENSION_HOMEPAGE_URL));
   }
 
   /**
    * The reportIssues method.
    *
+   * @function reportIssues
    * @public
    * @memberof FeedbackController
+   *
+   * @returns {void} - No return value
    */
-  reportIssues() {
+  reportIssues(): void {
     env.openExternal(Uri.parse(EXTENSION_BUGS_URL));
   }
 
   /**
    * The rateUs method.
    *
+   * @function rateUs
    * @public
    * @memberof FeedbackController
+   *
+   * @returns {void} - No return value
    */
-  rateUs() {
+  rateUs(): void {
     env.openExternal(
       Uri.parse(`${EXTENSION_MARKETPLACE_URL}&ssr=false#review-details`),
     );
@@ -72,10 +82,14 @@ export class FeedbackController {
   /**
    * The supportUs method.
    *
+   * @function supportUs
    * @public
+   * @async
    * @memberof FeedbackController
+   *
+   * @returns {Promise<void>} - The promise that resolves with no value
    */
-  async supportUs() {
+  async supportUs(): Promise<void> {
     // Create the actions
     const actions: MessageItem[] = [
       { title: 'Become a Sponsor' },

@@ -7,27 +7,27 @@ import {
   TreeItem,
 } from 'vscode';
 
-import { EXTENSION_ID } from '../configs';
-import { FeedbackController } from '../controllers/feedback.controller';
+import { ListFilesController } from '../controllers';
+import { singularize } from '../helpers';
 import { NodeModel } from '../models';
 
 /**
- * The FeedbackProvider class
+ * The ListFilesProvider class
  *
  * @class
- * @classdesc The class that represents the feedback provider.
+ * @classdesc The class that represents the list of files provider.
  * @export
  * @public
  * @implements {TreeDataProvider<NodeModel>}
  * @property {EventEmitter<NodeModel | undefined | null | void>} _onDidChangeTreeData - The onDidChangeTreeData event emitter
  * @property {Event<NodeModel | undefined | null | void>} onDidChangeTreeData - The onDidChangeTreeData event
- * @property {FeedbackController} controller - The feedback controller
+ * @property {ListFilesController} controller - The list of files controller
  * @example
- * const provider = new FeedbackProvider();
+ * const provider = new ListFilesProvider();
  *
  * @see https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider
  */
-export class FeedbackProvider implements TreeDataProvider<NodeModel> {
+export class ListFilesProvider implements TreeDataProvider<NodeModel> {
   // -----------------------------------------------------------------
   // Properties
   // -----------------------------------------------------------------
@@ -37,7 +37,7 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
    * The onDidChangeTreeData event emitter.
    * @type {EventEmitter<NodeModel | undefined | null | void>}
    * @private
-   * @memberof FeedbackProvider
+   * @memberof ListFilesProvider
    * @example
    * this._onDidChangeTreeData = new EventEmitter<Node | undefined | null | void>();
    * this.onDidChangeTreeData = this._onDidChangeTreeData.event;
@@ -53,7 +53,7 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
    * The onDidChangeTreeData event.
    * @type {Event<NodeModel | undefined | null | void>}
    * @public
-   * @memberof FeedbackProvider
+   * @memberof ListFilesProvider
    * @example
    * readonly onDidChangeTreeData: Event<Node | undefined | null | void>;
    * this.onDidChangeTreeData = this._onDidChangeTreeData.event;
@@ -67,14 +67,13 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
   // -----------------------------------------------------------------
 
   /**
-   * Constructor for the FeedbackProvider class
+   * Constructor for the ListFilesProvider class
    *
    * @constructor
-   * @param {FeedbackController} controller - The feedback controller
    * @public
-   * @memberof FeedbackProvider
+   * @memberof ListFilesProvider
    */
-  constructor(readonly controller: FeedbackController) {
+  constructor(readonly controller: ListFilesController) {
     this._onDidChangeTreeData = new EventEmitter<
       NodeModel | undefined | null | void
     >();
@@ -92,7 +91,7 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
    * @function getTreeItem
    * @param {NodeModel} element - The element
    * @public
-   * @memberof FeedbackProvider
+   * @memberof ListFilesProvider
    * @example
    * const treeItem = provider.getTreeItem(element);
    *
@@ -110,7 +109,7 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
    * @function getChildren
    * @param {NodeModel} [element] - The element
    * @public
-   * @memberof FeedbackProvider
+   * @memberof ListFilesProvider
    * @example
    * const children = provider.getChildren(element);
    *
@@ -123,7 +122,7 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
       return element.children;
     }
 
-    return this.getFeedbacks();
+    return this.getListFiles();
   }
 
   /**
@@ -143,34 +142,43 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
 
   // Private methods
   /**
-   * Returns the feedbacks.
+   * Gets the list of files.
    *
-   * @function getFeedbacks
+   * @function getListFiles
    * @private
-   * @memberof FeedbackProvider
+   * @memberof ListFilesProvider
    * @example
-   * const feedbacks = this.getFeedbacks();
+   * const files = provider.getListFiles();
    *
-   * @returns {NodeModel[]} - The feedbacks
+   * @returns {Promise<NodeModel[]>} - The list of files
    */
-  private getFeedbacks(): NodeModel[] {
-    return [
-      new NodeModel('About Us', new ThemeIcon('info'), {
-        title: 'About Us',
-        command: `${EXTENSION_ID}.feedback.aboutUs`,
-      }),
-      new NodeModel('Report Issues', new ThemeIcon('bug'), {
-        title: 'Report Issues',
-        command: `${EXTENSION_ID}.feedback.reportIssues`,
-      }),
-      new NodeModel('Rate Us', new ThemeIcon('star'), {
-        title: 'Rate Us',
-        command: `${EXTENSION_ID}.feedback.rateUs`,
-      }),
-      new NodeModel('Support Us', new ThemeIcon('heart'), {
-        title: 'Support Us',
-        command: `${EXTENSION_ID}.feedback.supportUs`,
-      }),
-    ];
+  private async getListFiles(): Promise<NodeModel[]> {
+    const files = await this.controller.getFiles();
+
+    if (!files) {
+      return [];
+    }
+
+    const nodes: NodeModel[] = [];
+
+    const fileTypes = this.controller.config.watch;
+
+    for (const fileType of fileTypes) {
+      const typeName = fileType.charAt(0).toUpperCase() + fileType.slice(1);
+      const children = files.filter((file) =>
+        file.label.toString().includes(`${singularize(fileType)}.ts`),
+      );
+      const node = new NodeModel(
+        `${typeName}: ${children.length}`,
+        new ThemeIcon('folder-opened'),
+        undefined,
+        undefined,
+        fileType,
+        children,
+      );
+      nodes.push(node);
+    }
+
+    return nodes;
   }
 }

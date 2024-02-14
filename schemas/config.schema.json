@@ -20,6 +20,36 @@
       "default": true,
       "scope": "resource",
       "description": "Sets the standalone option when generating a new component"
+    },
+    "angular.files.include": {
+      "type": "array",
+      "default": [
+        "ts"
+      ],
+      "scope": "resource",
+      "description": "Glob patterns to include in the package. The default is ts, html, css, scss, less."
+    },
+    "angular.files.exclude": {
+      "type": "array",
+      "default": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/out/**",
+        "**/build/**",
+        "**/.*/**"
+      ],
+      "scope": "resource",
+      "description": "Glob patterns to exclude from the package. The default is node_modules, dist, out, build, and any hidden files."
+    },
+    "angular.files.watch": {
+      "type": "array",
+      "default": [
+        "modules",
+        "components",
+        "services"
+      ],
+      "scope": "resource",
+      "description": "The list of directories to watch for changes"
     }
   }
 }
