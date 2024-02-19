@@ -8,7 +8,7 @@ import {
 } from 'vscode';
 
 import { ListFilesController } from '../controllers';
-import { singularize } from '../helpers';
+import { singularize, titleize } from '../helpers';
 import { NodeModel } from '../models';
 
 /**
@@ -150,13 +150,13 @@ export class ListFilesProvider implements TreeDataProvider<NodeModel> {
    * @example
    * const files = provider.getListFiles();
    *
-   * @returns {Promise<NodeModel[]>} - The list of files
+   * @returns {Promise<NodeModel[] | undefined>} - The list of files
    */
-  private async getListFiles(): Promise<NodeModel[]> {
+  private async getListFiles(): Promise<NodeModel[] | undefined> {
     const files = await this.controller.getFiles();
 
     if (!files) {
-      return [];
+      return;
     }
 
     const nodes: NodeModel[] = [];
@@ -164,19 +164,26 @@ export class ListFilesProvider implements TreeDataProvider<NodeModel> {
     const fileTypes = this.controller.config.watch;
 
     for (const fileType of fileTypes) {
-      const typeName = fileType.charAt(0).toUpperCase() + fileType.slice(1);
       const children = files.filter((file) =>
         file.label.toString().includes(`${singularize(fileType)}.ts`),
       );
-      const node = new NodeModel(
-        `${typeName}: ${children.length}`,
-        new ThemeIcon('folder-opened'),
-        undefined,
-        undefined,
-        fileType,
-        children,
-      );
-      nodes.push(node);
+
+      if (children.length !== 0) {
+        const node = new NodeModel(
+          `${titleize(fileType)}: ${children.length}`,
+          new ThemeIcon('folder-opened'),
+          undefined,
+          undefined,
+          fileType,
+          children,
+        );
+
+        nodes.push(node);
+      }
+    }
+
+    if (nodes.length === 0) {
+      return;
     }
 
     return nodes;

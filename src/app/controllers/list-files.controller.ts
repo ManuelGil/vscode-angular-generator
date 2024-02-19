@@ -4,6 +4,7 @@ import {
   Selection,
   TextEditorRevealType,
   ThemeIcon,
+  Uri,
   window,
   workspace,
 } from 'vscode';
@@ -12,15 +13,17 @@ import { Config, EXTENSION_ID } from '../configs';
 import { directoryMap } from '../helpers';
 import { NodeModel } from '../models';
 
+/**
+ * The ListFilesController class.
+ *
+ * @class
+ * @classdesc The class that represents the list files controller.
+ * @export
+ * @public
+ * @example
+ * const controller = new ListFilesController();
+ */
 export class ListFilesController {
-  // -----------------------------------------------------------------
-  // Properties
-  // -----------------------------------------------------------------
-
-  // Private properties
-
-  // Public properties
-
   // -----------------------------------------------------------------
   // Constructor
   // -----------------------------------------------------------------
@@ -44,6 +47,7 @@ export class ListFilesController {
    * The getFiles method.
    *
    * @function getFiles
+   * @param {number} maxResults - The maximum number of results
    * @public
    * @async
    * @memberof ListFilesController
@@ -52,16 +56,20 @@ export class ListFilesController {
    *
    * @returns {Promise<NodeModel[] | void>} - The list of files
    */
-  async getFiles(): Promise<NodeModel[] | void> {
+  async getFiles(
+    maxResults: number = Number.MAX_SAFE_INTEGER,
+  ): Promise<NodeModel[] | void> {
     // Get the files in the folder
     const files = await directoryMap('/', {
       extensions: this.config.include,
       ignore: this.config.exclude,
-      maxResults: 512,
+      maxResults,
     });
 
-    if (files.length > 0) {
+    if (files.length !== 0) {
       let nodes: NodeModel[] = [];
+
+      files.sort((a, b) => a.path.localeCompare(b.path));
 
       for (const file of files) {
         const document = await workspace.openTextDocument(file);
@@ -91,7 +99,7 @@ export class ListFilesController {
    * The openFile method.
    *
    * @function openFile
-   * @param {string} uri - The file URI
+   * @param {Uri} uri - The file URI
    * @public
    * @memberof ListFilesController
    * @example
@@ -99,7 +107,7 @@ export class ListFilesController {
    *
    * @returns {Promise<void>} - The promise
    */
-  openFile(uri: string) {
+  openFile(uri: Uri) {
     workspace.openTextDocument(uri).then((filename) => {
       window.showTextDocument(filename);
     });
@@ -109,7 +117,7 @@ export class ListFilesController {
    * The gotoLine method.
    *
    * @function gotoLine
-   * @param {string} uri - The file URI
+   * @param {Uri} uri - The file URI
    * @param {number} line - The line number
    * @public
    * @memberof ListFilesController
@@ -118,7 +126,7 @@ export class ListFilesController {
    *
    * @returns {void} - The promise
    */
-  gotoLine(uri: string, line: number) {
+  gotoLine(uri: Uri, line: number) {
     workspace.openTextDocument(uri).then((document) => {
       window.showTextDocument(document).then((editor) => {
         const pos = new Position(line, 0);

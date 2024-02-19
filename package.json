@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -296,16 +296,6 @@
         "command": "angular.transform.json.ts",
         "title": "Convert JSON to TypeScript",
         "category": "Angular"
-      },
-      {
-        "command": "angular.list.openFile",
-        "title": "Open File",
-        "category": "Angular"
-      },
-      {
-        "command": "angular.list.gotoLine",
-        "title": "Go to Line",
-        "category": "Angular"
       }
     ],
     "submenus": [
@@ -316,6 +306,10 @@
       {
         "id": "angular.editor.submenu",
         "label": "Angular File Generator"
+      },
+      {
+        "id": "angular.root.submenu",
+        "label": "Angular File Generator"
       }
     ],
     "menus": {
@@ -324,6 +318,11 @@
           "submenu": "angular.explorer.submenu",
           "group": "2_workspace",
           "when": "explorerViewletFocus && explorerResourceIsFolder && !explorerResourceIsRoot"
+        },
+        {
+          "submenu": "angular.root.submenu",
+          "group": "2_workspace",
+          "when": "explorerViewletFocus && explorerResourceIsRoot && explorerResourceIsFolder"
         }
       ],
       "editor/context": [
@@ -421,8 +420,68 @@
           "alt": "Convert JSON to TypeScript",
           "group": "1_file"
         }
+      ],
+      "angular.root.submenu": [
+        {
+          "command": "angular.terminal.analytics.disable",
+          "group": "1_analytics"
+        },
+        {
+          "command": "angular.terminal.analytics.enable",
+          "group": "1_analytics"
+        },
+        {
+          "command": "angular.terminal.analytics.info",
+          "group": "1_analytics"
+        },
+        {
+          "command": "angular.terminal.analytics.prompt",
+          "group": "1_analytics"
+        },
+        {
+          "command": "angular.terminal.cache.clear",
+          "group": "2_cache"
+        },
+        {
+          "command": "angular.terminal.cache.disable",
+          "group": "2_cache"
+        },
+        {
+          "command": "angular.terminal.cache.enable",
+          "group": "2_cache"
+        },
+        {
+          "command": "angular.terminal.cache.info",
+          "group": "2_cache"
+        },
+        {
+          "command": "angular.terminal.start",
+          "group": "3_server"
+        },
+        {
+          "command": "angular.terminal.test",
+          "group": "4_test"
+        },
+        {
+          "command": "angular.terminal.e2e",
+          "group": "4_test"
+        },
+        {
+          "command": "angular.terminal.version",
+          "group": "5_version"
+        }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "angular.listModulesView",
+        "contents": "Your project currently lacks modules. You can begin by adding a new module to initiate your work.\n[Generate Module](command:angular.file.module)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator)."
+      },
+      {
+        "view": "angular.listFilesView",
+        "contents": "To effectively capture files, ensure you include the plural form of the file type within the workspace settings.\n[Open Workspace Setting](command:workbench.action.openWorkspaceSettingsFile)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator)."
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {
@@ -435,13 +494,13 @@
     "views": {
       "angular-explorer": [
         {
-          "id": "angular.listModulesView",
-          "name": "List of Modules",
+          "id": "angular.listFilesView",
+          "name": "List of Files",
           "visibility": "visible"
         },
         {
-          "id": "angular.listFilesView",
-          "name": "List of Files",
+          "id": "angular.listModulesView",
+          "name": "List of Modules",
           "visibility": "visible"
         },
         {
@@ -471,13 +530,13 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.6.0",
-    "@commitlint/config-conventional": "^18.6.0",
+    "@commitlint/cli": "^18.6.1",
+    "@commitlint/config-conventional": "^18.6.2",
     "@compodoc/compodoc": "^1.1.23",
     "@types/glob": "^8.1.0",
     "@types/minimatch": "^3.0.5",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.17",
+    "@types/node": "^20.11.19",
     "@types/vscode": "^1.76.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
@@ -488,7 +547,7 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
     "glob": "^10.3.10",
-    "husky": "^9.0.10",
+    "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "mocha": "^10.3.0",
     "prettier": "3.2.5",

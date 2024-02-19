@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.1] - 2024-02-19
+
+### Fixed
+
+- Fix sorting of files in the list of files view to show alphabetically the files
+- Fix empty list of modules view when there are no modules to show a welcome message
+- Fix empty list of files view when there are no files to show a welcome message
+- Fix order of the imports in the controllers and providers files
+- Fix documentation in the README file
+
 ## [2.1.0] - 2024-02-14
 
 ### Added
@@ -195,7 +205,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.1.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.9.0...v2.0.0
 [1.9.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v1.8.0...v1.9.0

@@ -1,6 +1,6 @@
+import JsonToTS from 'json-to-ts';
 import { Range, TextEditor, window, workspace } from 'vscode';
 
-import JsonToTS from 'json-to-ts';
 import { showError } from '../helpers';
 
 // Import the Config and helper functions
@@ -44,9 +44,9 @@ export class TransformController {
    * @example
    * await controller.json2ts();
    *
-   * @returns {Promise<TextEditor | undefined>} The result
+   * @returns {Promise<TextEditor | void>} The result
    */
-  async json2ts(): Promise<TextEditor | undefined> {
+  async json2ts(): Promise<TextEditor | void> {
     let editor;
 
     if (workspace.workspaceFolders) {

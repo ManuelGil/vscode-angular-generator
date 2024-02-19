@@ -9,7 +9,7 @@ import {
 } from 'vscode';
 
 import { EXTENSION_ID } from '../configs';
-import { ListFilesController } from '../controllers/list-files.controller';
+import { ListFilesController } from '../controllers';
 import { NodeModel } from '../models';
 
 /**

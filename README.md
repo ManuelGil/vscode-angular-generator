@@ -54,7 +54,22 @@ Configure your project by creating or updating a settings.json file at the proje
     ```jsonc
     {
       "angular.standalone": true,
-      "angular.style": "css"
+      "angular.style": "css",
+      "angular.files.include": [
+        "ts"
+      ],
+      "angular.files.exclude": [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/out/**",
+        "**/build/**",
+        "**/.*/**"
+      ],
+      "angular.files.watch": [
+        "modules",
+        "components",
+        "services"
+      ]
     }
     ```
 

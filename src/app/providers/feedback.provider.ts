@@ -8,7 +8,7 @@ import {
 } from 'vscode';
 
 import { EXTENSION_ID } from '../configs';
-import { FeedbackController } from '../controllers/feedback.controller';
+import { FeedbackController } from '../controllers';
 import { NodeModel } from '../models';
 
 /**
