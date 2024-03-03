@@ -1,9 +1,8 @@
 import JsonToTS from 'json-to-ts';
 import { Range, TextEditor, window, workspace } from 'vscode';
 
+// Import the helper functions
 import { showError } from '../helpers';
-
-// Import the Config and helper functions
 
 /**
  * The TransformController class.

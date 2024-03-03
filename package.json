@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -478,6 +478,10 @@
         "contents": "Your project currently lacks modules. You can begin by adding a new module to initiate your work.\n[Generate Module](command:angular.file.module)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator)."
       },
       {
+        "view": "angular.listRoutesView",
+        "contents": "Your project currently lacks routes. You can begin by adding a new route to initiate your work.\n[Generate Class](command:angular.file.class)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator)."
+      },
+      {
         "view": "angular.listFilesView",
         "contents": "To effectively capture files, ensure you include the plural form of the file type within the workspace settings.\n[Open Workspace Setting](command:workbench.action.openWorkspaceSettingsFile)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator)."
       }
@@ -496,6 +500,11 @@
         {
           "id": "angular.listFilesView",
           "name": "List of Files",
+          "visibility": "visible"
+        },
+        {
+          "id": "angular.listRoutesView",
+          "name": "List of Routes",
           "visibility": "visible"
         },
         {

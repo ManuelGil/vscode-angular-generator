@@ -1,9 +1,8 @@
 import { Uri, window } from 'vscode';
 
+// Import the Config and helper functions
 import { Config } from '../configs';
 import { getName, getPath, getRelativePath, runCommand } from '../helpers';
-
-// Import the Config and helper functions
 
 /**
  * The TerminalController class.
@@ -179,7 +178,7 @@ export class TerminalController {
       'Component name. E.g. src/app/modules/users, modules/users, modules/projects...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -192,41 +191,83 @@ export class TerminalController {
 
     const items = [
       {
-        label: '--dry-run',
-        description:
-          'Run through and reports activity without writing out results.',
+        label: 'Dry Run',
+        description: '--dry-run',
+        detail: 'Run through and reports activity without writing out results.',
       },
       {
-        label: '--force',
-        description: 'Force overwriting of existing files.',
+        label: 'Force',
+        description: '--force',
+        detail: 'Force overwriting of existing files.',
       },
       {
-        label: '--flat',
-        description:
-          'Create the new files at the top level of the current project.',
+        label: 'Change Detection',
+        description: '--change-detection',
+        detail: 'The change detection strategy to use in the new component.',
       },
       {
-        label: '--skip-import',
-        description: 'Do not import this component into the owning NgModule.',
+        label: 'Display Block',
+        description: '--display-block',
+        detail:
+          'Specifies if the style will contain `:host { display: block; }`.',
       },
       {
-        label: '--skip-selector',
-        description:
-          'Specifies if the component should have a selector or not.',
+        label: 'Flat',
+        description: '--flat',
+        detail: 'Create the new files at the top level of the current project.',
       },
       {
-        label: '--skip-tests',
-        description:
-          'Do not create "spec.ts" test files for the new component.',
+        label: 'Inline Style',
+        description: '--inline-style',
+        detail:
+          'Include styles inline in the component.ts file. Only CSS styles can be included inline. By default, an external styles file is created and referenced in the component.ts file.',
       },
       {
-        label: '--standalone',
-        description: 'Whether the generated component is standalone.',
+        label: 'Inline Template',
+        description: '--inline-template',
+        detail:
+          'Include template inline in the component.ts file. By default, an external template file is created and referenced in the component.ts file.',
+      },
+      {
+        label: 'Prefix',
+        description: '--prefix',
+        detail: 'The prefix to apply to the generated component selector.',
+      },
+      {
+        label: 'Selector',
+        description: '--selector',
+        detail: 'The HTML selector to use for this component.',
+      },
+      {
+        label: 'Skip Import',
+        description: '--skip-import',
+        detail: 'Do not import this component into the owning NgModule.',
+      },
+      {
+        label: 'Skip Selector',
+        description: '--skip-selector',
+        detail: 'Specifies if the component should have a selector or not.',
+      },
+      {
+        label: 'Skip Tests',
+        description: '--skip-tests',
+        detail: 'Do not create "spec.ts" test files for the new component.',
+      },
+      {
+        label: 'Standalone',
+        description: '--standalone',
+        detail: 'Whether the generated component is standalone.',
         picked: this.config.standalone,
+      },
+      {
+        label: 'View Encapsulation',
+        description: '--view-encapsulation',
+        detail: 'The view encapsulation strategy to use in the new component.',
       },
     ];
 
     let options: any = [];
+    let extras: any = [];
     let isStandalone = false;
 
     options = await window.showQuickPick(items, {
@@ -234,8 +275,73 @@ export class TerminalController {
       canPickMany: true,
     });
 
-    isStandalone = !!options.find((item: any) => item.label === '--standalone');
-    options = options.filter((item: any) => item.label !== '--standalone');
+    if (
+      options.find((item: any) => item.description === '--change-detection')
+    ) {
+      const detection = await window.showQuickPick(['Default', 'OnPush'], {
+        placeHolder:
+          'The change detection strategy to use in the new component',
+      });
+
+      if (detection) {
+        extras.push('--change-detection ' + detection.toLowerCase());
+        options = options.filter(
+          (item: any) => item.description !== '--change-detection',
+        );
+      }
+    }
+
+    if (options.find((item: any) => item.description === '--prefix')) {
+      const prefix = await window.showInputBox({
+        placeHolder: 'The prefix to apply to the generated component selector',
+      });
+
+      if (prefix) {
+        extras.push('--prefix ' + prefix);
+        options = options.filter(
+          (item: any) => item.description !== '--prefix',
+        );
+      }
+    }
+
+    if (options.find((item: any) => item.description === '--selector')) {
+      const selector = await window.showInputBox({
+        placeHolder: 'The HTML selector to use for this component',
+      });
+
+      if (selector) {
+        extras.push('--selector ' + selector);
+        options = options.filter(
+          (item: any) => item.description !== '--selector',
+        );
+      }
+    }
+
+    if (
+      options.find((item: any) => item.description === '--view-encapsulation')
+    ) {
+      const encapsulation = await window.showQuickPick(
+        ['Emulated', 'None', 'ShadowDom'],
+        {
+          placeHolder:
+            'The view encapsulation strategy to use in the new component',
+        },
+      );
+
+      if (encapsulation) {
+        extras.push('--view-encapsulation ' + encapsulation.toLowerCase());
+        options = options.filter(
+          (item: any) => item.description !== '--view-encapsulation',
+        );
+      }
+    }
+
+    if (options.find((item: any) => item.description === '--standalone')) {
+      isStandalone = true;
+      options = options.filter(
+        (item: any) => item.description !== '--standalone',
+      );
+    }
 
     folder = folder.replace('src/app/', '');
 
@@ -244,7 +350,10 @@ export class TerminalController {
       folder +
       (this.config.style ? ' --style ' + this.config.style : '') +
       (isStandalone ? ' --standalone true' : ' --standalone false') +
-      (options ? ' ' + options.map((item: any) => item.label).join(' ') : '');
+      (options
+        ? ' ' + options.map((item: any) => item.description).join(' ')
+        : '') +
+      (extras ? ' ' + extras.join(' ') : '');
 
     runCommand('generate component', command);
   }
@@ -302,7 +411,7 @@ export class TerminalController {
       'Guard name. E.g. guards/auth, guards/jwt...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -315,33 +424,57 @@ export class TerminalController {
 
     const items = [
       {
-        label: '--dry-run',
-        description:
-          'Run through and reports activity without writing out results.',
+        label: 'Dry Run',
+        description: '--dry-run',
+        detail: 'Run through and reports activity without writing out results.',
       },
       {
-        label: '--force',
-        description: 'Force overwriting of existing files.',
+        label: 'Force',
+        description: '--force',
+        detail: 'Force overwriting of existing files.',
       },
       {
-        label: '--skip-tests',
-        description: 'Do not create "spec.ts" test files for the new guard.',
+        label: 'Flat',
+        description: '--skip-tests',
+        detail: 'Do not create "spec.ts" test files for the new guard.',
+      },
+      {
+        label: 'Functional',
+        description: '--functional',
+        detail: 'Specifies whether to generate a guard as a function.',
+        picked: true,
+      },
+      {
+        label: 'Skip Tests',
+        description: '--skip-tests',
+        detail: 'Do not create "spec.ts" test files for the new guard.',
       },
     ];
 
     let options: any = [];
+    let isFunctional = false;
 
     options = await window.showQuickPick(items, {
       placeHolder: 'Select the options for the guard generation (optional)',
       canPickMany: true,
     });
 
+    if (options.find((item: any) => item.description === '--functional')) {
+      isFunctional = true;
+      options = options.filter(
+        (item: any) => item.description !== '--functional',
+      );
+    }
+
     folder = folder.replace('src/app/', '');
 
     const command =
       'ng g g ' +
       folder +
-      (options ? ' ' + options.map((item: any) => item.label).join(' ') : '');
+      (isFunctional ? ' --functional true' : ' --functional false') +
+      (options
+        ? ' ' + options.map((item: any) => item.description).join(' ')
+        : '');
 
     runCommand('generate guard', command);
   }
@@ -364,7 +497,7 @@ export class TerminalController {
       'Library name',
       'Library name. E.g. users, projects...',
       (name: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(name)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(name)) {
           return 'The library name must be a valid name';
         }
         return;
@@ -377,30 +510,46 @@ export class TerminalController {
 
     const items = [
       {
-        label: '--dry-run',
-        description:
-          'Run through and reports activity without writing out results.',
+        label: 'Dry Run',
+        description: '--dry-run',
+        detail: 'Run through and reports activity without writing out results.',
       },
       {
-        label: '--force',
-        description: 'Forces overwriting of files.',
+        label: 'Force',
+        description: '--force',
+        detail: 'Forces overwriting of files.',
       },
       {
-        label: '--skip-install',
-        description: 'Do not install dependency packages.',
+        label: 'Prefix',
+        description: '--prefix',
+        detail: 'A prefix to apply to generated selectors.',
       },
       {
-        label: '--skip-package-json',
-        description: 'Do not add dependencies to the "package.json" file.',
+        label: 'Publishable',
+        description: '--publishable',
+        detail:
+          'Create a publishable library that can be packaged and published.',
       },
       {
-        label: '--skip-ts-config',
-        description:
+        label: 'Skip Install',
+        description: '--skip-install',
+        detail: 'Do not install dependency packages.',
+      },
+      {
+        label: 'Skip Package JSON',
+        description: '--skip-package-json',
+        detail: 'Do not add dependencies to the "package.json" file.',
+      },
+      {
+        label: 'Skip Ts Config',
+        description: '--skip-ts-config',
+        detail:
           'Do not update "tsconfig.json" to add a path mapping for the new library. The path mapping is needed to use the library in an app, but can be disabled here to simplify development.',
       },
       {
-        label: '--standalone',
-        description:
+        label: 'Standalone',
+        description: '--standalone',
+        detail:
           'Creates a library based upon the standalone API, without NgModules.',
         picked: this.config.standalone,
       },
@@ -408,20 +557,40 @@ export class TerminalController {
 
     let options: any = [];
     let isStandalone = false;
+    let extras: any = [];
 
     options = await window.showQuickPick(items, {
       placeHolder: 'Select the options for the library generation (optional)',
       canPickMany: true,
     });
 
-    isStandalone = !!options.find((item: any) => item.label === '--standalone');
-    options = options.filter((item: any) => item.label !== '--standalone');
+    if (options.find((item: any) => item.description === '--prefix')) {
+      const prefix = await window.showInputBox({
+        placeHolder: 'A prefix to apply to generated selectors',
+      });
+
+      if (prefix) {
+        extras.push('--prefix ' + prefix);
+        options = options.filter(
+          (item: any) => item.description !== '--prefix',
+        );
+      }
+    }
+
+    if (options.find((item: any) => item.description === '--standalone')) {
+      isStandalone = true;
+      options = options.filter(
+        (item: any) => item.description !== '--standalone',
+      );
+    }
 
     const command =
       'ng g lib ' +
       folder +
       (isStandalone ? ' --standalone true' : ' --standalone false') +
-      (options ? ' ' + options.map((item: any) => item.label).join(' ') : '');
+      (options
+        ? ' ' + options.map((item: any) => item.description).join(' ')
+        : '');
 
     runCommand('generate library', command);
   }
@@ -449,7 +618,7 @@ export class TerminalController {
       'Pipe name. E.g. modules/transform-letters, modules/searh-user, modules/search-projects...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -462,30 +631,35 @@ export class TerminalController {
 
     const items = [
       {
-        label: '--dry-run',
-        description:
-          'Run through and reports activity without writing out results.',
+        label: 'Dry Run',
+        description: '--dry-run',
+        detail: 'Run through and reports activity without writing out results.',
       },
       {
-        label: '--force',
-        description: 'Force overwriting of existing files.',
+        label: 'Force',
+        description: '--force',
+        detail: 'Force overwriting of existing files.',
       },
       {
-        label: '--flat',
-        description:
+        label: 'Flat',
+        description: '--flat',
+        detail:
           'When true (the default) creates files at the top level of the project.',
       },
       {
-        label: '--skip-import',
-        description: 'Do not import this pipe into the owning NgModule.',
+        label: 'Skip Import',
+        description: '--skip-import',
+        detail: 'Do not import this pipe into the owning NgModule.',
       },
       {
-        label: '--skip-tests',
-        description: 'Do not create "spec.ts" test files for the new pipe.',
+        label: 'Skip Tests',
+        description: '--skip-tests',
+        detail: 'Do not create "spec.ts" test files for the new pipe.',
       },
       {
-        label: '--standalone',
-        description: 'Whether the generated pipe is standalone.',
+        label: 'Standalone',
+        description: '--standalone',
+        detail: 'Whether the generated pipe is standalone.',
         picked: this.config.standalone,
       },
     ];
@@ -498,8 +672,12 @@ export class TerminalController {
       canPickMany: true,
     });
 
-    isStandalone = !!options.find((item: any) => item.label === '--standalone');
-    options = options.filter((item: any) => item.label !== '--standalone');
+    if (options.find((item: any) => item.description === '--standalone')) {
+      isStandalone = true;
+      options = options.filter(
+        (item: any) => item.description !== '--standalone',
+      );
+    }
 
     folder = folder.replace('src/app/', '');
 
@@ -507,7 +685,9 @@ export class TerminalController {
       'ng g p ' +
       folder +
       (isStandalone ? ' --standalone true' : ' --standalone false') +
-      (options ? ' ' + options.map((item: any) => item.label).join(' ') : '');
+      (options
+        ? ' ' + options.map((item: any) => item.description).join(' ')
+        : '');
 
     runCommand('generate pipe', command);
   }
@@ -550,7 +730,7 @@ export class TerminalController {
       'Service name. E.g. services/auth, services/jwt...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -563,22 +743,25 @@ export class TerminalController {
 
     const items = [
       {
-        label: '--dry-run',
-        description:
-          'Run through and reports activity without writing out results.',
+        label: 'Dry Run',
+        description: '--dry-run',
+        detail: 'Run through and reports activity without writing out results.',
       },
       {
-        label: '--force',
-        description: 'Force overwriting of existing files.',
+        label: 'Force',
+        description: '--force',
+        detail: 'Force overwriting of existing files.',
       },
       {
-        label: '--flat',
-        description:
+        label: 'Flat',
+        description: '--flat',
+        detail:
           'When true (the default) creates files at the top level of the project.',
       },
       {
-        label: '--skip-tests',
-        description: 'Do not create "spec.ts" test files for the new service.',
+        label: 'Skip Tests',
+        description: '--skip-tests',
+        detail: 'Do not create "spec.ts" test files for the new service.',
       },
     ];
 
@@ -594,7 +777,9 @@ export class TerminalController {
     const command =
       'ng g s ' +
       folder +
-      (options ? ' ' + options.map((item: any) => item.label).join(' ') : '');
+      (options
+        ? ' ' + options.map((item: any) => item.description).join(' ')
+        : '');
 
     runCommand('generate service', command);
   }

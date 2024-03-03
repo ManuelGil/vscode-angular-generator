@@ -13,7 +13,7 @@ import { ListFilesController } from '../controllers';
 import { NodeModel } from '../models';
 
 /**
- * The ListModulesProvider class
+ * The ListRoutesProvider class
  *
  * @class
  * @classdesc The class that represents the list of files provider.
@@ -24,11 +24,11 @@ import { NodeModel } from '../models';
  * @property {Event<NodeModel | undefined | null | void>} onDidChangeTreeData - The onDidChangeTreeData event
  * @property {ListFilesController} controller - The list of files controller
  * @example
- * const provider = new ListModulesProvider();
+ * const provider = new ListRoutesProvider();
  *
  * @see https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider
  */
-export class ListModulesProvider implements TreeDataProvider<NodeModel> {
+export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
   // -----------------------------------------------------------------
   // Properties
   // -----------------------------------------------------------------
@@ -38,7 +38,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    * The onDidChangeTreeData event emitter.
    * @type {EventEmitter<NodeModel | undefined | null | void>}
    * @private
-   * @memberof ListModulesProvider
+   * @memberof ListRoutesProvider
    * @example
    * this._onDidChangeTreeData = new EventEmitter<Node | undefined | null | void>();
    * this.onDidChangeTreeData = this._onDidChangeTreeData.event;
@@ -54,7 +54,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    * The onDidChangeTreeData event.
    * @type {Event<NodeModel | undefined | null | void>}
    * @public
-   * @memberof ListModulesProvider
+   * @memberof ListRoutesProvider
    * @example
    * readonly onDidChangeTreeData: Event<Node | undefined | null | void>;
    * this.onDidChangeTreeData = this._onDidChangeTreeData.event;
@@ -68,11 +68,11 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
   // -----------------------------------------------------------------
 
   /**
-   * Constructor for the ListModulesProvider class
+   * Constructor for the ListRoutesProvider class
    *
    * @constructor
    * @public
-   * @memberof ListModulesProvider
+   * @memberof ListRoutesProvider
    */
   constructor(readonly controller: ListFilesController) {
     this._onDidChangeTreeData = new EventEmitter<
@@ -92,7 +92,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    * @function getTreeItem
    * @param {NodeModel} element - The element
    * @public
-   * @memberof ListModulesProvider
+   * @memberof ListRoutesProvider
    * @example
    * const treeItem = provider.getTreeItem(element);
    *
@@ -110,7 +110,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    * @function getChildren
    * @param {NodeModel} [element] - The element
    * @public
-   * @memberof ListModulesProvider
+   * @memberof ListRoutesProvider
    * @example
    * const children = provider.getChildren(element);
    *
@@ -123,7 +123,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
       return element.children;
     }
 
-    return this.getListModules();
+    return this.getListRoutes();
   }
 
   /**
@@ -145,15 +145,15 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
   /**
    * Returns the list of files.
    *
-   * @function getListModules
+   * @function getListRoutes
    * @private
-   * @memberof ListModulesProvider
+   * @memberof ListRoutesProvider
    * @example
-   * const files = provider.getListModules();
+   * const files = provider.getListRoutes();
    *
    * @returns {Promise<NodeModel[] | undefined>} - The list of files
    */
-  private async getListModules(): Promise<NodeModel[] | undefined> {
+  private async getListRoutes(): Promise<NodeModel[] | undefined> {
     const files = await this.controller.getFiles();
 
     if (!files) {
@@ -161,8 +161,10 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
     }
 
     // List of Modules
-    const nodes = files.filter((file) =>
-      file.label.toString().includes('module.ts'),
+    const nodes = files.filter(
+      (file) =>
+        file.label.toString().includes('module.ts') ||
+        file.label.toString().includes('routes.ts'),
     );
 
     for (const file of nodes) {
@@ -177,14 +179,10 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
 
           let node: NodeModel | undefined;
 
-          if (
-            line.text.match(
-              /(declarations|exports|imports|bootstrap|providers): \[/g,
-            )
-          ) {
+          if (line.text.match(/path:/gi)) {
             node = new NodeModel(
               line.text.trim(),
-              new ThemeIcon('symbol-module'),
+              new ThemeIcon('symbol-reference'),
               {
                 command: `${EXTENSION_ID}.list.gotoLine`,
                 title: line.text,

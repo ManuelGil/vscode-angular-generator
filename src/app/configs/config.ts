@@ -12,8 +12,9 @@ import { EXCLUDE, INCLUDE, STANDALONE, STYLE, WATCH } from './constants';
  * @property {WorkspaceConfiguration} config - The workspace configuration
  * @property {string} style - The style file extension
  * @property {boolean} standalone - The standalone option
+ * @property {string[]} include - The files to include
+ * @property {string[]} exclude - The files to exclude
  * @property {string[]} watch - The files to watch
- * @property {{ apiKey: string; model: string; }} openai - The OpenAI API key
  * @example
  * const config = new Config(workspace.getConfiguration());
  * console.log(config.include);

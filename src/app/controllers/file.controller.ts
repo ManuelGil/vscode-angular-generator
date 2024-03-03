@@ -52,7 +52,7 @@ export class FileController {
    * @async
    * @memberof FileController
    * @example
-   * createClass();
+   * generateClass();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -66,7 +66,7 @@ export class FileController {
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -128,7 +128,7 @@ export class FileController {
    * @async
    * @memberof FileController
    * @example
-   * createComponent();
+   * generateComponent();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -142,7 +142,7 @@ export class FileController {
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -210,7 +210,7 @@ export class ${className}Component {}
    * @async
    * @memberof FileController
    * @example
-   * createDirective();
+   * generateDirective();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -224,7 +224,7 @@ export class ${className}Component {}
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -273,7 +273,7 @@ export class ${className}Directive {}
    * @async
    * @memberof FileController
    * @example
-   * createEnum();
+   * generateEnum();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -287,7 +287,7 @@ export class ${className}Directive {}
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -331,7 +331,7 @@ export class ${className}Directive {}
    * @async
    * @memberof FileController
    * @example
-   * createGuard();
+   * generateGuard();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -345,7 +345,7 @@ export class ${className}Directive {}
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -418,7 +418,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
    * @async
    * @memberof FileController
    * @example
-   * createInterceptor();
+   * generateInterceptor();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -432,7 +432,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -493,7 +493,7 @@ export class ${className}Interceptor implements HttpInterceptor {
    * @async
    * @memberof FileController
    * @example
-   * createInterface();
+   * generateInterface();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -507,7 +507,7 @@ export class ${className}Interceptor implements HttpInterceptor {
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -569,7 +569,7 @@ export class ${className}Interceptor implements HttpInterceptor {
    * @async
    * @memberof FileController
    * @example
-   * createModule();
+   * generateModule();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -583,7 +583,7 @@ export class ${className}Interceptor implements HttpInterceptor {
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -634,7 +634,7 @@ export class ${className}Module {}
    * @async
    * @memberof FileController
    * @example
-   * createPipe();
+   * generatePipe();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -648,7 +648,7 @@ export class ${className}Module {}
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -701,7 +701,7 @@ export class ${className}Pipe implements PipeTransform {
    * @async
    * @memberof FileController
    * @example
-   * createResolver();
+   * generateResolver();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -715,7 +715,7 @@ export class ${className}Pipe implements PipeTransform {
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -778,7 +778,7 @@ export class ${className}Resolver implements Resolve<boolean> {
    * @async
    * @memberof FileController
    * @example
-   * createService();
+   * generateService();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -792,7 +792,7 @@ export class ${className}Resolver implements Resolve<boolean> {
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;
@@ -841,7 +841,7 @@ export class ${className}Service {}
    * @async
    * @memberof FileController
    * @example
-   * createTest();
+   * generateTest();
    *
    * @returns {Promise<void>} - The result of the operation
    */
@@ -855,7 +855,7 @@ export class ${className}Service {}
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
-        if (!/^[A-Za-z][\w\s\/-]+$/.test(path)) {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
         }
         return;

@@ -12,15 +12,20 @@ import {
   FeedbackProvider,
   ListFilesProvider,
   ListModulesProvider,
+  ListRoutesProvider,
 } from './app/providers';
 
 export function activate(context: vscode.ExtensionContext) {
   // The code you place here will be executed every time your command is executed
-  let resource: vscode.Uri | null = null;
+  let resource:
+    | vscode.Uri
+    | vscode.TextDocument
+    | vscode.WorkspaceFolder
+    | undefined;
 
   // Get the resource for the workspace
   if (vscode.workspace.workspaceFolders) {
-    resource = vscode.workspace.workspaceFolders[0].uri;
+    resource = vscode.workspace.workspaceFolders[0];
   }
 
   // -----------------------------------------------------------------
@@ -29,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Get the configuration for the extension
   const config = new Config(
-    vscode.workspace.getConfiguration(EXTENSION_ID, resource ?? null),
+    vscode.workspace.getConfiguration(EXTENSION_ID, resource),
   );
 
   // -----------------------------------------------------------------
@@ -187,6 +192,16 @@ export function activate(context: vscode.ExtensionContext) {
   // Create a new ListFilesController
   const listFilesController = new ListFilesController(config);
 
+  const disposableListOpenFile = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.list.openFile`,
+    (uri) => listFilesController.openFile(uri),
+  );
+
+  const disposableListGotoLine = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.list.gotoLine`,
+    (uri, line) => listFilesController.gotoLine(uri, line),
+  );
+
   // -----------------------------------------------------------------
   // Register ListFilesProvider and list commands
   // -----------------------------------------------------------------
@@ -203,9 +218,20 @@ export function activate(context: vscode.ExtensionContext) {
     },
   );
 
-  const disposableListOpenFile = vscode.commands.registerCommand(
-    `${EXTENSION_ID}.list.openFile`,
-    (uri) => listFilesProvider.controller.openFile(uri),
+  // -----------------------------------------------------------------
+  // Register ListRoutesProvider and list commands
+  // -----------------------------------------------------------------
+
+  // Create a new ListRoutesProvider
+  const listRoutesProvider = new ListRoutesProvider(listFilesController);
+
+  // Register the list provider
+  const disposableListRoutesTreeView = vscode.window.createTreeView(
+    `${EXTENSION_ID}.listRoutesView`,
+    {
+      treeDataProvider: listRoutesProvider,
+      showCollapseAll: true,
+    },
   );
 
   // -----------------------------------------------------------------
@@ -224,33 +250,33 @@ export function activate(context: vscode.ExtensionContext) {
     },
   );
 
-  const disposableListGotoLine = vscode.commands.registerCommand(
-    `${EXTENSION_ID}.list.gotoLine`,
-    (uri, line) => listModulesProvider.controller.gotoLine(uri, line),
-  );
-
   // -----------------------------------------------------------------
-  // Register ListFilesProvider and ListMethodsProvider events
+  // Register provider events
   // -----------------------------------------------------------------
 
   vscode.workspace.onDidChangeTextDocument(() => {
     listFilesProvider.refresh();
+    listRoutesProvider.refresh();
     listModulesProvider.refresh();
   });
   vscode.workspace.onDidCreateFiles(() => {
     listFilesProvider.refresh();
+    listRoutesProvider.refresh();
     listModulesProvider.refresh();
   });
   vscode.workspace.onDidDeleteFiles(() => {
     listFilesProvider.refresh();
+    listRoutesProvider.refresh();
     listModulesProvider.refresh();
   });
   vscode.workspace.onDidRenameFiles(() => {
     listFilesProvider.refresh();
+    listRoutesProvider.refresh();
     listModulesProvider.refresh();
   });
   vscode.workspace.onDidSaveTextDocument(() => {
     listFilesProvider.refresh();
+    listRoutesProvider.refresh();
     listModulesProvider.refresh();
   });
 
@@ -319,10 +345,11 @@ export function activate(context: vscode.ExtensionContext) {
     disposableTerminalE2E,
     disposableTerminalVersion,
     disposableTransformJson2Ts,
-    disposableListFilesTreeView,
     disposableListOpenFile,
-    disposableListModulesTreeView,
     disposableListGotoLine,
+    disposableListFilesTreeView,
+    disposableListRoutesTreeView,
+    disposableListModulesTreeView,
     disposableFeedbackTreeView,
     disposableFeedbackAboutUs,
     disposableFeedbackReportIssues,

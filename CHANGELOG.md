@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2024-03-02
+
+### Added
+
+- Add List of Routes View
+
+### Changed
+
+- Update `TerminalController` to improve the file generation process through the terminal
+
+### Fixed
+
+- Fix documentation
+
 ## [2.1.1] - 2024-02-19
 
 ### Fixed
