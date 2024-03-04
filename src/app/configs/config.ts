@@ -107,11 +107,12 @@ export class Config {
    * @memberof Config
    */
   constructor(readonly config: WorkspaceConfiguration) {
-    this.style = config.get<string>('style') ?? STYLE;
-    this.standalone = config.get<boolean>('standalone') ?? STANDALONE;
+    this.style = config.get<string>('components.style') ?? STYLE;
+    this.standalone =
+      config.get<boolean>('components.standalone') ?? STANDALONE;
     this.include = config.get<string[]>('files.include') ?? INCLUDE;
     this.exclude = config.get<string[]>('files.exclude') ?? EXCLUDE;
-    this.watch = config.get<string[]>('watch') ?? WATCH;
-    this.showPath = config.get<boolean>('showPath') ?? SHOW_PATH;
+    this.watch = config.get<string[]>('files.watch') ?? WATCH;
+    this.showPath = config.get<boolean>('files.showPath') ?? SHOW_PATH;
   }
 }

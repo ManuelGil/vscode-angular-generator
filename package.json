@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -85,13 +85,13 @@
     "configuration": {
       "title": "Angular File Generator",
       "properties": {
-        "angular.standalone": {
+        "angular.components.standalone": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
           "description": "Sets the standalone option when generating a new component"
         },
-        "angular.style": {
+        "angular.components.style": {
           "type": "string",
           "default": "css",
           "enum": [
