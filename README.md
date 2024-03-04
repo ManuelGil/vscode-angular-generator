@@ -69,7 +69,8 @@ Configure your project by creating or updating a settings.json file at the proje
         "modules",
         "components",
         "services"
-      ]
+      ],
+      "angular.files.showPath": true
     }
     ```
 

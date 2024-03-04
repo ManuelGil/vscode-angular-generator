@@ -284,7 +284,7 @@ export class TerminalController {
       });
 
       if (detection) {
-        extras.push('--change-detection ' + detection.toLowerCase());
+        extras.push('--change-detection ' + detection);
         options = options.filter(
           (item: any) => item.description !== '--change-detection',
         );
@@ -329,7 +329,7 @@ export class TerminalController {
       );
 
       if (encapsulation) {
-        extras.push('--view-encapsulation ' + encapsulation.toLowerCase());
+        extras.push('--view-encapsulation ' + encapsulation);
         options = options.filter(
           (item: any) => item.description !== '--view-encapsulation',
         );

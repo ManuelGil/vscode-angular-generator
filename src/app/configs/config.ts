@@ -1,6 +1,13 @@
 import { WorkspaceConfiguration } from 'vscode';
 
-import { EXCLUDE, INCLUDE, STANDALONE, STYLE, WATCH } from './constants';
+import {
+  EXCLUDE,
+  INCLUDE,
+  SHOW_PATH,
+  STANDALONE,
+  STYLE,
+  WATCH,
+} from './constants';
 
 /**
  * The Config class.
@@ -76,6 +83,16 @@ export class Config {
    * console.log(config.watch);
    */
   watch: string[];
+  /**
+   * Whether to show the path or not.
+   * @type {boolean}
+   * @public
+   * @memberof Config
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.showPath);
+   */
+  showPath: boolean;
 
   // -----------------------------------------------------------------
   // Constructor
@@ -95,5 +112,6 @@ export class Config {
     this.include = config.get<string[]>('files.include') ?? INCLUDE;
     this.exclude = config.get<string[]>('files.exclude') ?? EXCLUDE;
     this.watch = config.get<string[]>('watch') ?? WATCH;
+    this.showPath = config.get<boolean>('showPath') ?? SHOW_PATH;
   }
 }

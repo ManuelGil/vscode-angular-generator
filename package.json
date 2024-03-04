@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -133,6 +133,12 @@
           ],
           "scope": "resource",
           "description": "The list of directories to watch for changes"
+        },
+        "angular.files.showPath": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Show the path of the file in the name of the list of generated files"
         }
       }
     },
@@ -296,6 +302,24 @@
         "command": "angular.transform.json.ts",
         "title": "Convert JSON to TypeScript",
         "category": "Angular"
+      },
+      {
+        "command": "angular.listFiles.refreshList",
+        "title": "Refresh List of Files",
+        "category": "Angular",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "angular.listRoutes.refreshList",
+        "title": "Refresh List of Routes",
+        "category": "Angular",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "angular.listModules.refreshList",
+        "title": "Refresh List of Modules",
+        "category": "Angular",
+        "icon": "$(refresh)"
       }
     ],
     "submenus": [
@@ -313,6 +337,23 @@
       }
     ],
     "menus": {
+      "view/title": [
+        {
+          "command": "angular.listFiles.refreshList",
+          "when": "view == angular.listFilesView",
+          "group": "navigation"
+        },
+        {
+          "command": "angular.listRoutes.refreshList",
+          "when": "view == angular.listRoutesView",
+          "group": "navigation"
+        },
+        {
+          "command": "angular.listModules.refreshList",
+          "when": "view == angular.listModulesView",
+          "group": "navigation"
+        }
+      ],
       "explorer/context": [
         {
           "submenu": "angular.explorer.submenu",

@@ -8,7 +8,7 @@
  *
  * @returns {string} - The unique identifier of the extension
  */
-export const EXTENSION_ID = 'angular';
+export const EXTENSION_ID: string = 'angular';
 
 /**
  * EXTENSION_NAME: The name of the extension.
@@ -20,7 +20,7 @@ export const EXTENSION_ID = 'angular';
  *
  * @returns {string} - The name of the extension
  */
-export const EXTENSION_NAME = 'Angular File Generator';
+export const EXTENSION_NAME: string = 'Angular File Generator';
 
 /**
  * EXTENSION_HOMEPAGE_URL: The homepage URL of the extension.
@@ -32,7 +32,7 @@ export const EXTENSION_NAME = 'Angular File Generator';
  *
  * @returns {string} - The homepage URL of the extension
  */
-export const EXTENSION_HOMEPAGE_URL =
+export const EXTENSION_HOMEPAGE_URL: string =
   'https://github.com/ManuelGil/vscode-angular-generator#readme';
 
 /**
@@ -45,7 +45,7 @@ export const EXTENSION_HOMEPAGE_URL =
  *
  * @returns {string} - The repository URL of the extension
  */
-export const EXTENSION_REPOSITORY_URL =
+export const EXTENSION_REPOSITORY_URL: string =
   'https://github.com/ManuelGil/vscode-angular-generator';
 
 /**
@@ -58,7 +58,7 @@ export const EXTENSION_REPOSITORY_URL =
  *
  * @returns {string} - The marketplace URL of the extension
  */
-export const EXTENSION_MARKETPLACE_URL =
+export const EXTENSION_MARKETPLACE_URL: string =
   'https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-angular-generator';
 
 /**
@@ -71,7 +71,7 @@ export const EXTENSION_MARKETPLACE_URL =
  *
  * @returns {string} - The bugs URL of the extension
  */
-export const EXTENSION_BUGS_URL =
+export const EXTENSION_BUGS_URL: string =
   'https://github.com/ManuelGil/vscode-angular-generator/issues';
 
 /**
@@ -84,7 +84,8 @@ export const EXTENSION_BUGS_URL =
  *
  * @returns {string} - The sponsor URL of the extension
  */
-export const EXTENSION_SPONSOR_URL = 'https://github.com/sponsors/ManuelGil';
+export const EXTENSION_SPONSOR_URL: string =
+  'https://github.com/sponsors/ManuelGil';
 
 /**
  * EXTENSION_PAYPAL_URL: The PayPal URL of the extension.
@@ -96,7 +97,7 @@ export const EXTENSION_SPONSOR_URL = 'https://github.com/sponsors/ManuelGil';
  *
  * @returns {string} - The PayPal URL of the extension
  */
-export const EXTENSION_PAYPAL_URL =
+export const EXTENSION_PAYPAL_URL: string =
   'https://www.paypal.com/paypalme/ManuelFGil';
 
 /**
@@ -109,7 +110,7 @@ export const EXTENSION_PAYPAL_URL =
  *
  * @returns {string} - The style file extension
  */
-export const STYLE = 'css';
+export const STYLE: string = 'css';
 
 /**
  * STANDALONE: The standalone option when generating a new component.
@@ -121,7 +122,7 @@ export const STYLE = 'css';
  *
  * @returns {boolean} - The standalone flag
  */
-export const STANDALONE = true;
+export const STANDALONE: boolean = true;
 
 /**
  * INCLUDE: The files to include.
@@ -133,7 +134,7 @@ export const STANDALONE = true;
  *
  * @returns {string[]} - The files to include
  */
-export const INCLUDE = ['ts'];
+export const INCLUDE: string[] = ['ts'];
 /**
  * EXCLUDE: The files to exclude.
  * @type {string[]}
@@ -144,7 +145,7 @@ export const INCLUDE = ['ts'];
  *
  * @returns {string[]} - The files to exclude
  */
-export const EXCLUDE = [
+export const EXCLUDE: string[] = [
   '**/node_modules/**',
   '**/dist/**',
   '**/out/**',
@@ -162,4 +163,16 @@ export const EXCLUDE = [
  *
  * @returns {string[]} - The files to watch
  */
-export const WATCH = ['modules', 'components', 'services'];
+export const WATCH: string[] = ['modules', 'components', 'services'];
+
+/**
+ * SHOW_PATH: Whether to show the path or not.
+ * @type {boolean}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(SHOW_PATH);
+ *
+ * @returns {boolean} - Whether to show the path or not
+ */
+export const SHOW_PATH: boolean = true;

@@ -218,6 +218,11 @@ export function activate(context: vscode.ExtensionContext) {
     },
   );
 
+  const disposableRefreshListFiles = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.listFiles.refreshList`,
+    () => listFilesProvider.refresh(),
+  );
+
   // -----------------------------------------------------------------
   // Register ListRoutesProvider and list commands
   // -----------------------------------------------------------------
@@ -232,6 +237,11 @@ export function activate(context: vscode.ExtensionContext) {
       treeDataProvider: listRoutesProvider,
       showCollapseAll: true,
     },
+  );
+
+  const disposableRefreshListRoutes = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.listRoutes.refreshList`,
+    () => listRoutesProvider.refresh(),
   );
 
   // -----------------------------------------------------------------
@@ -250,15 +260,15 @@ export function activate(context: vscode.ExtensionContext) {
     },
   );
 
+  const disposableRefreshListModules = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.listModules.refreshList`,
+    () => listModulesProvider.refresh(),
+  );
+
   // -----------------------------------------------------------------
   // Register provider events
   // -----------------------------------------------------------------
 
-  vscode.workspace.onDidChangeTextDocument(() => {
-    listFilesProvider.refresh();
-    listRoutesProvider.refresh();
-    listModulesProvider.refresh();
-  });
   vscode.workspace.onDidCreateFiles(() => {
     listFilesProvider.refresh();
     listRoutesProvider.refresh();
@@ -270,11 +280,6 @@ export function activate(context: vscode.ExtensionContext) {
     listModulesProvider.refresh();
   });
   vscode.workspace.onDidRenameFiles(() => {
-    listFilesProvider.refresh();
-    listRoutesProvider.refresh();
-    listModulesProvider.refresh();
-  });
-  vscode.workspace.onDidSaveTextDocument(() => {
     listFilesProvider.refresh();
     listRoutesProvider.refresh();
     listModulesProvider.refresh();
@@ -348,8 +353,11 @@ export function activate(context: vscode.ExtensionContext) {
     disposableListOpenFile,
     disposableListGotoLine,
     disposableListFilesTreeView,
+    disposableRefreshListFiles,
     disposableListRoutesTreeView,
+    disposableRefreshListRoutes,
     disposableListModulesTreeView,
+    disposableRefreshListModules,
     disposableFeedbackTreeView,
     disposableFeedbackAboutUs,
     disposableFeedbackReportIssues,
