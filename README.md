@@ -13,11 +13,7 @@ Are you tired of manually creating files for your Angular projects in Visual Stu
 
 With this powerful extension, you can streamline your Angular development workflow by generating files with just a few clicks. Whether you need a new class, interface, module, or any other Angular component, our extension has you covered.
 
-![snippets](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/snippets.png)
-
-![menu](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/menu.png)
-
-![commands](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/commands.png)
+![preview](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/images/preview.png)
 
 ## Table of Contents
 

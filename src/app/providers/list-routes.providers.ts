@@ -180,26 +180,31 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
           let node: NodeModel | undefined;
 
           if (line.text.match(/path:/gi)) {
-            node = new NodeModel(
-              line.text.trim(),
-              new ThemeIcon('symbol-reference'),
-              {
-                command: `${EXTENSION_ID}.list.gotoLine`,
-                title: line.text,
-                arguments: [file.resourceUri, index],
-              },
-            );
+            const path = line.text
+              .replace(/[\{\}]/gi, '')
+              .split(',')[0]
+              .trim();
+
+            node = new NodeModel(path, new ThemeIcon('symbol-reference'), {
+              command: `${EXTENSION_ID}.list.gotoLine`,
+              title: line.text,
+              arguments: [file.resourceUri, index],
+            });
           }
 
           return node;
         },
       );
 
+      if (children.length === 0) {
+        continue;
+      }
+
       file.setChildren(
         children.filter((child) => child !== undefined) as NodeModel[],
       );
     }
 
-    return nodes.filter((file) => file.children && file.children.length !== 0);
+    return nodes.filter((file) => file.children?.length !== 0);
   }
 }
