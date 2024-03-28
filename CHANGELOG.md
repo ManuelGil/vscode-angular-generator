@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2024-03-28
+
+### Changed
+
+- Update the `getFiles` method in the `ListFilesController` so that it can be used without instantiating the class
+- Update the `ListFilesProvider` and `ListRoutesProvider` to use the new `getFiles` method
+- Upgrade dependencies to the latest versions available
+
 ## [2.3.2] - 2024-03-04
 
 ### Fixed
@@ -237,7 +245,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.3.2...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.3.2...v2.4.0
 [2.3.2]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.3.1...v2.3.2
 [2.3.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.2.0...v2.3.0
