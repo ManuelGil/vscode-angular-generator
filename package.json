@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -580,13 +580,13 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.2.1",
-    "@commitlint/config-conventional": "^19.1.0",
-    "@compodoc/compodoc": "^1.1.23",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@compodoc/compodoc": "^1.1.24",
     "@types/glob": "^8.1.0",
     "@types/minimatch": "^3.0.5",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.11",
     "@types/vscode": "^1.76.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
@@ -596,16 +596,16 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
-    "glob": "^10.3.10",
+    "glob": "^10.3.13",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "mocha": "^10.4.0",
     "prettier": "3.2.5",
     "rimraf": "^5.0.5",
-    "typescript": "^5.4.3",
+    "typescript": "^5.4.5",
     "vscode-test": "^1.5.0"
   },
   "dependencies": {
-    "json-to-ts": "^1.7.0"
+    "json-to-ts": "^2.1.0"
   }
 }

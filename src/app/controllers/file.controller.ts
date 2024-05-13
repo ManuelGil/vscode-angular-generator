@@ -259,7 +259,7 @@ export class ${className}Component {}
 export class ${className}Directive {}
 `;
 
-    const filename = `${dasherize(className)}.interceptor.ts`;
+    const filename = `${dasherize(className)}.directive.ts`;
 
     saveFile(folder, filename, content);
   }
