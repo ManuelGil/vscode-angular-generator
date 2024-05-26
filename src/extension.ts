@@ -38,6 +38,91 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // -----------------------------------------------------------------
+  // Set the context values
+  // -----------------------------------------------------------------
+
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.terminal.component`,
+    config.activateItem.terminal.component,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.terminal.guard`,
+    config.activateItem.terminal.guard,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.terminal.pipe`,
+    config.activateItem.terminal.pipe,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.terminal.service`,
+    config.activateItem.terminal.service,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.class`,
+    config.activateItem.file.class,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.component`,
+    config.activateItem.file.component,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.directive`,
+    config.activateItem.file.directive,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.enum`,
+    config.activateItem.file.enum,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.guard`,
+    config.activateItem.file.guard,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.interceptor`,
+    config.activateItem.file.interceptor,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.interface`,
+    config.activateItem.file.interface,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.module`,
+    config.activateItem.file.module,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.pipe`,
+    config.activateItem.file.pipe,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.resolver`,
+    config.activateItem.file.resolver,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.service`,
+    config.activateItem.file.service,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.spec`,
+    config.activateItem.file.spec,
+  );
+
+  // -----------------------------------------------------------------
   // Register FileController and commands
   // -----------------------------------------------------------------
 

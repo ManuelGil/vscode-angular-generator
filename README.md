@@ -69,7 +69,29 @@ Configure your project by creating or updating a settings.json file at the proje
         "components",
         "services"
       ],
-      "angular.files.showPath": true
+      "angular.files.showPath": true,
+      "angular.submenu.activateItem": {
+        "terminal": {
+          "component": true,
+          "guard": true,
+          "pipe": true,
+          "service": true
+        },
+        "file": {
+          "class": true,
+          "component": true,
+          "directive": true,
+          "enum": true,
+          "guard": true,
+          "interceptor": true,
+          "interface": true,
+          "module": true,
+          "pipe": true,
+          "resolver": true,
+          "service": true,
+          "spec": true
+        }
+      }
     }
     ```
 

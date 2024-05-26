@@ -5,13 +5,7 @@
     "angular.components.style": {
       "type": "string",
       "default": "css",
-      "enum": [
-        "css",
-        "scss",
-        "sass",
-        "less",
-        "none"
-      ],
+      "enum": ["css", "scss", "sass", "less", "none"],
       "scope": "resource",
       "description": "Sets the style file extension when generating a new component"
     },
@@ -23,9 +17,7 @@
     },
     "angular.files.include": {
       "type": "array",
-      "default": [
-        "ts"
-      ],
+      "default": ["ts"],
       "scope": "resource",
       "description": "Glob patterns to include in the package. The default is ts, html, css, scss, less."
     },
@@ -43,11 +35,7 @@
     },
     "angular.files.watch": {
       "type": "array",
-      "default": [
-        "modules",
-        "components",
-        "services"
-      ],
+      "default": ["modules", "components", "services"],
       "scope": "resource",
       "description": "The list of directories to watch for changes"
     },
@@ -56,6 +44,125 @@
       "default": true,
       "scope": "resource",
       "description": "Show the path of the file in the name of the list of generated files"
+    },
+    "angular.submenu.activateItem": {
+      "type": "object",
+      "properties": {
+        "terminal": {
+          "type": "object",
+          "properties": {
+            "component": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the component item in the terminal submenu"
+            },
+            "guard": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the guard item in the terminal submenu"
+            },
+            "pipe": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the pipe item in the terminal submenu"
+            },
+            "service": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the service item in the terminal submenu"
+            }
+          }
+        },
+        "file": {
+          "type": "object",
+          "properties": {
+            "class": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the class item in the file submenu"
+            },
+            "component": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the component item in the file submenu"
+            },
+            "directive": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the directive item in the file submenu"
+            },
+            "enum": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the enum item in the file submenu"
+            },
+            "guard": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the guard item in the file submenu"
+            },
+            "interceptor": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the interceptor item in the file submenu"
+            },
+            "interface": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the interface item in the file submenu"
+            },
+            "module": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the module item in the file submenu"
+            },
+            "pipe": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the pipe item in the file submenu"
+            },
+            "resolver": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the resolver item in the file submenu"
+            },
+            "service": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the service item in the file submenu"
+            },
+            "spec": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the spec item in the file submenu"
+            }
+          }
+        }
+      },
+      "default": {
+        "terminal": {
+          "component": true,
+          "guard": true,
+          "pipe": true,
+          "service": true
+        },
+        "file": {
+          "class": true,
+          "component": true,
+          "directive": true,
+          "enum": true,
+          "guard": true,
+          "interceptor": true,
+          "interface": true,
+          "module": true,
+          "pipe": true,
+          "resolver": true,
+          "service": true,
+          "spec": true
+        }
+      },
+      "scope": "resource",
+      "description": "Activate or deactivate items in the context menu"
     }
   }
 }

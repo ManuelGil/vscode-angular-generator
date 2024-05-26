@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0] - 2024-05-26
+
+### Added
+
+- Add `submenu.activateItem` settings to enable or disable the items in the context menu
+
+### Changed
+
+- Update the `extension.ts` file to use the new `submenu.activateItem` settings
+- Update the `package.json` file to include the new settings
+
 ## [2.4.1] - 2024-05-12
 
 ### Changed
@@ -255,7 +266,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.4.1...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.4.1...v2.5.0
 [2.4.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.4.0...v2.4.1
 [2.4.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.3.2...v2.4.0
 [2.3.2]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.3.1...v2.3.2

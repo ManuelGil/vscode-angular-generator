@@ -1,8 +1,10 @@
 import { WorkspaceConfiguration } from 'vscode';
 
 import {
+  ACTIVATE_MENU,
   EXCLUDE,
   INCLUDE,
+  MenuInterface,
   SHOW_PATH,
   STANDALONE,
   STYLE,
@@ -22,6 +24,8 @@ import {
  * @property {string[]} include - The files to include
  * @property {string[]} exclude - The files to exclude
  * @property {string[]} watch - The files to watch
+ * @property {boolean} showPath - Whether to show the path or not
+ * @property {object} activateItem - Whether to show the menu or not
  * @example
  * const config = new Config(workspace.getConfiguration());
  * console.log(config.include);
@@ -93,6 +97,17 @@ export class Config {
    * console.log(config.showPath);
    */
   showPath: boolean;
+  /**
+   * Whether to show the menu or not.
+   * @type {MenuInterface}
+   * @public
+   * @memberof Config
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.activateItem);
+   * console.log(config.activateItem.terminal.components);
+   */
+  activateItem: MenuInterface;
 
   // -----------------------------------------------------------------
   // Constructor
@@ -114,5 +129,7 @@ export class Config {
     this.exclude = config.get<string[]>('files.exclude') ?? EXCLUDE;
     this.watch = config.get<string[]>('files.watch') ?? WATCH;
     this.showPath = config.get<boolean>('files.showPath') ?? SHOW_PATH;
+    this.activateItem =
+      config.get<MenuInterface>('submenu.activateItem') ?? ACTIVATE_MENU;
   }
 }

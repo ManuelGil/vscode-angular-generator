@@ -176,3 +176,69 @@ export const WATCH: string[] = ['modules', 'components', 'services'];
  * @returns {boolean} - Whether to show the path or not
  */
 export const SHOW_PATH: boolean = true;
+
+/**
+ * MenuIterface: The menu options.
+ * @type {object}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(MenuIterface);
+ *
+ * @returns {object} - The menu options
+ */
+export interface MenuInterface {
+  terminal: {
+    component: boolean;
+    guard: boolean;
+    pipe: boolean;
+    service: boolean;
+  };
+  file: {
+    class: boolean;
+    component: boolean;
+    directive: boolean;
+    enum: boolean;
+    guard: boolean;
+    interceptor: boolean;
+    interface: boolean;
+    module: boolean;
+    pipe: boolean;
+    resolver: boolean;
+    service: boolean;
+    spec: boolean;
+  };
+}
+
+/**
+ * ACTIVATE_MENU: Whether to show the menu or not.
+ * @type {object}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(ACTIVATE_MENU);
+ *
+ * @returns {object} - Whether to show the menu or not
+ */
+export const ACTIVATE_MENU: MenuInterface = {
+  terminal: {
+    component: true,
+    guard: true,
+    pipe: true,
+    service: true,
+  },
+  file: {
+    class: true,
+    component: true,
+    directive: true,
+    enum: true,
+    guard: true,
+    interceptor: true,
+    interface: true,
+    module: true,
+    pipe: true,
+    resolver: true,
+    service: true,
+    spec: true,
+  },
+};
