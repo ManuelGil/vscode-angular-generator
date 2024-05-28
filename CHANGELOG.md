@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.0] - 2024-05-28
+
+### Added
+
+- Add `submenu.customCommands` settings to customize the commands in the context menu
+- Add `generateCustomElement` command to generate a custom element
+
+### Changed
+
+- Update the `extension.ts` file to use the new `submenu.customCommands` settings
+- Update the `package.json` file to include the new settings
+
 ## [2.5.0] - 2024-05-26
 
 ### Added

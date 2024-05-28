@@ -178,6 +178,24 @@ export const WATCH: string[] = ['modules', 'components', 'services'];
 export const SHOW_PATH: boolean = true;
 
 /**
+ * CUSTOM_COMMANDS: The custom commands.
+ * @type {object[]}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(CUSTOM_COMMANDS);
+ *
+ * @returns {object[]} - The custom commands
+ */
+export const CUSTOM_COMMANDS: object[] = [
+  {
+    'name': 'Custom Component',
+    'command': 'ng g c',
+    'args': '--style css --standalone true --inline-style --inline-template',
+  },
+];
+
+/**
  * MenuIterface: The menu options.
  * @type {object}
  * @public
@@ -193,6 +211,7 @@ export interface MenuInterface {
     guard: boolean;
     pipe: boolean;
     service: boolean;
+    custom: boolean;
   };
   file: {
     class: boolean;
@@ -226,6 +245,7 @@ export const ACTIVATE_MENU: MenuInterface = {
     guard: true,
     pipe: true,
     service: true,
+    custom: true,
   },
   file: {
     class: true,

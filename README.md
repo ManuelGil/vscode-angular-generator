@@ -70,6 +70,18 @@ Configure your project by creating or updating a settings.json file at the proje
         "services"
       ],
       "angular.files.showPath": true,
+      "angular.submenu.customCommands": [
+        {
+          "name": "Template 1",
+          "command": "ng g c",
+          "args": "--style css --standalone true --inline-style --inline-template"
+        },
+        {
+          "name": "Template 2",
+          "command": "ng g c",
+          "args": "--style scss --standalone false --inline-style --inline-template"
+        }
+      ],
       "angular.submenu.activateItem": {
         "terminal": {
           "component": true,

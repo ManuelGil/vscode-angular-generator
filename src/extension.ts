@@ -121,6 +121,11 @@ export function activate(context: vscode.ExtensionContext) {
     `${EXTENSION_ID}.activateItem.file.spec`,
     config.activateItem.file.spec,
   );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.terminal.custom`,
+    config.activateItem.terminal.custom,
+  );
 
   // -----------------------------------------------------------------
   // Register FileController and commands
@@ -256,6 +261,10 @@ export function activate(context: vscode.ExtensionContext) {
   const disposableTerminalVersion = vscode.commands.registerCommand(
     `${EXTENSION_ID}.terminal.version`,
     () => terminalController.version(),
+  );
+  const disposableTerminalCustomElement = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.terminal.custom`,
+    (args) => terminalController.generateCustomElement(args),
   );
 
   // -----------------------------------------------------------------
@@ -434,6 +443,7 @@ export function activate(context: vscode.ExtensionContext) {
     disposableTerminalTest,
     disposableTerminalE2E,
     disposableTerminalVersion,
+    disposableTerminalCustomElement,
     disposableTransformJson2Ts,
     disposableListOpenFile,
     disposableListGotoLine,

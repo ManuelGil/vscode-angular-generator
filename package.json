@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -140,6 +140,35 @@
           "scope": "resource",
           "description": "Show the path of the file in the name of the list of generated files"
         },
+        "angular.submenu.customCommands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The name of the command"
+              },
+              "command": {
+                "type": "string",
+                "description": "The command to execute"
+              },
+              "args": {
+                "type": "string",
+                "description": "The arguments to pass to the command"
+              }
+            }
+          },
+          "default": [
+            {
+              "name": "Custom Component",
+              "command": "ng g c",
+              "args": "--style css --standalone true --inline-style --inline-template"
+            }
+          ],
+          "scope": "resource",
+          "description": "Custom commands to add to the context menu"
+        },
         "angular.submenu.activateItem": {
           "type": "object",
           "properties": {
@@ -165,6 +194,11 @@
                   "type": "boolean",
                   "default": true,
                   "description": "Activate the service item in the terminal submenu"
+                },
+                "custom": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Activate the custom item in the terminal submenu"
                 }
               }
             },
@@ -239,7 +273,8 @@
               "component": true,
               "guard": true,
               "pipe": true,
-              "service": true
+              "service": true,
+              "custom": true
             },
             "file": {
               "class": true,
@@ -418,6 +453,11 @@
         "category": "Angular"
       },
       {
+        "command": "angular.terminal.custom",
+        "title": "Generate Custom Element with CLI",
+        "category": "Angular"
+      },
+      {
         "command": "angular.transform.json.ts",
         "title": "Convert JSON to TypeScript",
         "category": "Angular"
@@ -518,75 +558,81 @@
           "when": "angular.activateItem.terminal.service"
         },
         {
+          "command": "angular.terminal.custom",
+          "alt": "Generate Custom Element with CLI",
+          "group": "2_terminal",
+          "when": "angular.activateItem.terminal.custom"
+        },
+        {
           "command": "angular.file.class",
           "alt": "Generate Class",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.class"
         },
         {
           "command": "angular.file.component",
           "alt": "Generate Component File",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.component"
         },
         {
           "command": "angular.file.directive",
           "alt": "Generate Directive",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.directive"
         },
         {
           "command": "angular.file.enum",
           "alt": "Generate Enum",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.enum"
         },
         {
           "command": "angular.file.guard",
           "alt": "Generate Guard",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.guard"
         },
         {
           "command": "angular.file.interceptor",
           "alt": "Generate Interceptor",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.interceptor"
         },
         {
           "command": "angular.file.interface",
           "alt": "Generate Interface",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.interface"
         },
         {
           "command": "angular.file.module",
           "alt": "Generate Module",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.module"
         },
         {
           "command": "angular.file.pipe",
           "alt": "Generate Pipe",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.pipe"
         },
         {
           "command": "angular.file.resolver",
           "alt": "Generate Resolver",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.resolver"
         },
         {
           "command": "angular.file.service",
           "alt": "Generate Service",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.service"
         },
         {
           "command": "angular.file.spec",
           "alt": "Generate Test",
-          "group": "2_file",
+          "group": "3_file",
           "when": "angular.activateItem.file.spec"
         }
       ],

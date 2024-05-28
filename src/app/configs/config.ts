@@ -2,6 +2,7 @@ import { WorkspaceConfiguration } from 'vscode';
 
 import {
   ACTIVATE_MENU,
+  CUSTOM_COMMANDS,
   EXCLUDE,
   INCLUDE,
   MenuInterface,
@@ -25,6 +26,7 @@ import {
  * @property {string[]} exclude - The files to exclude
  * @property {string[]} watch - The files to watch
  * @property {boolean} showPath - Whether to show the path or not
+ * @property {object[]} customCommands - The custom commands
  * @property {object} activateItem - Whether to show the menu or not
  * @example
  * const config = new Config(workspace.getConfiguration());
@@ -98,6 +100,19 @@ export class Config {
    */
   showPath: boolean;
   /**
+   * The custom commands.
+   * @type {object[]}
+   * @public
+   * @memberof Config
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.customCommands);
+   * console.log(config.customCommands[0].name);
+   * console.log(config.customCommands[0].command);
+   * console.log(config.customCommands[0].args);
+   */
+  customCommands: object[];
+  /**
    * Whether to show the menu or not.
    * @type {MenuInterface}
    * @public
@@ -129,6 +144,8 @@ export class Config {
     this.exclude = config.get<string[]>('files.exclude') ?? EXCLUDE;
     this.watch = config.get<string[]>('files.watch') ?? WATCH;
     this.showPath = config.get<boolean>('files.showPath') ?? SHOW_PATH;
+    this.customCommands =
+      config.get<object[]>('submenu.customCommands') ?? CUSTOM_COMMANDS;
     this.activateItem =
       config.get<MenuInterface>('submenu.activateItem') ?? ACTIVATE_MENU;
   }

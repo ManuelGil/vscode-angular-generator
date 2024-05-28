@@ -813,4 +813,61 @@ export class TerminalController {
   version(): void {
     runCommand('version', 'ng v');
   }
+
+  /**
+   * Generates a custom element.
+   *
+   * @function generateCustomElement
+   * @param {Uri} [path] - The path
+   * @public
+   * @async
+   * @memberof TerminalController
+   * @example
+   * controller.generateCustomElement();
+   *
+   * @returns {Promise<void>} - No return value
+   */
+  async generateCustomElement(path?: Uri): Promise<void> {
+    // Get the relative path
+    const folderPath: string = path ? await getRelativePath(path.path) : '';
+
+    // Get the path to the folder
+    let folder = await getPath(
+      'Element name',
+      'Element name. E.g. src/app/modules/users, modules/users, modules/projects...',
+      folderPath,
+      (path: string) => {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
+          return 'The folder name must be a valid name';
+        }
+        return;
+      },
+    );
+
+    if (folder === undefined) {
+      return;
+    }
+
+    const items = this.config.customCommands.map((item: any) => {
+      return {
+        label: item.name,
+        description: item.command,
+        detail: item.args,
+      };
+    });
+
+    const option = await window.showQuickPick(items, {
+      placeHolder: 'Select the template for the custom element generation',
+    });
+
+    if (option === undefined) {
+      return;
+    }
+
+    folder = folder.replace('src/app/', '');
+
+    const command = `${option.description} ${folder} ${option.detail}`;
+
+    runCommand('generate custom element', command);
+  }
 }

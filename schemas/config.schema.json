@@ -45,6 +45,35 @@
       "scope": "resource",
       "description": "Show the path of the file in the name of the list of generated files"
     },
+    "angular.submenu.customCommands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the command"
+          },
+          "command": {
+            "type": "string",
+            "description": "The command to execute"
+          },
+          "args": {
+            "type": "string",
+            "description": "The arguments to pass to the command"
+          }
+        }
+      },
+      "default": [
+        {
+          "name": "Custom Component",
+          "command": "ng g c",
+          "args": "--style css --standalone true --inline-style --inline-template"
+        }
+      ],
+      "scope": "resource",
+      "description": "Custom commands to add to the context menu"
+    },
     "angular.submenu.activateItem": {
       "type": "object",
       "properties": {
@@ -70,6 +99,11 @@
               "type": "boolean",
               "default": true,
               "description": "Activate the service item in the terminal submenu"
+            },
+            "custom": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the custom item in the terminal submenu"
             }
           }
         },
@@ -144,7 +178,8 @@
           "component": true,
           "guard": true,
           "pipe": true,
-          "service": true
+          "service": true,
+          "custom": true
         },
         "file": {
           "class": true,
