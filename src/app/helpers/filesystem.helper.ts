@@ -1,6 +1,6 @@
 import { access, existsSync, mkdirSync, open, writeFile } from 'fs';
 import { dirname, join } from 'path';
-import { FilePermission, FileStat, Uri, window, workspace } from 'vscode';
+import { FilePermission, FileStat, l10n, Uri, window, workspace } from 'vscode';
 
 /**
  * Reads the contents of the file specified in the path.
@@ -58,7 +58,8 @@ export const saveFile = async (
   if (workspace.workspaceFolders) {
     folder = workspace.workspaceFolders[0].uri.fsPath;
   } else {
-    window.showErrorMessage('The file has not been created!');
+    const message = l10n.t('The file has not been created!');
+    window.showErrorMessage(message);
     return;
   }
 
@@ -88,9 +89,11 @@ export const saveFile = async (
         });
       });
 
-      window.showInformationMessage('Successfully created the file!');
+      const message = l10n.t('Successfully created the file!');
+      window.showInformationMessage(message);
     } else {
-      window.showWarningMessage('Name already exist!');
+      const message = l10n.t('Name already exist!');
+      window.showWarningMessage(message);
     }
   });
 };

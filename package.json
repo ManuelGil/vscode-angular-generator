@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -33,10 +33,14 @@
     "angular 15",
     "angular 16",
     "angular 17",
+    "angular 18",
+    "angular 19",
     "angular-14",
     "angular-15",
     "angular-16",
     "angular-17",
+    "angular-18",
+    "angular-19",
     "angular14",
     "angular15",
     "angular16",
@@ -81,6 +85,7 @@
     "workspaceContains:**/angular.json"
   ],
   "main": "./out/extension.js",
+  "l10n": "./l10n",
   "contributes": {
     "configuration": {
       "title": "Angular File Generator",
@@ -89,7 +94,7 @@
           "type": "boolean",
           "default": true,
           "scope": "resource",
-          "description": "Sets the standalone option when generating a new component"
+          "description": "%angular.components.standalone%"
         },
         "angular.components.style": {
           "type": "string",
@@ -102,7 +107,7 @@
             "none"
           ],
           "scope": "resource",
-          "description": "Sets the style file extension when generating a new component"
+          "description": "%angular.components.style%"
         },
         "angular.files.include": {
           "type": "array",
@@ -110,7 +115,7 @@
             "ts"
           ],
           "scope": "resource",
-          "description": "Glob patterns to include in the package. The default is ts, html, css, scss, less."
+          "description": "%angular.files.include%"
         },
         "angular.files.exclude": {
           "type": "array",
@@ -122,7 +127,7 @@
             "**/.*/**"
           ],
           "scope": "resource",
-          "description": "Glob patterns to exclude from the package. The default is node_modules, dist, out, build, and any hidden files."
+          "description": "%angular.files.exclude%"
         },
         "angular.files.watch": {
           "type": "array",
@@ -132,13 +137,13 @@
             "services"
           ],
           "scope": "resource",
-          "description": "The list of directories to watch for changes"
+          "description": "%angular.files.watch%"
         },
         "angular.files.showPath": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
-          "description": "Show the path of the file in the name of the list of generated files"
+          "description": "%angular.files.showPath%"
         },
         "angular.submenu.customCommands": {
           "type": "array",
@@ -147,15 +152,15 @@
             "properties": {
               "name": {
                 "type": "string",
-                "description": "The name of the command"
+                "description": "%angular.submenu.customCommands.name%"
               },
               "command": {
                 "type": "string",
-                "description": "The command to execute"
+                "description": "%angular.submenu.customCommands.command%"
               },
               "args": {
                 "type": "string",
-                "description": "The arguments to pass to the command"
+                "description": "%angular.submenu.customCommands.args%"
               }
             }
           },
@@ -167,7 +172,7 @@
             }
           ],
           "scope": "resource",
-          "description": "Custom commands to add to the context menu"
+          "description": "%angular.submenu.customCommands%"
         },
         "angular.submenu.activateItem": {
           "type": "object",
@@ -178,27 +183,27 @@
                 "component": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the component item in the terminal submenu"
+                  "description": "%angular.submenu.activateItem.terminal.component%"
                 },
                 "guard": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the guard item in the terminal submenu"
+                  "description": "%angular.submenu.activateItem.terminal.guard%"
                 },
                 "pipe": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the pipe item in the terminal submenu"
+                  "description": "%angular.submenu.activateItem.terminal.pipe%"
                 },
                 "service": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the service item in the terminal submenu"
+                  "description": "%angular.submenu.activateItem.terminal.service%"
                 },
                 "custom": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the custom item in the terminal submenu"
+                  "description": "%angular.submenu.activateItem.terminal.custom%"
                 }
               }
             },
@@ -208,62 +213,62 @@
                 "class": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the class item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.class%"
                 },
                 "component": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the component item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.component%"
                 },
                 "directive": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the directive item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.directive%"
                 },
                 "enum": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the enum item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.enum%"
                 },
                 "guard": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the guard item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.guard%"
                 },
                 "interceptor": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the interceptor item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.interceptor%"
                 },
                 "interface": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the interface item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.interface%"
                 },
                 "module": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the module item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.module%"
                 },
                 "pipe": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the pipe item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.pipe%"
                 },
                 "resolver": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the resolver item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.resolver%"
                 },
                 "service": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the service item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.service%"
                 },
                 "spec": {
                   "type": "boolean",
                   "default": true,
-                  "description": "Activate the spec item in the file submenu"
+                  "description": "%angular.submenu.activateItem.file.spec%"
                 }
               }
             }
@@ -292,7 +297,7 @@
             }
           },
           "scope": "resource",
-          "description": "Activate or deactivate items in the context menu"
+          "description": "%angular.submenu.activateItem%"
         }
       }
     },
@@ -304,179 +309,179 @@
     "commands": [
       {
         "command": "angular.file.class",
-        "title": "Generate Class",
+        "title": "%angular.file.class%",
         "category": "Angular"
       },
       {
         "command": "angular.file.component",
-        "title": "Generate Component File",
+        "title": "%angular.file.component%",
         "category": "Angular"
       },
       {
         "command": "angular.file.directive",
-        "title": "Generate Directive",
+        "title": "%angular.file.directive%",
         "category": "Angular"
       },
       {
         "command": "angular.file.enum",
-        "title": "Generate Enum",
+        "title": "%angular.file.enum%",
         "category": "Angular"
       },
       {
         "command": "angular.file.guard",
-        "title": "Generate Guard",
+        "title": "%angular.file.guard%",
         "category": "Angular"
       },
       {
         "command": "angular.file.interceptor",
-        "title": "Generate Interceptor",
+        "title": "%angular.file.interceptor%",
         "category": "Angular"
       },
       {
         "command": "angular.file.interface",
-        "title": "Generate Interface",
+        "title": "%angular.file.interface%",
         "category": "Angular"
       },
       {
         "command": "angular.file.module",
-        "title": "Generate Module",
+        "title": "%angular.file.module%",
         "category": "Angular"
       },
       {
         "command": "angular.file.pipe",
-        "title": "Generate Pipe",
+        "title": "%angular.file.pipe%",
         "category": "Angular"
       },
       {
         "command": "angular.file.resolver",
-        "title": "Generate Resolver",
+        "title": "%angular.file.resolver%",
         "category": "Angular"
       },
       {
         "command": "angular.file.service",
-        "title": "Generate Service",
+        "title": "%angular.file.service%",
         "category": "Angular"
       },
       {
         "command": "angular.file.spec",
-        "title": "Generate Test",
+        "title": "%angular.file.spec%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.analytics.disable",
-        "title": "Disable Analytics",
+        "title": "%angular.terminal.analytics.disable%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.analytics.enable",
-        "title": "Enable Analytics",
+        "title": "%angular.terminal.analytics.enable%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.analytics.info",
-        "title": "Info Analytics",
+        "title": "%angular.terminal.analytics.info%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.analytics.prompt",
-        "title": "Prompt Analytics",
+        "title": "%angular.terminal.analytics.prompt%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.cache.clear",
-        "title": "Clear Cache",
+        "title": "%angular.terminal.cache.clear%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.cache.disable",
-        "title": "Disable Cache",
+        "title": "%angular.terminal.cache.disable%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.cache.enable",
-        "title": "Enable Cache",
+        "title": "%angular.terminal.cache.enable%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.cache.info",
-        "title": "Info Cache",
+        "title": "%angular.terminal.cache.info%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.component",
-        "title": "Generate Component with CLI",
+        "title": "%angular.terminal.component%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.environments",
-        "title": "Generate Environments",
+        "title": "%angular.terminal.environments%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.guard",
-        "title": "Generate Guard with CLI",
+        "title": "%angular.terminal.guard%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.library",
-        "title": "Generate Library",
+        "title": "%angular.terminal.library%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.pipe",
-        "title": "Generate Pipe with CLI",
+        "title": "%angular.terminal.pipe%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.service",
-        "title": "Generate Service with CLI",
+        "title": "%angular.terminal.service%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.start",
-        "title": "Start Server",
+        "title": "%angular.terminal.start%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.test",
-        "title": "Run Test",
+        "title": "%angular.terminal.test%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.e2e",
-        "title": "Run E2E",
+        "title": "%angular.terminal.e2e%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.version",
-        "title": "Version",
+        "title": "%angular.terminal.version%",
         "category": "Angular"
       },
       {
         "command": "angular.terminal.custom",
-        "title": "Generate Custom Element with CLI",
+        "title": "%angular.terminal.custom%",
         "category": "Angular"
       },
       {
         "command": "angular.transform.json.ts",
-        "title": "Convert JSON to TypeScript",
+        "title": "%angular.transform.json.ts%",
         "category": "Angular"
       },
       {
         "command": "angular.listFiles.refreshList",
-        "title": "Refresh List of Files",
+        "title": "%angular.listFiles.refreshList%",
         "category": "Angular",
         "icon": "$(refresh)"
       },
       {
         "command": "angular.listRoutes.refreshList",
-        "title": "Refresh List of Routes",
+        "title": "%angular.listRoutes.refreshList%",
         "category": "Angular",
         "icon": "$(refresh)"
       },
       {
         "command": "angular.listModules.refreshList",
-        "title": "Refresh List of Modules",
+        "title": "%angular.listModules.refreshList%",
         "category": "Angular",
         "icon": "$(refresh)"
       }
@@ -535,103 +540,103 @@
       "angular.explorer.submenu": [
         {
           "command": "angular.terminal.component",
-          "alt": "Generate Component with CLI",
+          "alt": "%angular.terminal.component%",
           "group": "1_terminal",
           "when": "angular.activateItem.terminal.component"
         },
         {
           "command": "angular.terminal.guard",
-          "alt": "Generate Guard with CLI",
+          "alt": "%angular.terminal.guard%",
           "group": "1_terminal",
           "when": "angular.activateItem.terminal.guard"
         },
         {
           "command": "angular.terminal.pipe",
-          "alt": "Generate Pipe with CLI",
+          "alt": "%angular.terminal.pipe%",
           "group": "1_terminal",
           "when": "angular.activateItem.terminal.pipe"
         },
         {
           "command": "angular.terminal.service",
-          "alt": "Generate Service with CLI",
+          "alt": "%angular.terminal.service%",
           "group": "1_terminal",
           "when": "angular.activateItem.terminal.service"
         },
         {
           "command": "angular.terminal.custom",
-          "alt": "Generate Custom Element with CLI",
+          "alt": "%angular.terminal.custom%",
           "group": "2_terminal",
           "when": "angular.activateItem.terminal.custom"
         },
         {
           "command": "angular.file.class",
-          "alt": "Generate Class",
+          "alt": "%angular.file.class%",
           "group": "3_file",
           "when": "angular.activateItem.file.class"
         },
         {
           "command": "angular.file.component",
-          "alt": "Generate Component File",
+          "alt": "%angular.file.component%",
           "group": "3_file",
           "when": "angular.activateItem.file.component"
         },
         {
           "command": "angular.file.directive",
-          "alt": "Generate Directive",
+          "alt": "%angular.file.directive%",
           "group": "3_file",
           "when": "angular.activateItem.file.directive"
         },
         {
           "command": "angular.file.enum",
-          "alt": "Generate Enum",
+          "alt": "%angular.file.enum%",
           "group": "3_file",
           "when": "angular.activateItem.file.enum"
         },
         {
           "command": "angular.file.guard",
-          "alt": "Generate Guard",
+          "alt": "%angular.file.guard%",
           "group": "3_file",
           "when": "angular.activateItem.file.guard"
         },
         {
           "command": "angular.file.interceptor",
-          "alt": "Generate Interceptor",
+          "alt": "%angular.file.interceptor%",
           "group": "3_file",
           "when": "angular.activateItem.file.interceptor"
         },
         {
           "command": "angular.file.interface",
-          "alt": "Generate Interface",
+          "alt": "%angular.file.interface%",
           "group": "3_file",
           "when": "angular.activateItem.file.interface"
         },
         {
           "command": "angular.file.module",
-          "alt": "Generate Module",
+          "alt": "%angular.file.module%",
           "group": "3_file",
           "when": "angular.activateItem.file.module"
         },
         {
           "command": "angular.file.pipe",
-          "alt": "Generate Pipe",
+          "alt": "%angular.file.pipe%",
           "group": "3_file",
           "when": "angular.activateItem.file.pipe"
         },
         {
           "command": "angular.file.resolver",
-          "alt": "Generate Resolver",
+          "alt": "%angular.file.resolver%",
           "group": "3_file",
           "when": "angular.activateItem.file.resolver"
         },
         {
           "command": "angular.file.service",
-          "alt": "Generate Service",
+          "alt": "%angular.file.service%",
           "group": "3_file",
           "when": "angular.activateItem.file.service"
         },
         {
           "command": "angular.file.spec",
-          "alt": "Generate Test",
+          "alt": "%angular.file.spec%",
           "group": "3_file",
           "when": "angular.activateItem.file.spec"
         }
@@ -639,7 +644,7 @@
       "angular.editor.submenu": [
         {
           "command": "angular.transform.json.ts",
-          "alt": "Convert JSON to TypeScript",
+          "alt": "%angular.transform.json.ts%",
           "group": "1_file"
         }
       ],
@@ -697,15 +702,15 @@
     "viewsWelcome": [
       {
         "view": "angular.listModulesView",
-        "contents": "Your project currently lacks modules. You can begin by adding a new module to initiate your work.\n[Generate Module](command:angular.file.module)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator)."
+        "contents": "%viewsWelcome.angular.listModulesView%"
       },
       {
         "view": "angular.listRoutesView",
-        "contents": "Your project currently lacks routes. You can begin by adding a new route to initiate your work.\n[Generate Class](command:angular.file.class)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator)."
+        "contents": "%viewsWelcome.angular.listRoutesView%"
       },
       {
         "view": "angular.listFilesView",
-        "contents": "To effectively capture files, ensure you include the plural form of the file type within the workspace settings.\n[Open Workspace Setting](command:workbench.action.openWorkspaceSettingsFile)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator)."
+        "contents": "%viewsWelcome.angular.listFilesView%"
       }
     ],
     "viewsContainers": {
@@ -721,22 +726,22 @@
       "angular-explorer": [
         {
           "id": "angular.listFilesView",
-          "name": "List of Files",
+          "name": "%angular.listFilesView%",
           "visibility": "visible"
         },
         {
           "id": "angular.listRoutesView",
-          "name": "List of Routes",
+          "name": "%angular.listRoutesView%",
           "visibility": "visible"
         },
         {
           "id": "angular.listModulesView",
-          "name": "List of Modules",
+          "name": "%angular.listModulesView%",
           "visibility": "visible"
         },
         {
           "id": "angular.feedbackView",
-          "name": "Help and Feedback",
+          "name": "%angular.feedbackView%",
           "visibility": "visible"
         }
       ]
@@ -771,6 +776,7 @@
     "@types/vscode": "^1.76.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "@vscode/l10n-dev": "^0.0.35",
     "cpy-cli": "^5.0.0",
     "eslint": "^8.57.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
@@ -787,6 +793,7 @@
     "vscode-test": "^1.5.0"
   },
   "dependencies": {
-    "json-to-ts": "^2.1.0"
+    "json-to-ts": "^2.1.0",
+    "json5": "^2.2.3"
   }
 }
