@@ -1,6 +1,6 @@
 import JsonToTS from 'json-to-ts';
 import * as json5 from 'json5';
-import { l10n, Range, TextEditor, window, workspace } from 'vscode';
+import { Range, TextEditor, l10n, window, workspace } from 'vscode';
 
 // Import the helper functions
 import { showError } from '../helpers';

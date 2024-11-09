@@ -1,6 +1,6 @@
 import { access, existsSync, mkdirSync, open, writeFile } from 'fs';
 import { dirname, join } from 'path';
-import { FilePermission, FileStat, l10n, Uri, window, workspace } from 'vscode';
+import { FilePermission, FileStat, Uri, l10n, window, workspace } from 'vscode';
 
 /**
  * Reads the contents of the file specified in the path.
