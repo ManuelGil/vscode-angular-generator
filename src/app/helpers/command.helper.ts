@@ -1,4 +1,4 @@
-import { window } from 'vscode';
+import { Uri, window, workspace } from 'vscode';
 
 /**
  * Runs a command in the terminal
@@ -11,10 +11,21 @@ import { window } from 'vscode';
  * @returns {Promise<void>} - No return value
  */
 export const runCommand = async (
-  title: string,
+  name: string,
   command: string,
+  path?: string | undefined,
 ): Promise<void> => {
-  const terminal = window.createTerminal(title);
+  let cwd: Uri | undefined;
+
+  if (path && workspace.getWorkspaceFolder(Uri.file(path))) {
+    cwd = Uri.file(path);
+  }
+
+  const terminal = window.createTerminal({
+    name,
+    cwd,
+  });
+
   terminal.show();
   terminal.sendText(command);
 };

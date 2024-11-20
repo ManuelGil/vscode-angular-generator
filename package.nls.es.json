@@ -5,6 +5,7 @@
   "angular.files.exclude": "Patrones glob para excluir del paquete. Por defecto son spec.ts, e2e-spec.ts, *.d.ts",
   "angular.files.watch": "Lista de archivos a observar para cambios",
   "angular.files.showPath": "Muestra la ruta completa de los archivos en la lista de archivos",
+  "angular.terminal.cwd": "Establece el directorio de trabajo actual para el terminal",
   "angular.submenu.customCommands": "Comandos personalizados para agregar al menú contextual",
   "angular.submenu.customCommands.name": "El nombre del comando",
   "angular.submenu.customCommands.command": "El comando a ejecutar",

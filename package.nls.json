@@ -5,6 +5,7 @@
   "angular.files.exclude": "Glob patterns to exclude from the package. The default is node_modules, dist, out, build, and any hidden files.",
   "angular.files.watch": "The list of directories to watch for changes",
   "angular.files.showPath": "Show the path of the file in the name of the list of generated files",
+  "angular.terminal.cwd": "Sets the current working directory for the terminal",
   "angular.submenu.customCommands.name": "The name of the command",
   "angular.submenu.customCommands.command": "The command to execute",
   "angular.submenu.customCommands.args": "The arguments to pass to the command",

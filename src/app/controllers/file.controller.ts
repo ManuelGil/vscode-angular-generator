@@ -1,4 +1,4 @@
-import { Uri } from 'vscode';
+import { Uri, l10n, workspace } from 'vscode';
 
 // Import the Config and helper functions
 import { Config } from '../configs';
@@ -6,7 +6,6 @@ import {
   dasherize,
   getName,
   getPath,
-  getRelativePath,
   pickItem,
   saveFile,
   titleize,
@@ -58,11 +57,11 @@ export class FileController {
    */
   async generateClass(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -79,7 +78,7 @@ export class FileController {
 
     // Get the class name
     const className = await getName(
-      'Class name',
+      l10n.t('Enter the class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -95,7 +94,7 @@ export class FileController {
 
     // Get the type
     let type = await getName(
-      'Type class name',
+      l10n.t('Enter the type name'),
       'E.g. class, dto, entity, model...',
       (type: string) => {
         if (!/[a-z]+/.test(type)) {
@@ -134,11 +133,11 @@ export class FileController {
    */
   async generateComponent(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -155,7 +154,7 @@ export class FileController {
 
     // Get the class name
     const className = await getName(
-      'Component class name',
+      l10n.t('Enter the component class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -216,11 +215,11 @@ export class ${className}Component {}
    */
   async generateDirective(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -237,7 +236,7 @@ export class ${className}Component {}
 
     // Get the class name
     const className = await getName(
-      'Directive class name',
+      l10n.t('Enter the directive class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -279,11 +278,11 @@ export class ${className}Directive {}
    */
   async generateEnum(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -300,7 +299,7 @@ export class ${className}Directive {}
 
     // Get the class name
     const className = await getName(
-      'Enum class name',
+      l10n.t('Enter the enum class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -337,11 +336,11 @@ export class ${className}Directive {}
    */
   async generateGuard(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -358,7 +357,7 @@ export class ${className}Directive {}
 
     // Get the class name
     const entityName = await getName(
-      'Guard name',
+      l10n.t('Enter the guard name'),
       'E.g. user, role, auth...',
       (name: string) => {
         if (!/^[a-z][\w-]+$/.test(name)) {
@@ -374,7 +373,7 @@ export class ${className}Directive {}
 
     const guardType = await pickItem(
       ['CanActivate', 'CanActivateChild', 'CanDeactivate', 'CanMatch'],
-      'Which type of guard would you like to create?',
+      l10n.t('Which type of guard would you like to create?'),
     );
 
     let params = '';
@@ -424,11 +423,11 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
    */
   async generateInterceptor(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -445,7 +444,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
 
     // Get the class name
     const className = await getName(
-      'Interceptor class name',
+      l10n.t('Enter the interceptor class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -499,11 +498,11 @@ export class ${className}Interceptor implements HttpInterceptor {
    */
   async generateInterface(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -520,7 +519,7 @@ export class ${className}Interceptor implements HttpInterceptor {
 
     // Get the class name
     const className = await getName(
-      'Interceptor class name',
+      l10n.t('Enter the interface class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -536,7 +535,7 @@ export class ${className}Interceptor implements HttpInterceptor {
 
     // Get the type
     let type = await getName(
-      'Type interface name',
+      l10n.t('Enter the interface type name'),
       'E.g. interface, dto, entity, model...',
       (type: string) => {
         if (!/[a-z]+/.test(type)) {
@@ -575,11 +574,11 @@ export class ${className}Interceptor implements HttpInterceptor {
    */
   async generateModule(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -596,7 +595,7 @@ export class ${className}Interceptor implements HttpInterceptor {
 
     // Get the class name
     const className = await getName(
-      'Module class name',
+      l10n.t('Enter the module class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -640,11 +639,11 @@ export class ${className}Module {}
    */
   async generatePipe(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -661,7 +660,7 @@ export class ${className}Module {}
 
     // Get the class name
     const className = await getName(
-      'Pipe class name',
+      l10n.t('Enter the pipe class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -707,11 +706,11 @@ export class ${className}Pipe implements PipeTransform {
    */
   async generateResolver(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -728,7 +727,7 @@ export class ${className}Pipe implements PipeTransform {
 
     // Get the class name
     const className = await getName(
-      'Pipe class name',
+      l10n.t('Enter the resolver class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -784,11 +783,11 @@ export class ${className}Resolver implements Resolve<boolean> {
    */
   async generateService(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -805,7 +804,7 @@ export class ${className}Resolver implements Resolve<boolean> {
 
     // Get the class name
     const className = await getName(
-      'Service class name',
+      l10n.t('Enter the service class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -847,11 +846,11 @@ export class ${className}Service {}
    */
   async generateTest(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Get the path to the folder
     const folder = await getPath(
-      'Folder name',
+      l10n.t('Enter the folder name'),
       'Folder name. E.g. src, app...',
       folderPath,
       (path: string) => {
@@ -868,7 +867,7 @@ export class ${className}Service {}
 
     // Get the class name
     const className = await getName(
-      'Test class name',
+      l10n.t('Enter the test class name'),
       'E.g. User, Role, Auth...',
       (name: string) => {
         if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
@@ -884,7 +883,7 @@ export class ${className}Service {}
 
     // Get the type
     let type = await getName(
-      'Type class name',
+      l10n.t('Enter the test type name'),
       'E.g. class, dto, entity, model...',
       (type: string) => {
         if (!/[a-z]+/.test(type)) {

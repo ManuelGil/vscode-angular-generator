@@ -1,4 +1,4 @@
-import { WorkspaceConfiguration } from 'vscode';
+import { workspace, WorkspaceConfiguration } from 'vscode';
 
 import {
   ACTIVATE_MENU,
@@ -100,6 +100,16 @@ export class Config {
    */
   showPath: boolean;
   /**
+   * The current working directory.
+   * @type {string | undefined}
+   * @public
+   * @memberof Config
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.cwd);
+   */
+  cwd: string | undefined;
+  /**
    * The custom commands.
    * @type {object[]}
    * @public
@@ -144,6 +154,9 @@ export class Config {
     this.exclude = config.get<string[]>('files.exclude') ?? EXCLUDE;
     this.watch = config.get<string[]>('files.watch') ?? WATCH;
     this.showPath = config.get<boolean>('files.showPath') ?? SHOW_PATH;
+    this.cwd =
+      config.get<string | undefined>('terminal.cwd') ??
+      workspace.workspaceFolders?.[0].uri.fsPath;
     this.customCommands =
       config.get<object[]>('submenu.customCommands') ?? CUSTOM_COMMANDS;
     this.activateItem =

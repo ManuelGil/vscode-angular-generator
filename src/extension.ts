@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { Config, EXTENSION_ID } from './app/configs';
+import { Config, EXTENSION_ID, EXTENSION_NAME } from './app/configs';
 import {
   FeedbackController,
   FileController,
@@ -36,6 +36,36 @@ export function activate(context: vscode.ExtensionContext) {
   const config = new Config(
     vscode.workspace.getConfiguration(EXTENSION_ID, resource),
   );
+
+  // -----------------------------------------------------------------
+  // Get version of the extension
+  // -----------------------------------------------------------------
+
+  // Get the previous version of the extension
+  const previousVersion = context.globalState.get('version');
+  // Get the current version of the extension
+  const currentVersion = context.extension.packageJSON.version;
+
+  // Check if the extension is running for the first time
+  if (!previousVersion) {
+    const message = vscode.l10n.t('Welcome to {0}!', [EXTENSION_NAME]);
+    vscode.window.showInformationMessage(message);
+
+    // Update the version in the global state
+    context.globalState.update('version', currentVersion);
+  }
+
+  // Check if the extension has been updated
+  if (previousVersion && previousVersion !== currentVersion) {
+    const message = vscode.l10n.t(
+      'Looks like {0} has been updated to version {1}!',
+      [EXTENSION_NAME, currentVersion],
+    );
+    vscode.window.showInformationMessage(message);
+
+    // Update the version in the global state
+    context.globalState.update('version', currentVersion);
+  }
 
   // -----------------------------------------------------------------
   // Set the context values

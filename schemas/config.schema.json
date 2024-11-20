@@ -45,6 +45,11 @@
       "scope": "resource",
       "description": "Show the path of the file in the name of the list of generated files"
     },
+    "angular.terminal.cwd": {
+      "type": "string",
+      "scope": "resource",
+      "description": "Sets the current working directory for the terminal"
+    },
     "angular.submenu.customCommands": {
       "type": "array",
       "items": {

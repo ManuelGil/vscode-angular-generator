@@ -1,8 +1,8 @@
-import { Uri, window } from 'vscode';
+import { Uri, l10n, window, workspace } from 'vscode';
 
 // Import the Config and helper functions
 import { Config } from '../configs';
-import { getName, getPath, getRelativePath, runCommand } from '../helpers';
+import { getName, getPath, runCommand } from '../helpers';
 
 /**
  * The TerminalController class.
@@ -47,7 +47,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   analyticsDisable(): void {
-    runCommand('analytics disable', 'ng analytics disable');
+    runCommand('analytics disable', 'ng analytics disable', this.config.cwd);
   }
 
   /**
@@ -62,7 +62,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   analyticsEnable(): void {
-    runCommand('analytics enable', 'ng analytics enable');
+    runCommand('analytics enable', 'ng analytics enable', this.config.cwd);
   }
 
   /**
@@ -77,7 +77,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   analyticsInfo(): void {
-    runCommand('analytics info', 'ng analytics info');
+    runCommand('analytics info', 'ng analytics info', this.config.cwd);
   }
 
   /**
@@ -92,7 +92,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   analyticsPrompt(): void {
-    runCommand('analytics prompt', 'ng analytics prompt');
+    runCommand('analytics prompt', 'ng analytics prompt', this.config.cwd);
   }
 
   /**
@@ -107,7 +107,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   cacheClear(): void {
-    runCommand('cache clean', 'ng cache clean');
+    runCommand('cache clean', 'ng cache clean', this.config.cwd);
   }
 
   /**
@@ -122,7 +122,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   cacheDisable(): void {
-    runCommand('cache disable', 'ng cache disable');
+    runCommand('cache disable', 'ng cache disable', this.config.cwd);
   }
 
   /**
@@ -137,7 +137,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   cacheEnable(): void {
-    runCommand('cache enable', 'ng cache enable');
+    runCommand('cache enable', 'ng cache enable', this.config.cwd);
   }
 
   /**
@@ -152,7 +152,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   cacheInfo(): void {
-    runCommand('cache info', 'ng cache info');
+    runCommand('cache info', 'ng cache info', this.config.cwd);
   }
 
   /**
@@ -170,11 +170,20 @@ export class TerminalController {
    */
   async generateComponent(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+
+    if (this.config.cwd) {
+      const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
+      folderPath = folderPath.replace(cwd, '');
+
+      if (folderPath.startsWith('/')) {
+        folderPath = folderPath.substring(1);
+      }
+    }
 
     // Get the path to the folder
     let folder = await getPath(
-      'Component name',
+      l10n.t('Enter the component name'),
       'Component name. E.g. src/app/modules/users, modules/users, modules/projects...',
       folderPath,
       (path: string) => {
@@ -271,7 +280,9 @@ export class TerminalController {
     let isStandalone = false;
 
     options = await window.showQuickPick(items, {
-      placeHolder: 'Select the options for the component generation (optional)',
+      placeHolder: l10n.t(
+        'Select the options for the component generation (optional)',
+      ),
       canPickMany: true,
     });
 
@@ -279,8 +290,9 @@ export class TerminalController {
       options.find((item: any) => item.description === '--change-detection')
     ) {
       const detection = await window.showQuickPick(['Default', 'OnPush'], {
-        placeHolder:
+        placeHolder: l10n.t(
           'The change detection strategy to use in the new component',
+        ),
       });
 
       if (detection) {
@@ -293,7 +305,9 @@ export class TerminalController {
 
     if (options.find((item: any) => item.description === '--prefix')) {
       const prefix = await window.showInputBox({
-        placeHolder: 'The prefix to apply to the generated component selector',
+        placeHolder: l10n.t(
+          'The prefix to apply to the generated component selector',
+        ),
       });
 
       if (prefix) {
@@ -323,8 +337,9 @@ export class TerminalController {
       const encapsulation = await window.showQuickPick(
         ['Emulated', 'None', 'ShadowDom'],
         {
-          placeHolder:
+          placeHolder: l10n.t(
             'The view encapsulation strategy to use in the new component',
+          ),
         },
       );
 
@@ -355,7 +370,7 @@ export class TerminalController {
         : '') +
       (extras ? ' ' + extras.join(' ') : '');
 
-    runCommand('generate component', command);
+    runCommand('generate component', command, this.config.cwd);
   }
 
   /**
@@ -370,7 +385,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   e2e(): void {
-    runCommand('e2e', 'ng e');
+    runCommand('e2e', 'ng e', this.config.cwd);
   }
 
   /**
@@ -385,7 +400,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   generateEnvironments(): void {
-    runCommand('generate environments', 'ng g environments');
+    runCommand('generate environments', 'ng g environments', this.config.cwd);
   }
 
   /**
@@ -403,11 +418,20 @@ export class TerminalController {
    */
   async generateGuard(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+
+    if (this.config.cwd) {
+      const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
+      folderPath = folderPath.replace(cwd, '');
+
+      if (folderPath.startsWith('/')) {
+        folderPath = folderPath.substring(1);
+      }
+    }
 
     // Get the path to the folder
     let folder = await getPath(
-      'Guard name',
+      l10n.t('Enter the guard name'),
       'Guard name. E.g. guards/auth, guards/jwt...',
       folderPath,
       (path: string) => {
@@ -455,7 +479,9 @@ export class TerminalController {
     let isFunctional = false;
 
     options = await window.showQuickPick(items, {
-      placeHolder: 'Select the options for the guard generation (optional)',
+      placeHolder: l10n.t(
+        'Select the options for the guard generation (optional)',
+      ),
       canPickMany: true,
     });
 
@@ -476,7 +502,7 @@ export class TerminalController {
         ? ' ' + options.map((item: any) => item.description).join(' ')
         : '');
 
-    runCommand('generate guard', command);
+    runCommand('generate guard', command, this.config.cwd);
   }
 
   /**
@@ -494,7 +520,7 @@ export class TerminalController {
   async generateLibrary(): Promise<void> {
     // Get the path to the folder
     let folder = await getName(
-      'Library name',
+      l10n.t('Enter the library name'),
       'Library name. E.g. users, projects...',
       (name: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(name)) {
@@ -560,7 +586,9 @@ export class TerminalController {
     let extras: any = [];
 
     options = await window.showQuickPick(items, {
-      placeHolder: 'Select the options for the library generation (optional)',
+      placeHolder: l10n.t(
+        'Select the options for the library generation (optional)',
+      ),
       canPickMany: true,
     });
 
@@ -592,7 +620,7 @@ export class TerminalController {
         ? ' ' + options.map((item: any) => item.description).join(' ')
         : '');
 
-    runCommand('generate library', command);
+    runCommand('generate library', command, this.config.cwd);
   }
 
   /**
@@ -610,11 +638,20 @@ export class TerminalController {
    */
   async generatePipe(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+
+    if (this.config.cwd) {
+      const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
+      folderPath = folderPath.replace(cwd, '');
+
+      if (folderPath.startsWith('/')) {
+        folderPath = folderPath.substring(1);
+      }
+    }
 
     // Get the path to the folder
     let folder = await getPath(
-      'Pipe name',
+      l10n.t('Enter the pipe name'),
       'Pipe name. E.g. modules/transform-letters, modules/searh-user, modules/search-projects...',
       folderPath,
       (path: string) => {
@@ -668,7 +705,9 @@ export class TerminalController {
     let isStandalone = false;
 
     options = await window.showQuickPick(items, {
-      placeHolder: 'Select the options for the pipe generation (optional)',
+      placeHolder: l10n.t(
+        'Select the options for the pipe generation (optional)',
+      ),
       canPickMany: true,
     });
 
@@ -689,7 +728,7 @@ export class TerminalController {
         ? ' ' + options.map((item: any) => item.description).join(' ')
         : '');
 
-    runCommand('generate pipe', command);
+    runCommand('generate pipe', command, this.config.cwd);
   }
 
   /**
@@ -704,7 +743,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   start(): void {
-    runCommand('start', 'ng s');
+    runCommand('start', 'ng s', this.config.cwd);
   }
 
   /**
@@ -722,11 +761,20 @@ export class TerminalController {
    */
   async generateService(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+
+    if (this.config.cwd) {
+      const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
+      folderPath = folderPath.replace(cwd, '');
+
+      if (folderPath.startsWith('/')) {
+        folderPath = folderPath.substring(1);
+      }
+    }
 
     // Get the path to the folder
     let folder = await getPath(
-      'Service name',
+      l10n.t('Enter the service name'),
       'Service name. E.g. services/auth, services/jwt...',
       folderPath,
       (path: string) => {
@@ -768,7 +816,9 @@ export class TerminalController {
     let options: any = [];
 
     options = await window.showQuickPick(items, {
-      placeHolder: 'Select the options for the service generation (optional)',
+      placeHolder: l10n.t(
+        'Select the options for the service generation (optional)',
+      ),
       canPickMany: true,
     });
 
@@ -781,7 +831,7 @@ export class TerminalController {
         ? ' ' + options.map((item: any) => item.description).join(' ')
         : '');
 
-    runCommand('generate service', command);
+    runCommand('generate service', command, this.config.cwd);
   }
 
   /**
@@ -796,7 +846,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   test(): void {
-    runCommand('test', 'ng t');
+    runCommand('test', 'ng t', this.config.cwd);
   }
 
   /**
@@ -811,7 +861,7 @@ export class TerminalController {
    * @returns {void} - No return value
    */
   version(): void {
-    runCommand('version', 'ng v');
+    runCommand('version', 'ng v', this.config.cwd);
   }
 
   /**
@@ -829,11 +879,20 @@ export class TerminalController {
    */
   async generateCustomElement(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = path ? await getRelativePath(path.path) : '';
+    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+
+    if (this.config.cwd) {
+      const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
+      folderPath = folderPath.replace(cwd, '');
+
+      if (folderPath.startsWith('/')) {
+        folderPath = folderPath.substring(1);
+      }
+    }
 
     // Get the path to the folder
     let folder = await getPath(
-      'Element name',
+      l10n.t('Enter the element name'),
       'Element name. E.g. src/app/modules/users, modules/users, modules/projects...',
       folderPath,
       (path: string) => {
@@ -857,7 +916,9 @@ export class TerminalController {
     });
 
     const option = await window.showQuickPick(items, {
-      placeHolder: 'Select the template for the custom element generation',
+      placeHolder: l10n.t(
+        'Select the template for the custom element generation',
+      ),
     });
 
     if (option === undefined) {
@@ -868,6 +929,6 @@ export class TerminalController {
 
     const command = `${option.description} ${folder} ${option.detail}`;
 
-    runCommand('generate custom element', command);
+    runCommand('generate custom element', command, this.config.cwd);
   }
 }

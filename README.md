@@ -70,6 +70,7 @@ Configure your project by creating or updating a settings.json file at the proje
         "services"
       ],
       "angular.files.showPath": true,
+      "angular.terminal.cwd": "/path/to/your/project/",
       "angular.submenu.customCommands": [
         {
           "name": "Template 1",
