@@ -15,17 +15,34 @@ import {
   ListRoutesProvider,
 } from './app/providers';
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   // The code you place here will be executed every time your command is executed
-  let resource:
-    | vscode.Uri
-    | vscode.TextDocument
-    | vscode.WorkspaceFolder
-    | undefined;
+  let resource: vscode.WorkspaceFolder | undefined;
 
-  // Get the resource for the workspace
-  if (vscode.workspace.workspaceFolders) {
+  // Check if there are workspace folders
+  if (
+    !vscode.workspace.workspaceFolders ||
+    vscode.workspace.workspaceFolders.length === 0
+  ) {
+    const message = vscode.l10n.t(
+      'No workspace folders are open. Please open a workspace folder to use this extension',
+    );
+    vscode.window.showErrorMessage(message);
+    return;
+  }
+
+  // Optionally, prompt the user to select a workspace folder if multiple are available
+  if (vscode.workspace.workspaceFolders.length === 1) {
     resource = vscode.workspace.workspaceFolders[0];
+  } else {
+    const placeHolder = vscode.l10n.t(
+      'Select a workspace folder to use. This folder will be used to load workspace-specific configuration for the extension',
+    );
+    const selectedFolder = await vscode.window.showWorkspaceFolderPick({
+      placeHolder,
+    });
+
+    resource = selectedFolder;
   }
 
   // -----------------------------------------------------------------
@@ -34,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Get the configuration for the extension
   const config = new Config(
-    vscode.workspace.getConfiguration(EXTENSION_ID, resource),
+    vscode.workspace.getConfiguration(EXTENSION_ID, resource?.uri),
   );
 
   // -----------------------------------------------------------------

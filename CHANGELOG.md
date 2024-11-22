@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.1] - 2024-11-22
+
+### Fixed
+
+- Enhance workspace folder handling to support multiple workspace folders.
+
 ## [2.8.0] - 2024-11-20
 
 ### Added
@@ -291,7 +297,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.1...HEAD
+[2.8.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.0...v2.8.1
 [2.8.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.5.0...v2.6.0

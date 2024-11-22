@@ -1,6 +1,8 @@
 {
   "Welcome to {0}!": "¡Bienvenido a {0}!",
   "Looks like {0} has been updated to version {1}!": "¡Parece que {0} se ha actualizado a la versión {1}!",
+  "No workspace folders are open. Please open a workspace folder to use this extension": "No hay carpetas de espacio de trabajo abiertas. Por favor, abra una carpeta de espacio de trabajo para usar esta extensión",
+  "Select a workspace folder to use. This folder will be used to load workspace-specific configuration for the extension": "Seleccione una carpeta de espacio de trabajo para usar. Esta carpeta se utilizará para cargar la configuración específica del espacio de trabajo para la extensión",
   "No text editor is active!": "¡No hay editor de texto activo!",
   "The file has not been created!": "¡El archivo no ha sido creado!",
   "Successfully created the file!": "¡Archivo creado con éxito!",
