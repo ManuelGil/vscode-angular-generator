@@ -28,6 +28,7 @@
   "angular.submenu.activateItem.file.resolver": "Activar el elemento de resolver en el submenú de archivo",
   "angular.submenu.activateItem.file.service": "Activar el elemento de servicio en el submenú de archivo",
   "angular.submenu.activateItem.file.spec": "Activar el elemento de prueba en el submenú de archivo",
+  "angulae.fileGenerator.skipFolderConfirmation": "Omitir confirmación de carpeta",
   "angular.file.class": "Generar Clase",
   "angular.file.component": "Generar Archivo de Componente",
   "angular.file.directive": "Generar Directiva",

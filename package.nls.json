@@ -28,6 +28,7 @@
   "angular.submenu.activateItem.file.service": "Activate the service item in the file submenu",
   "angular.submenu.activateItem.file.spec": "Activate the spec item in the file submenu",
   "angular.submenu.activateItem": "Activate or deactivate items in the context menu",
+  "angular.fileGenerator.skipFolderConfirmation": "Skip folder confirmation",
   "angular.file.class": "Generate Class",
   "angular.file.component": "Generate Component File",
   "angular.file.directive": "Generate Directive",

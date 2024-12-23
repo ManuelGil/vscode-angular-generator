@@ -104,7 +104,8 @@ Configure your project by creating or updating a settings.json file at the proje
           "service": true,
           "spec": true
         }
-      }
+      },
+      "angular.fileGenerator.skipFolderConfirmation": false,
     }
     ```
 

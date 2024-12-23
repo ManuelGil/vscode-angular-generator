@@ -203,6 +203,12 @@
       },
       "scope": "resource",
       "description": "Activate or deactivate items in the context menu"
+    },
+    "angular.fileGenerator.skipFolderConfirmation": {
+      "type": "boolean",
+      "default": false,
+      "scope": "resource",
+      "description": "Skip folder confirmation"
     }
   }
 }

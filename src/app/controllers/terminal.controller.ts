@@ -1,3 +1,5 @@
+import { statSync } from 'fs';
+import { resolve } from 'path';
 import { Uri, l10n, window, workspace } from 'vscode';
 
 // Import the Config and helper functions
@@ -169,6 +171,11 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async generateComponent(path?: Uri): Promise<void> {
+    // Check if the path is a file
+    if (path && statSync(path.fsPath).isFile()) {
+      path = Uri.file(resolve(path.fsPath, '..'));
+    }
+
     // Get the relative path
     let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
@@ -185,7 +192,7 @@ export class TerminalController {
     let folder = await getPath(
       l10n.t('Enter the component name'),
       'Component name. E.g. src/app/modules/users, modules/users, modules/projects...',
-      folderPath,
+      `${folderPath}/`,
       (path: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
@@ -417,6 +424,11 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async generateGuard(path?: Uri): Promise<void> {
+    // Check if the path is a file
+    if (path && statSync(path.fsPath).isFile()) {
+      path = Uri.file(resolve(path.fsPath, '..'));
+    }
+
     // Get the relative path
     let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
@@ -433,7 +445,7 @@ export class TerminalController {
     let folder = await getPath(
       l10n.t('Enter the guard name'),
       'Guard name. E.g. guards/auth, guards/jwt...',
-      folderPath,
+      `${folderPath}/`,
       (path: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
@@ -637,6 +649,11 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async generatePipe(path?: Uri): Promise<void> {
+    // Check if the path is a file
+    if (path && statSync(path.fsPath).isFile()) {
+      path = Uri.file(resolve(path.fsPath, '..'));
+    }
+
     // Get the relative path
     let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
@@ -653,7 +670,7 @@ export class TerminalController {
     let folder = await getPath(
       l10n.t('Enter the pipe name'),
       'Pipe name. E.g. modules/transform-letters, modules/searh-user, modules/search-projects...',
-      folderPath,
+      `${folderPath}/`,
       (path: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
@@ -760,6 +777,11 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async generateService(path?: Uri): Promise<void> {
+    // Check if the path is a file
+    if (path && statSync(path.fsPath).isFile()) {
+      path = Uri.file(resolve(path.fsPath, '..'));
+    }
+
     // Get the relative path
     let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
@@ -776,7 +798,7 @@ export class TerminalController {
     let folder = await getPath(
       l10n.t('Enter the service name'),
       'Service name. E.g. services/auth, services/jwt...',
-      folderPath,
+      `${folderPath}/`,
       (path: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';
@@ -878,6 +900,11 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async generateCustomElement(path?: Uri): Promise<void> {
+    // Check if the path is a file
+    if (path && statSync(path.fsPath).isFile()) {
+      path = Uri.file(resolve(path.fsPath, '..'));
+    }
+
     // Get the relative path
     let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
@@ -894,7 +921,7 @@ export class TerminalController {
     let folder = await getPath(
       l10n.t('Enter the element name'),
       'Element name. E.g. src/app/modules/users, modules/users, modules/projects...',
-      folderPath,
+      `${folderPath}/`,
       (path: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
           return 'The folder name must be a valid name';

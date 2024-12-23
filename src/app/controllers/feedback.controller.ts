@@ -1,11 +1,10 @@
 import { MessageItem, Uri, env, l10n, window } from 'vscode';
 
 import {
-  EXTENSION_BUGS_URL,
-  EXTENSION_HOMEPAGE_URL,
+  EXTENSION_DISPLAY_NAME,
   EXTENSION_MARKETPLACE_URL,
-  EXTENSION_NAME,
   EXTENSION_PAYPAL_URL,
+  EXTENSION_REPOSITORY_URL,
   EXTENSION_SPONSOR_URL,
 } from '../configs';
 
@@ -48,7 +47,7 @@ export class FeedbackController {
    * @returns {void} - No return value
    */
   aboutUs(): void {
-    env.openExternal(Uri.parse(EXTENSION_HOMEPAGE_URL));
+    env.openExternal(Uri.parse(EXTENSION_MARKETPLACE_URL));
   }
 
   /**
@@ -61,7 +60,7 @@ export class FeedbackController {
    * @returns {void} - No return value
    */
   reportIssues(): void {
-    env.openExternal(Uri.parse(EXTENSION_BUGS_URL));
+    env.openExternal(Uri.parse(`${EXTENSION_REPOSITORY_URL}/issues`));
   }
 
   /**
@@ -99,7 +98,7 @@ export class FeedbackController {
     // Show the message
     const message = l10n.t(
       'Although {0} is offered at no cost, your support is deeply appreciated if you find it beneficial. Thank you for considering!',
-      EXTENSION_NAME,
+      EXTENSION_DISPLAY_NAME,
     );
     const option = await window.showInformationMessage(message, ...actions);
 

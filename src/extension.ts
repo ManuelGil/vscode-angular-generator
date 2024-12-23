@@ -1,6 +1,12 @@
 import * as vscode from 'vscode';
 
-import { Config, EXTENSION_ID, EXTENSION_NAME } from './app/configs';
+import {
+  Config,
+  EXTENSION_DISPLAY_NAME,
+  EXTENSION_ID,
+  EXTENSION_NAME,
+  USER_PUBLISHER,
+} from './app/configs';
 import {
   FeedbackController,
   FileController,
@@ -15,6 +21,8 @@ import {
   ListRoutesProvider,
 } from './app/providers';
 
+// this method is called when your extension is activated
+// your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
   // The code you place here will be executed every time your command is executed
   let resource: vscode.WorkspaceFolder | undefined;
@@ -54,6 +62,15 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.workspace.getConfiguration(EXTENSION_ID, resource?.uri),
   );
 
+  // Watch for changes in the configuration
+  vscode.workspace.onDidChangeConfiguration((event) => {
+    if (event.affectsConfiguration(EXTENSION_ID, resource?.uri)) {
+      config.update(
+        vscode.workspace.getConfiguration(EXTENSION_ID, resource?.uri),
+      );
+    }
+  });
+
   // -----------------------------------------------------------------
   // Get version of the extension
   // -----------------------------------------------------------------
@@ -65,7 +82,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
   // Check if the extension is running for the first time
   if (!previousVersion) {
-    const message = vscode.l10n.t('Welcome to {0}!', [EXTENSION_NAME]);
+    const message = vscode.l10n.t(
+      'Welcome to {0} version {1}! The extension is now active',
+      [EXTENSION_DISPLAY_NAME, currentVersion],
+    );
     vscode.window.showInformationMessage(message);
 
     // Update the version in the global state
@@ -74,11 +94,34 @@ export async function activate(context: vscode.ExtensionContext) {
 
   // Check if the extension has been updated
   if (previousVersion && previousVersion !== currentVersion) {
+    const actions: vscode.MessageItem[] = [
+      {
+        title: vscode.l10n.t('Release Notes'),
+      },
+      {
+        title: vscode.l10n.t('Close'),
+      },
+    ];
+
     const message = vscode.l10n.t(
-      'Looks like {0} has been updated to version {1}!',
-      [EXTENSION_NAME, currentVersion],
+      'New version of {0} is available. Check out the release notes for version {1}',
+      [EXTENSION_DISPLAY_NAME, currentVersion],
     );
-    vscode.window.showInformationMessage(message);
+    const option = await vscode.window.showInformationMessage(
+      message,
+      ...actions,
+    );
+
+    // Handle the actions
+    switch (option?.title) {
+      case actions[0].title:
+        vscode.env.openExternal(
+          vscode.Uri.parse(
+            `https://marketplace.visualstudio.com/items/${USER_PUBLISHER}.${EXTENSION_NAME}/changelog`,
+          ),
+        );
+        break;
+    }
 
     // Update the version in the global state
     context.globalState.update('version', currentVersion);

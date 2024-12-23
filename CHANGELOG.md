@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.0] - 2024-12-23
+
+### Added
+
+- Add `fileGenerator.skipFolderConfirmation` settings to skip the folder confirmation when generating a file
+- Add VS Code test configuration and update test scripts
+
+### Changed
+
+- Improve the file generation process to skip the folder confirmation when the setting is enabled
+- Improve the welcome and update messages in the extension
+- Update localization files to include the new settings
+- Update the `extension.ts` file to observer to the configuration changes
+- Update the `config.ts` file to include the new settings
+- Update the `package.json` file to include the new settings
+- Upgrade dependencies to the latest versions available
+
 ## [2.8.1] - 2024-11-22
 
 ### Fixed
@@ -297,7 +314,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.1...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.0...HEAD
+[2.9.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.1...v2.9.0
 [2.8.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.0...v2.8.1
 [2.8.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.6.0...v2.7.0
