@@ -69,7 +69,7 @@ export class FileController {
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -157,7 +157,7 @@ export class FileController {
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -251,7 +251,7 @@ export class ${className}Component {}
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -326,7 +326,7 @@ export class ${className}Directive {}
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -396,7 +396,7 @@ export class ${className}Directive {}
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -495,7 +495,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -582,7 +582,7 @@ export class ${className}Interceptor implements HttpInterceptor {
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -670,7 +670,7 @@ export class ${className}Interceptor implements HttpInterceptor {
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -747,7 +747,7 @@ export class ${className}Module {}
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -826,7 +826,7 @@ export class ${className}Pipe implements PipeTransform {
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -915,7 +915,7 @@ export class ${className}Resolver implements Resolve<boolean> {
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
@@ -990,7 +990,7 @@ export class ${className}Service {}
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!folderPath || !skipFolderConfirmation) {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),

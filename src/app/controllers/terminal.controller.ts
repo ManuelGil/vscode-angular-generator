@@ -917,21 +917,28 @@ export class TerminalController {
       }
     }
 
-    // Get the path to the folder
-    let folder = await getPath(
-      l10n.t('Enter the element name'),
-      'Element name. E.g. src/app/modules/users, modules/users, modules/projects...',
-      `${folderPath}/`,
-      (path: string) => {
-        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-          return 'The folder name must be a valid name';
-        }
-        return;
-      },
-    );
+    const skipFolderConfirmation = this.config.skipFolderConfirmation;
+    let folder: string | undefined;
 
-    if (folder === undefined) {
-      return;
+    if (!skipFolderConfirmation) {
+      // Get the path to the folder
+      let folder = await getPath(
+        l10n.t('Enter the element name'),
+        'Element name. E.g. src/app/modules/users, modules/users, modules/projects...',
+        `${folderPath}/`,
+        (path: string) => {
+          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
+            return 'The folder name must be a valid name';
+          }
+          return;
+        },
+      );
+
+      if (folder === undefined) {
+        return;
+      }
+    } else {
+      folder = folderPath;
     }
 
     const items = this.config.customCommands.map((item: any) => {
@@ -952,7 +959,9 @@ export class TerminalController {
       return;
     }
 
-    folder = folder.replace('src/app/', '');
+    if (folder) {
+      folder = folder.replace('src/app/', '');
+    }
 
     const command = `${option.description} ${folder} ${option.detail}`;
 

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.1] - 2024-12-24
+
+### Fixed
+
+- Fix the folder path validation issue when generating a file
+
 ## [2.9.0] - 2024-12-23
 
 ### Added
@@ -314,7 +320,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.1...HEAD
+[2.9.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.0...v2.9.1
 [2.9.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.1...v2.9.0
 [2.8.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.0...v2.8.1
 [2.8.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.7.0...v2.8.0
