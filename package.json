@@ -80,7 +80,9 @@
     "url": "https://github.com/ManuelGil/vscode-angular-generator/issues"
   },
   "activationEvents": [
-    "onLanguage:typescript"
+    "onLanguage:typescript",
+    "workspaceContains:**/angular.json",
+    "workspaceContains:**/nx.json"
   ],
   "main": "./out/extension.js",
   "l10n": "./l10n",
