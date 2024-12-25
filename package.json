@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator for VSCode",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.9.1",
+  "version": "2.9.3",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -80,7 +80,7 @@
     "url": "https://github.com/ManuelGil/vscode-angular-generator/issues"
   },
   "activationEvents": [
-    "workspaceContains:**/{angular.json,nx.json}"
+    "onLanguage:typescript"
   ],
   "main": "./out/extension.js",
   "l10n": "./l10n",
@@ -549,174 +549,144 @@
       "angular.explorer.submenu": [
         {
           "command": "angular.terminal.component",
-          "alt": "%angular.terminal.component%",
-          "group": "1_terminal",
+          "group": "1_terminal@1",
           "when": "angular.activateItem.terminal.component"
         },
         {
           "command": "angular.terminal.guard",
-          "alt": "%angular.terminal.guard%",
-          "group": "1_terminal",
+          "group": "1_terminal@2",
           "when": "angular.activateItem.terminal.guard"
         },
         {
           "command": "angular.terminal.pipe",
-          "alt": "%angular.terminal.pipe%",
-          "group": "1_terminal",
+          "group": "1_terminal@3",
           "when": "angular.activateItem.terminal.pipe"
         },
         {
           "command": "angular.terminal.service",
-          "alt": "%angular.terminal.service%",
-          "group": "1_terminal",
+          "group": "1_terminal@4",
           "when": "angular.activateItem.terminal.service"
         },
         {
           "command": "angular.terminal.custom",
-          "alt": "%angular.terminal.custom%",
-          "group": "2_terminal",
+          "group": "2_terminal@1",
           "when": "angular.activateItem.terminal.custom"
         },
         {
           "command": "angular.file.class",
-          "alt": "%angular.file.class%",
-          "group": "3_file",
+          "group": "3_file@1",
           "when": "angular.activateItem.file.class"
         },
         {
           "command": "angular.file.component",
-          "alt": "%angular.file.component%",
-          "group": "3_file",
+          "group": "3_file@2",
           "when": "angular.activateItem.file.component"
         },
         {
           "command": "angular.file.directive",
-          "alt": "%angular.file.directive%",
-          "group": "3_file",
+          "group": "3_file@3",
           "when": "angular.activateItem.file.directive"
         },
         {
           "command": "angular.file.enum",
-          "alt": "%angular.file.enum%",
-          "group": "3_file",
+          "group": "3_file@4",
           "when": "angular.activateItem.file.enum"
         },
         {
           "command": "angular.file.guard",
-          "alt": "%angular.file.guard%",
-          "group": "3_file",
+          "group": "3_file@5",
           "when": "angular.activateItem.file.guard"
         },
         {
           "command": "angular.file.interceptor",
-          "alt": "%angular.file.interceptor%",
-          "group": "3_file",
+          "group": "3_file@6",
           "when": "angular.activateItem.file.interceptor"
         },
         {
           "command": "angular.file.interface",
-          "alt": "%angular.file.interface%",
-          "group": "3_file",
+          "group": "3_file@7",
           "when": "angular.activateItem.file.interface"
         },
         {
           "command": "angular.file.module",
-          "alt": "%angular.file.module%",
-          "group": "3_file",
+          "group": "3_file@8",
           "when": "angular.activateItem.file.module"
         },
         {
           "command": "angular.file.pipe",
-          "alt": "%angular.file.pipe%",
-          "group": "3_file",
+          "group": "3_file@9",
           "when": "angular.activateItem.file.pipe"
         },
         {
           "command": "angular.file.resolver",
-          "alt": "%angular.file.resolver%",
-          "group": "3_file",
+          "group": "3_file@10",
           "when": "angular.activateItem.file.resolver"
         },
         {
           "command": "angular.file.service",
-          "alt": "%angular.file.service%",
-          "group": "3_file",
+          "group": "3_file@11",
           "when": "angular.activateItem.file.service"
         },
         {
           "command": "angular.file.spec",
-          "alt": "%angular.file.spec%",
-          "group": "3_file",
+          "group": "3_file@12",
           "when": "angular.activateItem.file.spec"
         }
       ],
       "angular.editor.submenu": [
         {
           "command": "angular.transform.json.ts",
-          "alt": "%angular.transform.json.ts%",
-          "group": "1_file"
+          "group": "1_file@1"
         }
       ],
       "angular.root.submenu": [
         {
           "command": "angular.terminal.analytics.disable",
-          "alt": "%angular.terminal.analytics.disable%",
-          "group": "1_analytics"
+          "group": "1_analytics@1"
         },
         {
           "command": "angular.terminal.analytics.enable",
-          "alt": "%angular.terminal.analytics.enable%",
-          "group": "1_analytics"
+          "group": "1_analytics@2"
         },
         {
           "command": "angular.terminal.analytics.info",
-          "alt": "%angular.terminal.analytics.info%",
-          "group": "1_analytics"
+          "group": "1_analytics@3"
         },
         {
           "command": "angular.terminal.analytics.prompt",
-          "alt": "%angular.terminal.analytics.prompt%",
-          "group": "1_analytics"
+          "group": "1_analytics@4"
         },
         {
           "command": "angular.terminal.cache.clear",
-          "alt": "%angular.terminal.cache.clear%",
-          "group": "2_cache"
+          "group": "2_cache@1"
         },
         {
           "command": "angular.terminal.cache.disable",
-          "alt": "%angular.terminal.cache.disable%",
-          "group": "2_cache"
+          "group": "2_cache@2"
         },
         {
           "command": "angular.terminal.cache.enable",
-          "alt": "%angular.terminal.cache.enable%",
-          "group": "2_cache"
+          "group": "2_cache@3"
         },
         {
           "command": "angular.terminal.cache.info",
-          "alt": "%angular.terminal.cache.info%",
-          "group": "2_cache"
+          "group": "2_cache@4"
         },
         {
           "command": "angular.terminal.start",
-          "alt": "%angular.terminal.start%",
-          "group": "3_server"
+          "group": "3_server@1"
         },
         {
           "command": "angular.terminal.test",
-          "alt": "%angular.terminal.test%",
-          "group": "4_test"
+          "group": "4_test@1"
         },
         {
           "command": "angular.terminal.e2e",
-          "alt": "%angular.terminal.e2e%",
-          "group": "4_test"
+          "group": "4_test@2"
         },
         {
           "command": "angular.terminal.version",
-          "alt": "%angular.terminal.version%",
-          "group": "5_version"
+          "group": "5_version@1"
         }
       ]
     },
