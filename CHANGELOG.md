@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.0] - 2025-01-06
+
+### Added
+
+- Add `enable` settings to enable or disable the extension
+
+### Fixed
+
+- Fix typos the file generation process
+
 ## [2.9.1] - 2024-12-24
 
 ### Fixed
@@ -320,7 +330,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.1...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.10.0...HEAD
+[2.10.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.1...v2.10.0
 [2.9.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.0...v2.9.1
 [2.9.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.1...v2.9.0
 [2.8.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.8.0...v2.8.1

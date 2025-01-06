@@ -41,6 +41,16 @@ export class Config {
 
   // Public properties
   /**
+   * The enable option.
+   *
+   * @type {boolean}
+   * @public
+   * @memberof Config
+   * @example
+   * console.log(config.enable);
+   */
+  enable: boolean;
+  /**
    * The style file extension.
    *
    * @type {string}
@@ -158,6 +168,7 @@ export class Config {
    * @memberof Config
    */
   constructor(readonly config: WorkspaceConfiguration) {
+    this.enable = config.get<boolean>('enable', true);
     this.style = config.get<string>('components.style', STYLE);
     this.standalone = config.get<boolean>('components.standalone', STANDALONE);
     this.include = config.get<string[]>('files.include', INCLUDE);
@@ -199,6 +210,7 @@ export class Config {
    * config.update(workspace.getConfiguration());
    */
   update(config: WorkspaceConfiguration): void {
+    this.enable = config.get<boolean>('enable', this.enable);
     this.style = config.get<string>('components.style', this.style);
     this.standalone = config.get<boolean>(
       'components.standalone',

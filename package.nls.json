@@ -1,4 +1,5 @@
 {
+  "angular.enable": "Enable or disable the Angular File Generator extension",
   "angular.components.standalone": "Sets the standalone option when generating a new component",
   "angular.components.style": "Sets the style file extension when generating a new component",
   "angular.files.include": "Glob patterns to include in the package. The default is ts, html, css, scss, less.",

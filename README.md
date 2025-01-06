@@ -52,6 +52,7 @@ Configure your project by creating or updating a settings.json file at the proje
 
     ```jsonc
     {
+      "angular.enable": true,
       "angular.components.standalone": true,
       "angular.components.style": "css",
       "angular.files.include": [

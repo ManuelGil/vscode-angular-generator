@@ -1,4 +1,5 @@
 {
+  "angular.enable": "Habilita o deshabilita la extensión Angular File Generator",
   "angular.components.standalone": "Establece la opción independiente al generar un nuevo componente",
   "angular.components.style": "Establece la extensión del archivo de estilo al generar un nuevo componente",
   "angular.files.include": "Patrones glob para incluir en el paquete. Por defecto son ts, html, css, scss, less",

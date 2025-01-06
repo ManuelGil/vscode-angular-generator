@@ -1,8 +1,8 @@
 {
   "name": "vscode-angular-generator",
-  "displayName": "Angular File Generator for VSCode",
+  "displayName": "Angular File Generator",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.9.3",
+  "version": "2.10.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -20,36 +20,12 @@
     "Other"
   ],
   "keywords": [
-    "angular 14",
-    "angular 15",
-    "angular 16",
-    "angular 17",
-    "angular 18",
-    "angular-14",
-    "angular-15",
-    "angular-16",
-    "angular-17",
-    "angular-18",
-    "angular-cli-file-generator",
-    "angular-cli-file",
-    "angular-cli-generator",
-    "angular-cli",
-    "angular-file-generator",
-    "angular-file",
-    "angular-generator",
     "angular",
-    "angular14",
-    "angular15",
-    "angular16",
-    "angular17",
-    "angular18",
     "boilerplate",
     "commands",
     "extension",
     "file",
     "generator",
-    "javascript",
-    "js",
     "make",
     "ng",
     "schema",
@@ -60,14 +36,6 @@
     "terminal",
     "ts",
     "typescript",
-    "vscode-angular-cli-file-generator",
-    "vscode-angular-cli-file",
-    "vscode-angular-cli",
-    "vscode-angular-file-generator",
-    "vscode-angular-file",
-    "vscode-angular-generator",
-    "vscode-angular",
-    "vscode-angular",
     "vscode-extension",
     "vscode"
   ],
@@ -80,9 +48,7 @@
     "url": "https://github.com/ManuelGil/vscode-angular-generator/issues"
   },
   "activationEvents": [
-    "onLanguage:typescript",
-    "workspaceContains:**/angular.json",
-    "workspaceContains:**/nx.json"
+    "workspaceContains:**/angular.json"
   ],
   "main": "./out/extension.js",
   "l10n": "./l10n",
@@ -90,6 +56,12 @@
     "configuration": {
       "title": "Angular File Generator",
       "properties": {
+        "angular.enable": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "%angular.enable%"
+        },
         "angular.components.standalone": {
           "type": "boolean",
           "default": true,
@@ -538,7 +510,7 @@
         {
           "submenu": "angular.root.submenu",
           "group": "2_workspace",
-          "when": "explorerViewletFocus && explorerResourceIsRoot && explorerResourceIsFolder"
+          "when": "explorerViewletFocus && explorerResourceIsRoot"
         }
       ],
       "editor/context": [

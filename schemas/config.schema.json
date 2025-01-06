@@ -2,6 +2,11 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
+    "angular.enable": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable or disable the Angular File Generator extension"
+    },
     "angular.components.style": {
       "type": "string",
       "default": "css",
