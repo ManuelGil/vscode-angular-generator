@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -151,6 +151,70 @@
           "scope": "resource",
           "description": "%angular.submenu.customCommands%"
         },
+        "angular.submenu.templates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "%angular.submenu.templates.name%"
+              },
+              "description": {
+                "type": "string",
+                "description": "%angular.submenu.templates.description%"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "component",
+                  "directive",
+                  "pipe",
+                  "service",
+                  "class",
+                  "enum",
+                  "guard",
+                  "interface",
+                  "module",
+                  "resolver",
+                  "spec",
+                  "template"
+                ],
+                "description": "%angular.submenu.templates.type%"
+              },
+              "template": {
+                "type": "array",
+                "description": "%angular.submenu.templates.template%"
+              }
+            }
+          },
+          "default": [
+            {
+              "name": "Custom Component",
+              "description": "Generate a custom component",
+              "type": "component",
+              "template": [
+                "import { Component, OnInit } from '@angular/core';",
+                "",
+                "@Component({",
+                "  selector: 'app-custom-component',",
+                "  templateUrl: './custom-component.component.html',",
+                "  styleUrls: ['./custom-component.component.css']",
+                "})",
+                "export class CustomComponentComponent implements OnInit {",
+                "",
+                "  constructor() { }",
+                "",
+                "  ngOnInit(): void {",
+                "  }",
+                "",
+                "}"
+              ]
+            }
+          ],
+          "scope": "resource",
+          "description": "%angular.submenu.templates%"
+        },
         "angular.submenu.activateItem": {
           "type": "object",
           "properties": {
@@ -246,6 +310,11 @@
                   "type": "boolean",
                   "default": true,
                   "description": "%angular.submenu.activateItem.file.spec%"
+                },
+                "template": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "%angular.submenu.activateItem.file.template%"
                 }
               }
             }
@@ -270,7 +339,8 @@
               "pipe": true,
               "resolver": true,
               "service": true,
-              "spec": true
+              "spec": true,
+              "template": true
             }
           },
           "scope": "resource",
@@ -348,6 +418,11 @@
       {
         "command": "angular.file.spec",
         "title": "%angular.file.spec%",
+        "category": "Angular"
+      },
+      {
+        "command": "angular.file.template",
+        "title": "%angular.file.template%",
         "category": "Angular"
       },
       {
@@ -438,6 +513,11 @@
       {
         "command": "angular.terminal.version",
         "title": "%angular.terminal.version%",
+        "category": "Angular"
+      },
+      {
+        "command": "angular.terminal.new",
+        "title": "%angular.terminal.new%",
         "category": "Angular"
       },
       {
@@ -605,6 +685,11 @@
           "command": "angular.file.spec",
           "group": "3_file@12",
           "when": "angular.activateItem.file.spec"
+        },
+        {
+          "command": "angular.file.template",
+          "group": "4_file@1",
+          "when": "angular.activateItem.file.template"
         }
       ],
       "angular.editor.submenu": [
@@ -615,40 +700,16 @@
       ],
       "angular.root.submenu": [
         {
-          "command": "angular.terminal.analytics.disable",
-          "group": "1_analytics@1"
-        },
-        {
-          "command": "angular.terminal.analytics.enable",
-          "group": "1_analytics@2"
-        },
-        {
-          "command": "angular.terminal.analytics.info",
-          "group": "1_analytics@3"
-        },
-        {
-          "command": "angular.terminal.analytics.prompt",
-          "group": "1_analytics@4"
-        },
-        {
-          "command": "angular.terminal.cache.clear",
-          "group": "2_cache@1"
-        },
-        {
-          "command": "angular.terminal.cache.disable",
-          "group": "2_cache@2"
-        },
-        {
-          "command": "angular.terminal.cache.enable",
-          "group": "2_cache@3"
-        },
-        {
-          "command": "angular.terminal.cache.info",
-          "group": "2_cache@4"
-        },
-        {
           "command": "angular.terminal.start",
-          "group": "3_server@1"
+          "group": "1_server@1"
+        },
+        {
+          "command": "angular.terminal.new",
+          "group": "2_new@1"
+        },
+        {
+          "command": "angular.terminal.version",
+          "group": "3_version@1"
         },
         {
           "command": "angular.terminal.test",
@@ -659,8 +720,36 @@
           "group": "4_test@2"
         },
         {
-          "command": "angular.terminal.version",
-          "group": "5_version@1"
+          "command": "angular.terminal.analytics.disable",
+          "group": "5_analytics@1"
+        },
+        {
+          "command": "angular.terminal.analytics.enable",
+          "group": "5_analytics@2"
+        },
+        {
+          "command": "angular.terminal.analytics.info",
+          "group": "5_analytics@3"
+        },
+        {
+          "command": "angular.terminal.analytics.prompt",
+          "group": "5_analytics@4"
+        },
+        {
+          "command": "angular.terminal.cache.clear",
+          "group": "6_cache@1"
+        },
+        {
+          "command": "angular.terminal.cache.disable",
+          "group": "6_cache@2"
+        },
+        {
+          "command": "angular.terminal.cache.enable",
+          "group": "6_cache@3"
+        },
+        {
+          "command": "angular.terminal.cache.info",
+          "group": "6_cache@4"
         }
       ]
     },

@@ -84,6 +84,70 @@
       "scope": "resource",
       "description": "Custom commands to add to the context menu"
     },
+    "angular.submenu.templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the template"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the template"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "component",
+              "directive",
+              "pipe",
+              "service",
+              "class",
+              "enum",
+              "guard",
+              "interface",
+              "module",
+              "resolver",
+              "spec",
+              "template"
+            ],
+            "description": "The type of the template"
+          },
+          "template": {
+            "type": "array",
+            "description": "The template to create the file"
+          }
+        }
+      },
+      "default": [
+        {
+          "name": "Custom Component",
+          "description": "Generate a custom component",
+          "type": "component",
+          "template": [
+            "import { Component, OnInit } from '@angular/core';",
+            "",
+            "@Component({",
+            "  selector: 'app-custom-component',",
+            "  templateUrl: './custom-component.component.html',",
+            "  styleUrls: ['./custom-component.component.css']",
+            "})",
+            "export class CustomComponentComponent implements OnInit {",
+            "",
+            "  constructor() { }",
+            "",
+            "  ngOnInit(): void {",
+            "  }",
+            "",
+            "}"
+          ]
+        }
+      ],
+      "scope": "resource",
+      "description": "The list of custom templates to create new files"
+    },
     "angular.submenu.activateItem": {
       "type": "object",
       "properties": {
@@ -179,6 +243,11 @@
               "type": "boolean",
               "default": true,
               "description": "Activate the spec item in the file submenu"
+            },
+            "template": {
+              "type": "boolean",
+              "default": true,
+              "description": "Activate the template item in the file submenu"
             }
           }
         }
@@ -203,7 +272,8 @@
           "pipe": true,
           "resolver": true,
           "service": true,
-          "spec": true
+          "spec": true,
+          "template": true
         }
       },
       "scope": "resource",

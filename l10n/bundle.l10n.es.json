@@ -24,6 +24,7 @@
   "Enter the folder name": "Ingrese el nombre de la carpeta",
   "Enter the class name": "Ingrese el nombre de la clase",
   "Enter the type name": "Ingrese el nombre del tipo",
+  "Operation cancelled!": "¡Operación cancelada!",
   "Enter the component class name": "Ingrese el nombre de la clase del componente",
   "Enter the directive class name": "Ingrese el nombre de la clase de la directiva",
   "Enter the enum class name": "Ingrese el nombre de la clase de la enumeración",
@@ -51,5 +52,8 @@
   "Select the options for the library generation (optional)": "Seleccione las opciones para la generación de la biblioteca (opcional)",
   "Select the options for the pipe generation (optional)": "Seleccione las opciones para la generación de la tubería (opcional)",
   "Select the options for the service generation (optional)": "Seleccione las opciones para la generación del servicio (opcional)",
-  "Select the template for the custom element generation": "Seleccione la plantilla para la generación del elemento personalizado"
+  "The custom commands list is empty. Please add custom commands to the configuration": "La lista de comandos personalizados está vacía. Agregue comandos personalizados a la configuración",
+  "The custom components list is empty. Please add custom components to the configuration": "La lista de componentes personalizados está vacía. Agregue componentes personalizados a la configuración",
+  "Select the template for the custom element generation": "Seleccione la plantilla para la generación del elemento personalizado",
+  "The template for the custom component does not exist. Please try again": "La plantilla para el componente personalizado no existe. Por favor, inténtelo de nuevo"
 }

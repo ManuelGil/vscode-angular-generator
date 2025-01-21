@@ -21,6 +21,7 @@ With this powerful extension, you can streamline your Angular development workfl
   - [Table of Contents](#table-of-contents)
   - [Requirements](#requirements)
   - [Project Settings](#project-settings)
+  - [Settings Options](#settings-options)
   - [Features](#features)
     - [Files](#files)
     - [Commands](#commands)
@@ -36,7 +37,7 @@ With this powerful extension, you can streamline your Angular development workfl
 
 ## Requirements
 
-- VSCode 1.76.0 or later
+- VSCode 1.88.0 or later
 
 ## Project Settings
 
@@ -52,26 +53,26 @@ Configure your project by creating or updating a settings.json file at the proje
 
     ```jsonc
     {
-      "angular.enable": true,
-      "angular.components.standalone": true,
-      "angular.components.style": "css",
+      "angular.enable": true, // Enable or disable the extension
+      "angular.components.standalone": true, // Standalone option when generating a new component
+      "angular.components.style": "css", // Style file extension when generating a new component
       "angular.files.include": [
         "ts"
-      ],
+      ], // Extensions to include in the Sidebar Angular File Generator
       "angular.files.exclude": [
         "**/node_modules/**",
         "**/dist/**",
         "**/out/**",
         "**/build/**",
         "**/.*/**"
-      ],
+      ], // Glob patterns of files or folders to exclude in the Sidebar Angular File Generator
       "angular.files.watch": [
         "modules",
         "components",
         "services"
-      ],
-      "angular.files.showPath": true,
-      "angular.terminal.cwd": "/path/to/your/project/",
+      ], // Folders to watch
+      "angular.files.showPath": true, // Show the path in the list of files in the Sidebar Angular File Generator
+      "angular.terminal.cwd": "/path/to/your/project/", // Current working directory for the terminal. The directory must be absolute
       "angular.submenu.customCommands": [
         {
           "name": "Template 1",
@@ -83,13 +84,24 @@ Configure your project by creating or updating a settings.json file at the proje
           "command": "ng g c",
           "args": "--style scss --standalone false --inline-style --inline-template"
         }
-      ],
+      ], // Custom commands to execute in the custom command submenu
+      "angular.submenu.templates": [
+        {
+          "name": "Template 1",
+          "description": "Description of Template 1",
+          "type": "component",
+          "template": [
+            "import { Component, OnInit } from '@angular/core';",
+          ]
+        }
+      ], // Templates to execute in the submenu
       "angular.submenu.activateItem": {
         "terminal": {
           "component": true,
           "guard": true,
           "pipe": true,
-          "service": true
+          "service": true,
+          "custom": true
         },
         "file": {
           "class": true,
@@ -103,16 +115,49 @@ Configure your project by creating or updating a settings.json file at the proje
           "pipe": true,
           "resolver": true,
           "service": true,
-          "spec": true
+          "spec": true,
+          "template": true
         }
-      },
-      "angular.fileGenerator.skipFolderConfirmation": false,
+      }, // Activate items in the submenu
+      "angular.fileGenerator.skipFolderConfirmation": false, // Skip folder confirmation when generating a new file
     }
     ```
 
 4. **Restart VS Code**
 
 Your project is now set up to automatically format code upon saving.
+
+## Settings Options
+
+Configure the Angular File Generator extension to suit your needs. The following settings are available:
+
+- `angular.enable`: Enable or disable the extension. The default is `true`.
+- `angular.components.standalone`: Sets the standalone option when generating a new component. The default is `true`.
+- `angular.components.style`: Sets the style file extension when generating a new component. The default is `css`.
+- `angular.files.include`: The list of extensions to include in the Sidebar Angular File Generator. The default is `ts`.
+- `angular.files.exclude`: Glob patterns of files or folders to exclude in the Sidebar Angular File Generator. The default is `**/node_modules/**`, `**/dist/**`, `**/out/**`, `**/build/**`, and `**/.*/**`.
+- `angular.files.watch`: The list of types of files to watch in the Sidebar Angular File Generator. The default is `modules`, `components`, and `services`.
+- `angular.files.showPath`: Show the path in the list of files in the Sidebar Angular File Generator. The default is `true`.
+- `angular.terminal.cwd`: Sets the current working directory for the terminal. The directory must be absolute.
+- `angular.submenu.customCommands`: The list of custom commands to execute in the custom command submenu. The default is an empty array.
+- `angular.submenu.templates`: The list of templates to execute in the submenu. The default is an empty array.
+- `angular.submenu.activateItem`: Activate items in the submenu.
+- `angular.fileGenerator.skipFolderConfirmation`: Skip folder confirmation when generating a new file. The default is `false`.
+
+The `angular.submenu.customCommands` setting is an array of objects with the following properties:
+
+- `name`: The name of the command. Example: "Template 1".
+- `command`: The command to execute. Example: "ng g c".
+- `args`: The arguments to pass to the command. Example: "--style css --standalone true --inline-style --inline-template".
+
+The `angular.submenu.templates` setting is an array of objects with the following properties:
+
+- `name`: The name of the template. Example: "Service".
+- `description`: A description of the template. Example: "Creates a service file".
+- `type`: The type of component. Example: "service".
+- `template`: The template content for the file. Use `{{ComponentName}}` as a placeholder for the component name and `{{EntityName}}` for the lowercase component name or any other placeholder you want to use.
+
+For more information on configuring the Angular File Generator extension, see the [Project Settings](#project-settings) section.
 
 ## Features
 
@@ -132,11 +177,17 @@ Your project is now set up to automatically format code upon saving.
 | Angular: Generate Resolver | Generates a new, generic resolver definition |
 | Angular: Generate Service | Creates a new, generic service definition |
 | Angular: Generate Test | Creates a new, generic test definition |
+| Angular: Generate Template | Creates a new file with a template definition |
 
 ### Commands
 
 | Title  | Purpose |
 | --- | --- |
+| Angular: New Application | Creates a new Angular application |
+| Angular: Start Server | Builds and serves your application, rebuilding on file changes |
+| Angular: Version | Outputs Angular CLI version |
+| Angular: Run Tests | Runs unit tests in a project |
+| Angular: Run E2E | Builds and serves an Angular application, then runs end-to-end tests |
 | Angular: Disable Analytics | Disables analytics gathering and reporting for the user |
 | Angular: Enable Analytics | Enables analytics gathering and reporting for the user |
 | Angular: Info Analytics | Prints analytics gathering and reporting configuration in the console |
@@ -151,10 +202,6 @@ Your project is now set up to automatically format code upon saving.
 | Angular: Generate Service with CLI | Creates a new, service service definition |
 | Angular: Generate Environments | Generates and configures environment files for a project |
 | Angular: Generate Library | Creates a new, generic library project in the current workspace |
-| Angular: Start Server | Builds and serves your application, rebuilding on file changes |
-| Angular: Run Tests | Runs unit tests in a project |
-| Angular: Run E2E | Builds and serves an Angular application, then runs end-to-end tests |
-| Angular: Version | Outputs Angular CLI version |
 
 ### Snippets
 
@@ -203,6 +250,7 @@ This extension was created using [VSXpert](https://vsxpert.com), a template that
 - [Angular File Generator](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-angular-generator)
 - [NestJS File Generator](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-nestjs-generator)
 - [T3 Stack / NextJS / ReactJS File Generator](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-nextjs-generator)
+- [JSON Flow](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-json-flow)
 - [Auto Barrel](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-auto-barrel)
 - [CodeIgniter 4 Spark](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-codeigniter4-spark)
 

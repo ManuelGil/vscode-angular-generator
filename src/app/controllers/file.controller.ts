@@ -1,6 +1,6 @@
 import { statSync } from 'fs';
 import { resolve } from 'path';
-import { Uri, l10n, workspace } from 'vscode';
+import { Uri, l10n, window, workspace } from 'vscode';
 
 // Import the Config and helper functions
 import { Config } from '../configs';
@@ -10,6 +10,7 @@ import {
   getPath,
   pickItem,
   saveFile,
+  showError,
   titleize,
 } from '../helpers';
 
@@ -83,7 +84,9 @@ export class FileController {
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -102,7 +105,9 @@ export class FileController {
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -118,7 +123,9 @@ export class FileController {
       },
     );
 
-    if (type === undefined) {
+    if (!type) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -171,7 +178,9 @@ export class FileController {
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -190,7 +199,9 @@ export class FileController {
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -265,7 +276,9 @@ export class ${className}Component {}
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -284,7 +297,9 @@ export class ${className}Component {}
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -340,7 +355,9 @@ export class ${className}Directive {}
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -359,7 +376,9 @@ export class ${className}Directive {}
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -410,7 +429,9 @@ export class ${className}Directive {}
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -429,7 +450,9 @@ export class ${className}Directive {}
       },
     );
 
-    if (entityName === undefined) {
+    if (!entityName) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -509,7 +532,9 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -528,7 +553,9 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -596,7 +623,9 @@ export class ${className}Interceptor implements HttpInterceptor {
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -615,7 +644,9 @@ export class ${className}Interceptor implements HttpInterceptor {
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -631,7 +662,9 @@ export class ${className}Interceptor implements HttpInterceptor {
       },
     );
 
-    if (type === undefined) {
+    if (!type) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -684,7 +717,9 @@ export class ${className}Interceptor implements HttpInterceptor {
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -703,7 +738,9 @@ export class ${className}Interceptor implements HttpInterceptor {
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -761,7 +798,9 @@ export class ${className}Module {}
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -780,7 +819,9 @@ export class ${className}Module {}
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -840,7 +881,9 @@ export class ${className}Pipe implements PipeTransform {
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -859,7 +902,9 @@ export class ${className}Pipe implements PipeTransform {
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -929,7 +974,9 @@ export class ${className}Resolver implements Resolve<boolean> {
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -948,7 +995,9 @@ export class ${className}Resolver implements Resolve<boolean> {
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -1004,7 +1053,9 @@ export class ${className}Service {}
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
@@ -1023,7 +1074,7 @@ export class ${className}Service {}
       },
     );
 
-    if (className === undefined) {
+    if (!className) {
       return;
     }
 
@@ -1039,7 +1090,9 @@ export class ${className}Service {}
       },
     );
 
-    if (type === undefined) {
+    if (!type) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -1062,6 +1115,146 @@ describe('${className}${titleize(type)}', () => {
 `;
 
     const filename = `${dasherize(className)}.spec.ts`;
+
+    saveFile(folder, filename, content);
+  }
+
+  /**
+   * Creates a new custom element.
+   *
+   * @function generateCustomElement
+   * @param {Uri} [path] - The path to the folder
+   * @public
+   * @async
+   * @memberof FileController
+   * @example
+   * generateCustomElement();
+   *
+   * @returns {Promise<void>} - The result of the operation
+   */
+  async generateCustomElement(path?: Uri): Promise<void> {
+    // Check if the path is a file
+    if (path && statSync(path.fsPath).isFile()) {
+      path = Uri.file(resolve(path.fsPath, '..'));
+    }
+
+    // Get the relative path
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+
+    const skipFolderConfirmation = this.config.skipFolderConfirmation;
+    let folder: string | undefined;
+
+    if (!folderPath || !skipFolderConfirmation) {
+      // Get the path to the folder
+      folder = await getPath(
+        l10n.t('Enter the folder name'),
+        'Folder name. E.g. src, app...',
+        folderPath,
+        (path: string) => {
+          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
+            return 'The folder name must be a valid name';
+          }
+          return;
+        },
+      );
+
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
+        return;
+      }
+    } else {
+      folder = folderPath;
+    }
+
+    if (this.config.templates.length === 0) {
+      const message = l10n.t(
+        'The custom components list is empty. Please add custom components to the configuration',
+      );
+      window.showErrorMessage(message);
+      return;
+    }
+
+    const items = this.config.templates.map((item: any) => {
+      return {
+        label: item.name,
+        description: item.description,
+        detail: item.type,
+      };
+    });
+
+    const option = await window.showQuickPick(items, {
+      placeHolder: l10n.t(
+        'Select the template for the custom element generation',
+      ),
+    });
+
+    if (!option) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
+      return;
+    }
+
+    const template = this.config.templates.find(
+      (item: any) => item.name === option.label,
+    );
+
+    if (!template) {
+      const message = l10n.t(
+        'The template for the custom component does not exist. Please try again',
+      );
+      window.showErrorMessage(message);
+      return;
+    }
+
+    let content = Object(template).template.join('\n');
+
+    // Get the class name
+    const className = await getName(
+      l10n.t('Enter the class name'),
+      'E.g. User, Role, Auth...',
+      (name: string) => {
+        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
+          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        }
+        return;
+      },
+    );
+
+    if (!className) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
+      return;
+    }
+
+    content = content.replace(/{{ComponentName}}/g, className);
+
+    if (content.includes('{{EntityName}}')) {
+      // Get the class name
+      const entityName = await getName(
+        l10n.t('Enter the entity name'),
+        'E.g. user, role, auth...',
+        (name: string) => {
+          if (!/^[a-z][\w-]+$/.test(name)) {
+            return 'Invalid format! Entity names MUST be declared in camelCase.';
+          }
+          return;
+        },
+      );
+
+      if (!entityName) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
+        return;
+      }
+
+      content = content.replace(/{{EntityName}}/g, entityName);
+    }
+
+    const type =
+      Object(template).type.length !== 0 ? `.${Object(template).type}` : '';
+
+    const filename = `${dasherize(className)}${type}.ts`;
 
     saveFile(folder, filename, content);
   }

@@ -128,21 +128,25 @@ export async function activate(context: vscode.ExtensionContext) {
       'New version of {0} is available. Check out the release notes for version {1}',
       [EXTENSION_DISPLAY_NAME, currentVersion],
     );
-    const option = await vscode.window.showInformationMessage(
-      message,
-      ...actions,
-    );
+    vscode.window.showInformationMessage(message, ...actions).then((option) => {
+      if (!option) {
+        return;
+      }
 
-    // Handle the actions
-    switch (option?.title) {
-      case actions[0].title:
-        vscode.env.openExternal(
-          vscode.Uri.parse(
-            `https://marketplace.visualstudio.com/items/${USER_PUBLISHER}.${EXTENSION_NAME}/changelog`,
-          ),
-        );
-        break;
-    }
+      // Handle the actions
+      switch (option?.title) {
+        case actions[0].title:
+          vscode.env.openExternal(
+            vscode.Uri.parse(
+              `https://marketplace.visualstudio.com/items/${USER_PUBLISHER}.${EXTENSION_NAME}/changelog`,
+            ),
+          );
+          break;
+
+        default:
+          break;
+      }
+    });
 
     // Update the version in the global state
     context.globalState.update('version', currentVersion);
@@ -236,6 +240,11 @@ export async function activate(context: vscode.ExtensionContext) {
     'setContext',
     `${EXTENSION_ID}.activateItem.terminal.custom`,
     config.activateItem.terminal.custom,
+  );
+  vscode.commands.executeCommand(
+    'setContext',
+    `${EXTENSION_ID}.activateItem.file.template`,
+    config.activateItem.file.template,
   );
 
   // -----------------------------------------------------------------
@@ -435,6 +444,22 @@ export async function activate(context: vscode.ExtensionContext) {
       }
 
       fileController.generateTest(args);
+    },
+  );
+  const disposableFileCustomElement = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.file.template`,
+    (args) => {
+      // Check if the extension is enabled
+      if (!config.enable) {
+        const message = vscode.l10n.t(
+          '{0} is disabled in settings. Enable it to use its features',
+          [EXTENSION_DISPLAY_NAME],
+        );
+        vscode.window.showErrorMessage(message);
+        return;
+      }
+
+      fileController.generateCustomElement(args);
     },
   );
 
@@ -733,6 +758,22 @@ export async function activate(context: vscode.ExtensionContext) {
       terminalController.version();
     },
   );
+  const disposableTerminalNewApp = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.terminal.new`,
+    () => {
+      // Check if the extension is enabled
+      if (!config.enable) {
+        const message = vscode.l10n.t(
+          '{0} is disabled in settings. Enable it to use its features',
+          [EXTENSION_DISPLAY_NAME],
+        );
+        vscode.window.showErrorMessage(message);
+        return;
+      }
+
+      terminalController.newApp();
+    },
+  );
   const disposableTerminalCustomElement = vscode.commands.registerCommand(
     `${EXTENSION_ID}.terminal.custom`,
     (args) => {
@@ -980,6 +1021,7 @@ export async function activate(context: vscode.ExtensionContext) {
     disposableFileResolver,
     disposableFileService,
     disposableFileTest,
+    disposableFileCustomElement,
     disposableTerminalAnalyticsDisable,
     disposableTerminalAnalyticsEnable,
     disposableTerminalAnalyticsInfo,
@@ -998,6 +1040,7 @@ export async function activate(context: vscode.ExtensionContext) {
     disposableTerminalTest,
     disposableTerminalE2E,
     disposableTerminalVersion,
+    disposableTerminalNewApp,
     disposableTerminalCustomElement,
     disposableTransformJson2Ts,
     disposableListOpenFile,

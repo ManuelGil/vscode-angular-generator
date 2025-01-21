@@ -204,6 +204,41 @@ export const CUSTOM_COMMANDS: object[] = [
 ];
 
 /**
+ * CUSTOM_TEMPLATES: The custom templates.
+ * @type {object[]}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(CUSTOM_TEMPLATES);
+ *
+ * @returns {object[]} - The custom templates
+ */
+export const CUSTOM_TEMPLATES: object[] = [
+  {
+    'name': 'Custom Component',
+    'description': 'Generate a custom component',
+    'type': 'component',
+    'template': [
+      "import { Component, OnInit } from '@angular/core';",
+      '',
+      '@Component({',
+      "  selector: 'app-custom-component',",
+      "  templateUrl: './custom-component.component.html',",
+      "  styleUrls: ['./custom-component.component.css']",
+      '})',
+      'export class CustomComponentComponent implements OnInit {',
+      '',
+      '  constructor() { }',
+      '',
+      '  ngOnInit(): void {',
+      '  }',
+      '',
+      '}',
+    ],
+  },
+];
+
+/**
  * MenuIterface: The menu options.
  * @type {object}
  * @public
@@ -234,6 +269,7 @@ export interface MenuInterface {
     resolver: boolean;
     service: boolean;
     spec: boolean;
+    template: boolean;
   };
 }
 
@@ -268,6 +304,7 @@ export const ACTIVATE_MENU: MenuInterface = {
     resolver: true,
     service: true,
     spec: true,
+    template: true,
   },
 };
 

@@ -4,7 +4,7 @@ import { Uri, l10n, window, workspace } from 'vscode';
 
 // Import the Config and helper functions
 import { Config } from '../configs';
-import { getName, getPath, runCommand } from '../helpers';
+import { getName, getPath, runCommand, showError } from '../helpers';
 
 /**
  * The TerminalController class.
@@ -158,6 +158,174 @@ export class TerminalController {
   }
 
   /**
+   * Creates a new application.
+   *
+   * @function newApp
+   * @public
+   * @async
+   * @memberof TerminalController
+   * @example
+   * controller.newApp();
+   *
+   * @returns {Promise<void>} - No return value
+   */
+  async newApp(): Promise<void> {
+    // Get the path to the folder
+    const applicationName = await getPath(
+      l10n.t('Enter the application name'),
+      'Application name.',
+      '',
+      (path: string) => {
+        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
+          return 'The application name must be a valid name';
+        }
+        return;
+      },
+    );
+
+    if (!applicationName) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
+      return;
+    }
+
+    const items = [
+      {
+        label: 'Dry Run',
+        description: '--dry-run',
+        detail: 'Run through and reports activity without writing out results.',
+      },
+      {
+        label: 'Force',
+        description: '--force',
+        detail: 'Force overwriting of existing files.',
+      },
+      {
+        label: 'Inline Style',
+        description: '--inline-style',
+        detail:
+          'Include styles inline in the component TS file. By default, an external styles file is created and referenced in the component TypeScript file.',
+      },
+      {
+        label: 'Inline Template',
+        description: '--inline-template',
+        detail:
+          'Include template inline in the component.ts file. By default, an external template file is created and referenced in the component TypeScript file.',
+      },
+      {
+        label: 'Prefix',
+        description: '--prefix',
+        detail:
+          'The prefix to apply to generated selectors for the initial project.',
+      },
+      {
+        label: 'Routing',
+        description: '--routing',
+        detail: 'Enable routing in the initial project.',
+      },
+      {
+        label: 'Skip Git',
+        description: '--skip-git',
+        detail: 'Do not initialize a git repository.',
+      },
+      {
+        label: 'Skip Install',
+        description: '--skip-install',
+        detail: 'Do not install dependency packages.',
+      },
+      {
+        label: 'Skip Tests',
+        description: '--skip-tests',
+        detail: 'Do not generate "spec.ts" test files for the new project.',
+      },
+      {
+        label: 'SSR',
+        description: '--ssr',
+        detail:
+          'Creates an application with Server-Side Rendering (SSR) and Static Site Generation (SSG/Prerendering) enabled.',
+      },
+      {
+        label: 'Standalone',
+        description: '--standalone',
+        detail:
+          'Creates an application based upon the standalone API, without NgModules.',
+        picked: this.config.standalone,
+      },
+      {
+        label: 'View Encapsulation',
+        description: '--view-encapsulation',
+        detail:
+          'The view encapsulation strategy to use in the initial project.',
+      },
+    ];
+
+    let options: any = [];
+    let extras: any = [];
+    let isStandalone = false;
+
+    options = await window.showQuickPick(items, {
+      placeHolder: l10n.t(
+        'Select the options for the component generation (optional)',
+      ),
+      canPickMany: true,
+    });
+
+    if (options.find((item: any) => item.description === '--prefix')) {
+      const prefix = await window.showInputBox({
+        placeHolder: l10n.t(
+          'The prefix to apply to generated selectors for the initial project.',
+        ),
+      });
+
+      if (prefix) {
+        extras.push('--prefix ' + prefix);
+        options = options.filter(
+          (item: any) => item.description !== '--prefix',
+        );
+      }
+    }
+
+    if (
+      options.find((item: any) => item.description === '--view-encapsulation')
+    ) {
+      const encapsulation = await window.showQuickPick(
+        ['Emulated', 'None', 'ShadowDom'],
+        {
+          placeHolder: l10n.t(
+            'The view encapsulation strategy to use in the initial project.',
+          ),
+        },
+      );
+
+      if (encapsulation) {
+        extras.push('--view-encapsulation ' + encapsulation);
+        options = options.filter(
+          (item: any) => item.description !== '--view-encapsulation',
+        );
+      }
+    }
+
+    if (options.find((item: any) => item.description === '--standalone')) {
+      isStandalone = true;
+      options = options.filter(
+        (item: any) => item.description !== '--standalone',
+      );
+    }
+
+    const command =
+      'ng n ' +
+      applicationName +
+      (this.config.style ? ' --style ' + this.config.style : '') +
+      (isStandalone ? ' --standalone true' : ' --standalone false') +
+      (options
+        ? ' ' + options.map((item: any) => item.description).join(' ')
+        : '') +
+      (extras ? ' ' + extras.join(' ') : '');
+
+    runCommand('new application', command, this.config.cwd);
+  }
+
+  /**
    * Generates a component.
    *
    * @function generateComponent
@@ -201,7 +369,9 @@ export class TerminalController {
       },
     );
 
-    if (folder === undefined) {
+    if (!folder) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -454,7 +624,9 @@ export class TerminalController {
       },
     );
 
-    if (folder === undefined) {
+    if (!folder) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -542,7 +714,9 @@ export class TerminalController {
       },
     );
 
-    if (folder === undefined) {
+    if (!folder) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -679,7 +853,9 @@ export class TerminalController {
       },
     );
 
-    if (folder === undefined) {
+    if (!folder) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -807,7 +983,9 @@ export class TerminalController {
       },
     );
 
-    if (folder === undefined) {
+    if (!folder) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 
@@ -934,11 +1112,21 @@ export class TerminalController {
         },
       );
 
-      if (folder === undefined) {
+      if (!folder) {
+        const message = l10n.t('Operation cancelled!');
+        showError(message);
         return;
       }
     } else {
       folder = folderPath;
+    }
+
+    if (this.config.customCommands.length === 0) {
+      const message = l10n.t(
+        'The custom commands list is empty. Please add custom commands to the configuration',
+      );
+      window.showErrorMessage(message);
+      return;
     }
 
     const items = this.config.customCommands.map((item: any) => {
@@ -955,7 +1143,9 @@ export class TerminalController {
       ),
     });
 
-    if (option === undefined) {
+    if (!option) {
+      const message = l10n.t('Operation cancelled!');
+      showError(message);
       return;
     }
 

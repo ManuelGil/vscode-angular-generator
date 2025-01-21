@@ -3,6 +3,7 @@ import { WorkspaceConfiguration, workspace } from 'vscode';
 import {
   ACTIVATE_MENU,
   CUSTOM_COMMANDS,
+  CUSTOM_TEMPLATES,
   EXCLUDE,
   INCLUDE,
   MenuInterface,
@@ -28,7 +29,9 @@ import {
  * @property {string[]} watch - The files to watch
  * @property {boolean} showPath - Whether to show the path or not
  * @property {object[]} customCommands - The custom commands
+ * @property {object[]} templates - The custom templates
  * @property {object} activateItem - Whether to show the menu or not
+ * @property {boolean} skipFolderConfirmation - Whether to skip the folder confirmation or not
  * @example
  * const config = new Config(workspace.getConfiguration());
  * console.log(config.include);
@@ -134,6 +137,20 @@ export class Config {
    */
   customCommands: object[];
   /**
+   * The custom templates.
+   * @type {object[]}
+   * @public
+   * @memberof Config
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.customTemplates);
+   * console.log(config.customTemplates[0].name);
+   * console.log(config.customTemplates[0].description);
+   * console.log(config.customTemplates[0].type);
+   * console.log(config.customTemplates[0].template);
+   */
+  templates: object[];
+  /**
    * Whether to show the menu or not.
    * @type {MenuInterface}
    * @public
@@ -183,6 +200,10 @@ export class Config {
       'submenu.customCommands',
       CUSTOM_COMMANDS,
     );
+    this.templates = config.get<object[]>(
+      'submenu.templates',
+      CUSTOM_TEMPLATES,
+    );
     this.activateItem = config.get<MenuInterface>(
       'submenu.activateItem',
       ACTIVATE_MENU,
@@ -225,6 +246,7 @@ export class Config {
       'submenu.customCommands',
       this.customCommands,
     );
+    this.templates = config.get<object[]>('submenu.templates', this.templates);
     this.activateItem = config.get<MenuInterface>(
       'submenu.activateItem',
       this.activateItem,
