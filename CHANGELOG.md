@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.12.0] - 2025-03-10
+
+### Added
+
+- Add `vscode-marketplace-client` dependency to check for extension updates and display a notification
+
+### Changed
+
+- Update the `extension.ts` file to use the new `vscode-marketplace-client` dependency
+- Update Localization strings for the extension
+
 ## [2.11.0] - 2025-01-20
 
 ### Added
@@ -336,7 +347,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.11.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.12.0...HEAD
+[2.12.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.11.0...v2.12.0
 [2.11.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.10.0...v2.11.0
 [2.10.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.1...v2.10.0
 [2.9.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.0...v2.9.1

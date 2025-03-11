@@ -92,9 +92,22 @@ Configure your project by creating or updating a settings.json file at the proje
           "type": "component",
           "template": [
             "import { Component, OnInit } from '@angular/core';",
+            "",
+            "@Component({",
+            "  selector: '{{EntityName}}',",
+            "  templateUrl: './{{EntityName}}.component.html',",
+            "  styleUrls: ['./{{EntityName}}.component.css']",
+            "})",
+            "export class {{ComponentName}}Component implements OnInit {",
+            "",
+            "  constructor() { }",
+            "",
+            "  ngOnInit(): void { }",
+            "",
+            "}"
           ]
         }
-      ], // Templates to execute in the submenu
+      ], // Templates to generate files in the submenu
       "angular.submenu.activateItem": {
         "terminal": {
           "component": true,
