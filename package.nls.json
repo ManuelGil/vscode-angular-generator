@@ -36,6 +36,8 @@
   "angular.submenu.activateItem.file.template": "Activate the template item in the file submenu",
   "angular.submenu.activateItem": "Activate or deactivate items in the context menu",
   "angular.fileGenerator.skipFolderConfirmation": "Skip folder confirmation when generating a new file",
+  "angular.fileGenerator.omitSuffix": "Omit suffix when generating a new file (Only for Angular version 20+)",
+  "angular.fileGenerator.typeSeparator": "File type separator (Only for Angular version 20+)",
   "angular.file.class": "Generate Class",
   "angular.file.component": "Generate Component File",
   "angular.file.directive": "Generate Directive",

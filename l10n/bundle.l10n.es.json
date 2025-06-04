@@ -57,5 +57,8 @@
   "The custom commands list is empty. Please add custom commands to the configuration": "La lista de comandos personalizados está vacía. Agrega comandos personalizados a la configuración",
   "The custom components list is empty. Please add custom components to the configuration": "La lista de componentes personalizados está vacía. Agrega componentes personalizados a la configuración",
   "Select the template for the custom element generation": "Selecciona la plantilla para la generación del elemento personalizado",
-  "The template for the custom component does not exist. Please try again": "La plantilla para el componente personalizado no existe. Por favor, inténtalo de nuevo"
+  "The template for the custom component does not exist. Please try again": "La plantilla para el componente personalizado no existe. Por favor, inténtalo de nuevo",
+  "The type to append to the component filename": "El tipo a añadir al nombre del archivo del componente",
+  "The type to append to the service filename": "El tipo a añadir al nombre del archivo del servicio",
+  "The type separator to use before the type within the generated file's name": "El separador de tipo a utilizar antes del tipo en el nombre del archivo generado"
 }

@@ -7,10 +7,12 @@ import {
   EXCLUDE,
   INCLUDE,
   MenuInterface,
+  OMIT_SUFFIX,
   SHOW_PATH,
   SKIP_FOLDER_CONFIRMATION,
   STANDALONE,
   STYLE,
+  TYPE_SEPARATOR,
   WATCH,
 } from './constants';
 
@@ -172,6 +174,28 @@ export class Config {
    */
   skipFolderConfirmation: boolean;
 
+  /**
+   * Whether to omit the suffix or not.
+   * @type {boolean}
+   * @public
+   * @memberof Config
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.omitSuffix);
+   */
+  omitSuffix: boolean;
+
+  /**
+   * The type separator.
+   * @type {string}
+   * @public
+   * @memberof Config
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.typeSeparator);
+   */
+  typeSeparator: string;
+
   // -----------------------------------------------------------------
   // Constructor
   // -----------------------------------------------------------------
@@ -211,6 +235,14 @@ export class Config {
     this.skipFolderConfirmation = config.get<boolean>(
       'fileGenerator.skipFolderConfirmation',
       SKIP_FOLDER_CONFIRMATION,
+    );
+    this.omitSuffix = config.get<boolean>(
+      'fileGenerator.omitSuffix',
+      OMIT_SUFFIX,
+    );
+    this.typeSeparator = config.get<string>(
+      'fileGenerator.typeSeparator',
+      TYPE_SEPARATOR,
     );
   }
 
@@ -254,6 +286,14 @@ export class Config {
     this.skipFolderConfirmation = config.get<boolean>(
       'fileGenerator.skipFolderConfirmation',
       this.skipFolderConfirmation,
+    );
+    this.omitSuffix = config.get<boolean>(
+      'fileGenerator.omitSuffix',
+      this.omitSuffix,
+    );
+    this.typeSeparator = config.get<string>(
+      'fileGenerator.typeSeparator',
+      this.typeSeparator,
     );
   }
 }

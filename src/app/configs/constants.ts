@@ -319,3 +319,27 @@ export const ACTIVATE_MENU: MenuInterface = {
  * @returns {boolean} - Whether to skip the folder confirmation or not
  */
 export const SKIP_FOLDER_CONFIRMATION: boolean = false;
+
+/**
+ * OMIT_SUFFIX: Whether to omit the suffix or not.
+ * @type {boolean}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(OMIT_SUFFIX);
+ *
+ * @returns {boolean} - Whether to omit the suffix or not
+ */
+export const OMIT_SUFFIX: boolean = false;
+
+/**
+ * TYPE_SEPARATOR: The separator used to join the type and name in the file name.
+ * @type {string}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(TYPE_SEPARATOR);
+ *
+ * @returns {string} - The separator used to join the type and name in the file name
+ */
+export const TYPE_SEPARATOR: string = '.';

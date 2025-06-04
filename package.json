@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator",
   "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.12.0",
+  "version": "2.13.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -20,21 +20,98 @@
     "Other"
   ],
   "keywords": [
+    "angular 18",
+    "angular 19",
+    "angular 20",
+    "angular-18",
+    "angular-19",
+    "angular-20",
+    "angular-cli",
+    "angular-commands",
+    "angular-extension",
+    "angular-extensions",
+    "angular-file-generator",
+    "angular-file",
+    "angular-files",
+    "angular-generator",
+    "angular-schematics",
+    "angular-scripts",
+    "angular-templates",
+    "angular-utilities",
     "angular",
+    "angular18",
+    "angular19",
+    "angular20",
     "boilerplate",
+    "cli",
+    "code",
+    "command",
     "commands",
+    "component",
+    "components",
+    "custom",
+    "directive",
+    "directives",
+    "e2e",
+    "enum",
     "extension",
+    "file-generator-extension",
+    "file-generator-scripts",
+    "file-generator-utilities",
+    "file-generator",
     "file",
     "generator",
+    "generators",
+    "guard",
+    "guards",
+    "interface",
+    "interfaces",
+    "library",
     "make",
+    "module",
+    "modules",
+    "ng-cli",
+    "ng-commands",
+    "ng-extension",
+    "ng-extensions",
+    "ng-file-generator",
+    "ng-file",
+    "ng-files",
+    "ng-generator",
+    "ng-schematics",
+    "ng-scripts",
+    "ng-templates",
+    "ng-utilities",
     "ng",
     "schema",
+    "schemas",
+    "schematic",
     "schematics",
+    "script",
+    "scripts",
+    "service",
+    "services",
     "snippet",
     "snippets",
+    "spec",
+    "specs",
+    "standalone",
     "template",
+    "terminal-commands",
     "terminal",
+    "ts-commands",
+    "ts-extension",
+    "ts-extensions",
+    "ts-file-generator",
+    "ts-file",
+    "ts-files",
+    "ts-generator",
+    "ts-schematics",
+    "ts-scripts",
+    "ts-templates",
+    "ts-utilities",
     "ts",
+    "typescript",
     "typescript",
     "vscode-extension",
     "vscode"
@@ -351,6 +428,22 @@
           "default": false,
           "scope": "resource",
           "description": "%angular.fileGenerator.skipFolderConfirmation%"
+        },
+        "angular.fileGenerator.omitSuffix": {
+          "type": "boolean",
+          "default": false,
+          "scope": "resource",
+          "description": "%angular.fileGenerator.omitSuffix%"
+        },
+        "angular.fileGenerator.typeSeparator": {
+          "type": "string",
+          "default": ".",
+          "enum": [
+            ".",
+            "-"
+          ],
+          "scope": "resource",
+          "description": "%angular.fileGenerator.typeSeparator%"
         }
       }
     },
@@ -781,22 +874,26 @@
         {
           "id": "angular.listFilesView",
           "name": "%angular.listFilesView%",
-          "visibility": "visible"
+          "visibility": "visible",
+          "icon": "$(file-directory)"
         },
         {
           "id": "angular.listRoutesView",
           "name": "%angular.listRoutesView%",
-          "visibility": "visible"
+          "visibility": "visible",
+          "icon": "$(list-tree)"
         },
         {
           "id": "angular.listModulesView",
           "name": "%angular.listModulesView%",
-          "visibility": "visible"
+          "visibility": "visible",
+          "icon": "$(symbol-module)"
         },
         {
           "id": "angular.feedbackView",
           "name": "%angular.feedbackView%",
-          "visibility": "visible"
+          "visibility": "visible",
+          "icon": "$(icon-feedback)"
         }
       ]
     },
@@ -821,27 +918,27 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@commitlint/cli": "^19.6.1",
-    "@commitlint/config-conventional": "^19.6.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@compodoc/compodoc": "^1.1.26",
     "@types/glob": "^8.1.0",
     "@types/minimatch": "^3.0.5",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.15.29",
     "@types/vscode": "^1.88.0",
     "@vscode/l10n-dev": "^0.0.35",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
     "cpy-cli": "^5.0.0",
-    "glob": "^11.0.0",
+    "glob": "^11.0.2",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.11",
+    "lint-staged": "^16.1.0",
     "rimraf": "^6.0.1",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "json-to-ts": "^2.1.0",
     "json5": "^2.2.3",
-    "vscode-marketplace-client": "^1.0.0"
+    "vscode-marketplace-client": "^1.1.0"
   }
 }
