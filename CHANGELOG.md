@@ -1,11 +1,19 @@
 # Change Log
 
-All notable changes to the "Angular File Generator for VSCode" extension will be documented in this file.
+All notable changes to the "Angular File Generator" extension will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.13.0] - 2025-06-04
+
+### Added
+
+- Add `angular.fileGenerator.omitSuffix` setting to omit the suffix from the generated file names in the context menu
+- Add `angular.fileGenerator.typeSeparator` setting to customize the separator between the file type and the file name in the context menu
+- Add snippets for `signal`, `computed`, `effect`, and `toSignal` APIs for Angular 20
 
 ## [2.12.0] - 2025-03-10
 
@@ -347,7 +355,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.12.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.13.0...HEAD
+[2.13.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.11.0...v2.12.0
 [2.11.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.10.0...v2.11.0
 [2.10.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.9.1...v2.10.0

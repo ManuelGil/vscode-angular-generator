@@ -1,6 +1,9 @@
 {
   "Module": {
-    "prefix": ["ng_class_module", "class Module"],
+    "prefix": [
+      "ng_class_module",
+      "class Module"
+    ],
     "scope": "typescript",
     "body": [
       "import { CommonModule } from '@angular/common';",
@@ -13,10 +16,14 @@
       "  bootstrap: [],",
       "})",
       "export class $1Module {}"
-    ]
+    ],
+    "description": "Creates an Angular NgModule with CommonModule imported"
   },
   "Routing Module": {
-    "prefix": ["ng_class_routing_module", "class Routing Module"],
+    "prefix": [
+      "ng_class_routing_module",
+      "class Routing Module"
+    ],
     "scope": "typescript",
     "body": [
       "import { NgModule } from '@angular/core';",
@@ -28,23 +35,27 @@
       "    component: $1Component,",
       "    children: [",
       "      {",
-      "$2",
+      "        $2",
       "      },",
       "      { path: '', redirectTo: 'list', pathMatch: 'full' },",
-      "      { path: '**', redirectTo: 'list', pathMatch: 'full' },",
-      "    ],",
-      "  },",
+      "      { path: '**', redirectTo: 'list', pathMatch: 'full' }",
+      "    ]",
+      "  }",
       "];",
       "",
       "@NgModule({",
       "  imports: [RouterModule.forChild(routes)],",
-      "  exports: [RouterModule],",
+      "  exports: [RouterModule]",
       "})",
       "export class $1RoutingModule {}"
-    ]
+    ],
+    "description": "Creates an Angular routing module with child routes"
   },
   "Standalone Routing Module": {
-    "prefix": ["ng_const_routes", "const routes"],
+    "prefix": [
+      "ng_const_routes",
+      "const routes"
+    ],
     "scope": "typescript",
     "body": [
       "import { Routes } from '@angular/router';",
@@ -54,12 +65,16 @@
       "    path: '',",
       "    loadComponent: () => import($1),",
       "  },",
-      "  { path: '**', redirectTo: '' },",
+      "  { path: '**', redirectTo: '' }",
       "];"
-    ]
+    ],
+    "description": "Creates standalone routes constant for lazy-loaded components"
   },
   "Component": {
-    "prefix": ["ng_class_component", "class Component"],
+    "prefix": [
+      "ng_class_component",
+      "class Component"
+    ],
     "scope": "typescript",
     "body": [
       "import { Component } from '@angular/core';",
@@ -71,13 +86,17 @@
       "})",
       "export class $3Component {",
       "  constructor() {",
-      "$0",
+      "    $0",
       "  }",
       "}"
-    ]
+    ],
+    "description": "Creates an Angular component class"
   },
   "Standalone Component": {
-    "prefix": ["ng_class_standalone_component", "class Standalone Component"],
+    "prefix": [
+      "ng_class_standalone_component",
+      "class Standalone Component"
+    ],
     "scope": "typescript",
     "body": [
       "import { Component } from '@angular/core';",
@@ -92,13 +111,17 @@
       "})",
       "export class $3Component {",
       "  constructor() {",
-      "$0",
+      "    $0",
       "  }",
       "}"
-    ]
+    ],
+    "description": "Creates a standalone Angular component with CommonModule"
   },
   "Service": {
-    "prefix": ["ng_class_service", "class Service"],
+    "prefix": [
+      "ng_class_service",
+      "class Service"
+    ],
     "scope": "typescript",
     "body": [
       "import { Injectable } from '@angular/core';",
@@ -108,62 +131,248 @@
       "})",
       "export class $1Service {",
       "  constructor() {",
-      "$0",
+      "    $0",
       "  }",
       "}"
-    ]
-  },
-  "unsubscribe": {
-    "prefix": ["ng_unsubscribe", "unsubscribe"],
-    "scope": "typescript",
-    "body": "private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/"
-  },
-  "subscribe": {
-    "prefix": ["ng_subscribe", "subscribe"],
-    "scope": "typescript",
-    "body": [
-      "this.$1Subject = new BehaviorSubject<$2Type>(undefined);",
-      "this.$1$ = this.$1Subject.asObservable();",
-      "this.$1Subscr = this.get$2().subscribe();",
-      "this.unsubscribe.push(this.$1Subscr);"
-    ]
-  },
-  "ngOnDestroy": {
-    "prefix": ["ng_on_destroy", "ngOnDestroy", "onDestroy"],
-    "scope": "typescript",
-    "body": [
-      "ngOnDestroy() {",
-      "  this.unsubscribe.forEach((sb) => sb.unsubscribe());",
-      "}"
-    ]
-  },
-  "ngOnInit": {
-    "prefix": ["ng_oninit", "ngOnInit", "onInit"],
-    "scope": "typescript",
-    "body": ["ngOnInit() {", "$0", "}"]
+    ],
+    "description": "Creates an injectable Angular service provided in root"
   },
   "environment": {
-    "prefix": ["ng_const_environment", "const environment"],
+    "prefix": [
+      "ng_const_environment",
+      "const environment"
+    ],
     "scope": "typescript",
     "body": [
       "export const environment = {",
       "  production: false,",
       "  apiUrl: 'http://localhost:8080/api/v1',",
       "};"
-    ]
+    ],
+    "description": "Defines environment configuration for development"
+  },
+  "ngOnInit": {
+    "prefix": [
+      "ng_oninit",
+      "ngOnInit",
+      "onInit"
+    ],
+    "scope": "typescript",
+    "body": [
+      "ngOnInit() {",
+      "  $0",
+      "}"
+    ],
+    "description": "Implements ngOnInit lifecycle hook"
+  },
+  "ngOnDestroy": {
+    "prefix": [
+      "ng_on_destroy",
+      "ngOnDestroy",
+      "onDestroy"
+    ],
+    "scope": "typescript",
+    "body": [
+      "ngOnDestroy() {",
+      "  this.unsubscribe.forEach((sb) => sb.unsubscribe());",
+      "}"
+    ],
+    "description": "Implements ngOnDestroy to unsubscribe from all subscriptions"
+  },
+  "unsubscribe": {
+    "prefix": [
+      "ng_unsubscribe",
+      "unsubscribe"
+    ],
+    "scope": "typescript",
+    "body": "private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/",
+    "description": "Defines an array for managing subscriptions and a comment"
+  },
+  "subscribe": {
+    "prefix": [
+      "ng_subscribe",
+      "subscribe"
+    ],
+    "scope": "typescript",
+    "body": [
+      "this.$1Subject = new BehaviorSubject<$2Type>(undefined);",
+      "this.$1$ = this.$1Subject.asObservable();",
+      "this.$1Subscr = this.get$2().subscribe();",
+      "this.unsubscribe.push(this.$1Subscr);"
+    ],
+    "description": "Initializes a BehaviorSubject, observable, subscription, and tracks it"
+  },
+  "Signal": {
+    "prefix": [
+      "ng_signal",
+      "signal"
+    ],
+    "scope": "typescript",
+    "body": [
+      "import { signal } from '@angular/core';",
+      "",
+      "const ${1:mySignal} = signal(${2:initialValue});"
+    ],
+    "description": "Creates a basic Angular signal"
+  },
+  "Computed": {
+    "prefix": [
+      "ng_computed",
+      "computed"
+    ],
+    "scope": "typescript",
+    "body": [
+      "import { computed } from '@angular/core';",
+      "",
+      "const ${1:myComputed} = computed(() => {",
+      "  return ${2:expression};",
+      "});"
+    ],
+    "description": "Creates a computed signal based on other signals"
+  },
+  "Effect": {
+    "prefix": [
+      "ng_effect",
+      "effect"
+    ],
+    "scope": "typescript",
+    "body": [
+      "import { effect } from '@angular/core';",
+      "",
+      "effect(() => {",
+      "  ${1:// reactive logic}",
+      "});"
+    ],
+    "description": "Creates a reactive effect that runs on signal changes"
+  },
+  "LinkedSignal": {
+    "prefix": [
+      "ng_linked_signal",
+      "linkedSignal"
+    ],
+    "scope": "typescript",
+    "body": [
+      "import { linkedSignal } from '@angular/core';",
+      "",
+      "const ${1:myLinkedSignal} = linkedSignal(${2:sourceSignal}, (value) => {",
+      "  return ${3:transformation};",
+      "});"
+    ],
+    "description": "Creates a linkedSignal that updates based on another signal"
+  },
+  "ToSignal": {
+    "prefix": [
+      "ng_to_signal",
+      "toSignal"
+    ],
+    "scope": "typescript",
+    "body": [
+      "import { toSignal } from '@angular/core/rxjs-interop';",
+      "",
+      "const ${1:signalFromObservable} = toSignal(${2:myObservable}, {",
+      "  initialValue: ${3:initialValue}",
+      "});"
+    ],
+    "description": "Converts an Observable into an Angular signal"
+  },
+  "Resource": {
+    "prefix": [
+      "ng_resource",
+      "resource"
+    ],
+    "scope": "typescript",
+    "body": [
+      "import { resource } from '@angular/core';",
+      "",
+      "const ${1:myResource} = resource(() => {",
+      "  return fetch(${2:'/api/data'}).then(res => res.json());",
+      "});"
+    ],
+    "description": "Creates a resource signal for handling async data"
+  },
+  "Standalone Component Reactivity": {
+    "prefix": [
+      "ng_class_standalone_component_reactivity",
+      "class Standalone Component Reactivity"
+    ],
+    "scope": "typescript",
+    "body": [
+      "import { Component } from '@angular/core';",
+      "import { CommonModule } from '@angular/common';",
+      "",
+      "@Component({",
+      "  selector: 'app-$1',",
+      "  standalone: true,",
+      "  imports: [CommonModule],",
+      "  template: `",
+      "    ${2:<!-- template here -->}",
+      "  `,",
+      "  styleUrls: ['./$1.component.$3'],",
+      "})",
+      "export class $4Component {",
+      "  constructor() {",
+      "    ${5:// initialize signals or effects here}",
+      "  }",
+      "}"
+    ],
+    "description": "Creates a standalone component boilerplate with reactivity setup"
+  },
+  "OnDestroy Reactivity": {
+    "prefix": [
+      "ng_on_destroy_reactivity",
+      "onDestroy Reactivity"
+    ],
+    "scope": "typescript",
+    "body": [
+      "import { OnDestroy } from '@angular/core';",
+      "import { Subscription } from 'rxjs';",
+      "",
+      "export class $1Component implements OnDestroy {",
+      "  private subscriptions: Subscription[] = [];",
+      "",
+      "  ngOnDestroy() {",
+      "    this.subscriptions.forEach(sub => sub.unsubscribe());",
+      "  }",
+      "}"
+    ],
+    "description": "Creates a component implementing OnDestroy to unsubscribe subscriptions"
   },
   "ng-if": {
-    "prefix": ["ng_if", "ng-if", "@if"],
+    "prefix": [
+      "ng_if",
+      "ng-if",
+      "@if"
+    ],
     "scope": "html",
-    "body": ["@if ($1$ | async; as $1) {", "  $0", "}"]
+    "body": [
+      "@if ($1$ | async; as $1) {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @if directive for async pipe with local variable"
   },
   "ng-if-else": {
-    "prefix": ["ng_if_else", "ng-if-else", "@if-else"],
+    "prefix": [
+      "ng_if_else",
+      "ng-if-else",
+      "@if-else"
+    ],
     "scope": "html",
-    "body": ["@if ($1$ | async; as $1) {", "  $0", "} @else {", "  $2", "}"]
+    "body": [
+      "@if ($1$ | async; as $1) {",
+      "  $0",
+      "} @else {",
+      "  $2",
+      "}"
+    ],
+    "description": "Creates an @if-else directive for async pipe"
   },
   "ng-if-else-if": {
-    "prefix": ["ng_if_else_if", "ng-if-else-if", "@if-else-if"],
+    "prefix": [
+      "ng_if_else_if",
+      "ng-if-else-if",
+      "@if-else-if"
+    ],
     "scope": "html",
     "body": [
       "@if ($1$ | async; as $1) {",
@@ -171,66 +380,169 @@
       "} @else if ($2$ | async; as $2) {",
       "  $3",
       "}"
-    ]
+    ],
+    "description": "Creates an @if-else-if directive sequence for async pipe"
   },
   "ng-else-if": {
-    "prefix": ["ng_else_if", "ng-else-if", "@else-if"],
+    "prefix": [
+      "ng_else_if",
+      "ng-else-if",
+      "@else-if"
+    ],
     "scope": "html",
-    "body": ["@else if ($1$ | async) {", "  $0", "}"]
+    "body": [
+      "@else if ($1$ | async) {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @else-if directive for async pipe"
   },
   "ng-else": {
-    "prefix": ["ng_else", "ng-else", "@else"],
+    "prefix": [
+      "ng_else",
+      "ng-else",
+      "@else"
+    ],
     "scope": "html",
-    "body": ["@else {", "  $0", "}"]
+    "body": [
+      "@else {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @else directive block"
   },
   "ng-for": {
-    "prefix": ["ng_for", "ng-for", "@for"],
+    "prefix": [
+      "ng_for",
+      "ng-for",
+      "@for"
+    ],
     "scope": "html",
-    "body": ["@for ($1 of $1s; track $1._id) {", "  $0", "}"]
+    "body": [
+      "@for ($1 of $1s; track $1._id) {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @for directive with tracking expression"
   },
   "ng-empty": {
-    "prefix": ["ng_empty", "ng-empty", "@empty"],
+    "prefix": [
+      "ng_empty",
+      "ng-empty",
+      "@empty"
+    ],
     "scope": "html",
-    "body": ["@empty {", "  $0", "}"]
+    "body": [
+      "@empty {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @empty directive block"
   },
   "ng-switch": {
-    "prefix": ["ng_switch", "ng-switch", "@switch"],
+    "prefix": [
+      "ng_switch",
+      "ng-switch",
+      "@switch"
+    ],
     "scope": "html",
-    "body": ["@switch ($1) {", "  $0", "}"]
+    "body": [
+      "@switch ($1) {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @switch directive block"
   },
   "ng-case": {
-    "prefix": ["ng_case", "ng-case", "@case"],
+    "prefix": [
+      "ng_case",
+      "ng-case",
+      "@case"
+    ],
     "scope": "html",
-    "body": ["@case ($1) {", "  $0", "}"]
+    "body": [
+      "@case ($1) {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @case directive block"
   },
   "ng-default": {
-    "prefix": ["ng_default", "ng-default", "@default"],
+    "prefix": [
+      "ng_default",
+      "ng-default",
+      "@default"
+    ],
     "scope": "html",
-    "body": ["@default {", "  $0", "}"]
+    "body": [
+      "@default {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @default directive block"
   },
   "ng-defer": {
-    "prefix": ["ng_defer", "ng-defer", "@defer"],
+    "prefix": [
+      "ng_defer",
+      "ng-defer",
+      "@defer"
+    ],
     "scope": "html",
-    "body": ["@defer ($1) {", "  $0", "}"]
+    "body": [
+      "@defer ($1) {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @defer directive block"
   },
   "ng-placeholder": {
-    "prefix": ["ng_placeholder", "ng-placeholder", "@placeholder"],
+    "prefix": [
+      "ng_placeholder",
+      "ng-placeholder",
+      "@placeholder"
+    ],
     "scope": "html",
-    "body": ["@placeholder {", "  $0", "}"]
+    "body": [
+      "@placeholder {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @placeholder directive block"
   },
   "ng-loading": {
-    "prefix": ["ng_loading", "ng-loading", "@loading"],
+    "prefix": [
+      "ng_loading",
+      "ng-loading",
+      "@loading"
+    ],
     "scope": "html",
-    "body": ["@loading {", "  $0", "}"]
+    "body": [
+      "@loading {",
+      "  $0",
+      "}"
+    ],
+    "description": "Creates an @loading directive block"
   },
   "router-outlet": {
-    "prefix": ["ng_router_outlet", "router-outlet"],
+    "prefix": [
+      "ng_router_outlet",
+      "router-outlet"
+    ],
     "scope": "html",
-    "body": "<router-outlet></router-outlet>"
+    "body": [
+      "<router-outlet></router-outlet>"
+    ],
+    "description": "Inserts a <router-outlet> in template"
   },
   "router-link": {
-    "prefix": ["ng_router_link", "router-link"],
+    "prefix": [
+      "ng_router_link",
+      "router-link"
+    ],
     "scope": "html",
-    "body": "<a routerLink=\"$1\">$2</a>"
+    "body": [
+      "<a routerLink=\"$1\">$2</a>"
+    ],
+    "description": "Creates a routerLink anchor element"
   }
 }

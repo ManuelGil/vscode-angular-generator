@@ -446,6 +446,12 @@ export class TerminalController {
         picked: this.config.standalone,
       },
       {
+        label: 'Type (Only for Angular version 20+)',
+        description: '--type',
+        detail:
+          "Append a custom type to the component's filename. For example, if you set the type to `container`, the file will be named `my-component.container.ts`.",
+      },
+      {
         label: 'View Encapsulation',
         description: '--view-encapsulation',
         detail: 'The view encapsulation strategy to use in the new component.',
@@ -462,6 +468,17 @@ export class TerminalController {
       ),
       canPickMany: true,
     });
+
+    if (options.find((item: any) => item.description === '--type')) {
+      const type = await window.showInputBox({
+        placeHolder: l10n.t('The type to append to the component filename'),
+      });
+
+      if (type) {
+        extras.push('--type ' + type);
+        options = options.filter((item: any) => item.description !== '--type');
+      }
+    }
 
     if (
       options.find((item: any) => item.description === '--change-detection')
@@ -657,9 +674,16 @@ export class TerminalController {
         description: '--skip-tests',
         detail: 'Do not create "spec.ts" test files for the new guard.',
       },
+      {
+        label: 'Type Separator (Only for Angular version 20+)',
+        description: '--type-separator',
+        detail:
+          "The separator character to use before the type within the generated file's name. For example, if you set the option to `.`, the file will be named `example.guard.ts`.",
+      },
     ];
 
     let options: any = [];
+    let extras: any = [];
     let isFunctional = false;
 
     options = await window.showQuickPick(items, {
@@ -668,6 +692,21 @@ export class TerminalController {
       ),
       canPickMany: true,
     });
+
+    if (options.find((item: any) => item.description === '--type-separator')) {
+      const separator = await window.showQuickPick(['-', '.'], {
+        placeHolder: l10n.t(
+          "The type separator to use before the type within the generated file's name.",
+        ),
+      });
+
+      if (separator) {
+        extras.push('--type-separator ' + separator);
+        options = options.filter(
+          (item: any) => item.description !== '--type-separator',
+        );
+      }
+    }
 
     if (options.find((item: any) => item.description === '--functional')) {
       isFunctional = true;
@@ -684,7 +723,8 @@ export class TerminalController {
       (isFunctional ? ' --functional true' : ' --functional false') +
       (options
         ? ' ' + options.map((item: any) => item.description).join(' ')
-        : '');
+        : '') +
+      (extras ? ' ' + extras.join(' ') : '');
 
     runCommand('generate guard', command, this.config.cwd);
   }
@@ -892,9 +932,17 @@ export class TerminalController {
         detail: 'Whether the generated pipe is standalone.',
         picked: this.config.standalone,
       },
+
+      {
+        label: 'Type Separator (Only for Angular version 20+)',
+        description: '--type-separator',
+        detail:
+          "The separator character to use before the type within the generated file's name. For example, if you set the option to `.`, the file will be named `example.pipe.ts`",
+      },
     ];
 
     let options: any = [];
+    let extras: any = [];
     let isStandalone = false;
 
     options = await window.showQuickPick(items, {
@@ -903,6 +951,21 @@ export class TerminalController {
       ),
       canPickMany: true,
     });
+
+    if (options.find((item: any) => item.description === '--type-separator')) {
+      const separator = await window.showQuickPick(['-', '.'], {
+        placeHolder: l10n.t(
+          "The type separator to use before the type within the generated file's name",
+        ),
+      });
+
+      if (separator) {
+        extras.push('--type-separator ' + separator);
+        options = options.filter(
+          (item: any) => item.description !== '--type-separator',
+        );
+      }
+    }
 
     if (options.find((item: any) => item.description === '--standalone')) {
       isStandalone = true;
@@ -919,7 +982,8 @@ export class TerminalController {
       (isStandalone ? ' --standalone true' : ' --standalone false') +
       (options
         ? ' ' + options.map((item: any) => item.description).join(' ')
-        : '');
+        : '') +
+      (extras ? ' ' + extras.join(' ') : '');
 
     runCommand('generate pipe', command, this.config.cwd);
   }
@@ -1011,9 +1075,16 @@ export class TerminalController {
         description: '--skip-tests',
         detail: 'Do not create "spec.ts" test files for the new service.',
       },
+      {
+        label: 'Type (Only for Angular version 20+)',
+        description: '--type',
+        detail:
+          "Append a custom type to the service's filename. For example, if you set the type to `service`, the file will be named `my-service.service.ts`.",
+      },
     ];
 
     let options: any = [];
+    let extras: any = [];
 
     options = await window.showQuickPick(items, {
       placeHolder: l10n.t(
@@ -1022,6 +1093,17 @@ export class TerminalController {
       canPickMany: true,
     });
 
+    if (options.find((item: any) => item.description === '--type')) {
+      const type = await window.showInputBox({
+        placeHolder: l10n.t('The type to append to the service filename'),
+      });
+
+      if (type) {
+        extras.push('--type ' + type);
+        options = options.filter((item: any) => item.description !== '--type');
+      }
+    }
+
     folder = folder.replace('src/app/', '');
 
     const command =
@@ -1029,7 +1111,8 @@ export class TerminalController {
       folder +
       (options
         ? ' ' + options.map((item: any) => item.description).join(' ')
-        : '');
+        : '') +
+      (extras ? ' ' + extras.join(' ') : '');
 
     runCommand('generate service', command, this.config.cwd);
   }

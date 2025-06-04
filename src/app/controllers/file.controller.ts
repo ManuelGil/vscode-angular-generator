@@ -205,6 +205,7 @@ export class FileController {
       return;
     }
 
+    const omitSuffix = this.config.omitSuffix;
     let content;
 
     if (this.config.standalone) {
@@ -215,8 +216,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-${dasherize(className)}',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './${dasherize(className)}.component.html',
-  styleUrls: ['./${dasherize(className)}.component.${this.config.style}'],
+  templateUrl: './${dasherize(className)}${omitSuffix ? '' : '.component'}.html',
+  styleUrls: ['./${dasherize(className)}${omitSuffix ? '' : '.component'}.${this.config.style}'],
 })
 export class ${className}Component {}
 `;
@@ -225,14 +226,14 @@ export class ${className}Component {}
 
 @Component({
   selector: 'app-${dasherize(className)}',
-  templateUrl: './${dasherize(className)}.component.html',
-  styleUrls: ['./${dasherize(className)}.component.${this.config.style}'],
+  templateUrl: './${dasherize(className)}${omitSuffix ? '' : '.component'}.html',
+  styleUrls: ['./${dasherize(className)}${omitSuffix ? '' : '.component'}.${this.config.style}'],
 })
 export class ${className}Component {}
 `;
     }
 
-    const filename = `${dasherize(className)}.component.ts`;
+    const filename = `${dasherize(className)}${omitSuffix ? '' : '.component'}.ts`;
 
     saveFile(folder, filename, content);
   }
@@ -311,7 +312,8 @@ export class ${className}Component {}
 export class ${className}Directive {}
 `;
 
-    const filename = `${dasherize(className)}.directive.ts`;
+    const omitSuffix = this.config.omitSuffix;
+    const filename = `${dasherize(className)}${omitSuffix ? '' : '.directive'}.ts`;
 
     saveFile(folder, filename, content);
   }
@@ -385,7 +387,8 @@ export class ${className}Directive {}
     const content = `export enum ${className} {}
 `;
 
-    const filename = `${dasherize(className)}.enum.ts`;
+    const omitSuffix = this.config.omitSuffix;
+    const filename = `${dasherize(className)}${omitSuffix ? '' : '.enum'}.ts`;
 
     saveFile(folder, filename, content);
   }
@@ -488,7 +491,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
 };
 `;
 
-    const filename = `${dasherize(entityName)}.guard.ts`;
+    const filename = `${dasherize(entityName)}${this.config.typeSeparator}guard.ts`;
 
     saveFile(folder, filename, content);
   }
@@ -579,7 +582,7 @@ export class ${className}Interceptor implements HttpInterceptor {
 }
 `;
 
-    const filename = `${dasherize(className)}.interceptor.ts`;
+    const filename = `${dasherize(className)}${this.config.typeSeparator}interceptor.ts`;
 
     saveFile(folder, filename, content);
   }
@@ -754,7 +757,7 @@ import { CommonModule } from '@angular/common';
 export class ${className}Module {}
 `;
 
-    const filename = `${dasherize(className)}.module.ts`;
+    const filename = `${dasherize(className)}${this.config.typeSeparator}module.ts`;
 
     saveFile(folder, filename, content);
   }
@@ -837,7 +840,7 @@ export class ${className}Pipe implements PipeTransform {
 }
 `;
 
-    const filename = `${dasherize(className)}.pipe.ts`;
+    const filename = `${dasherize(className)}${this.config.typeSeparator}pipe.ts`;
 
     saveFile(folder, filename, content);
   }
@@ -930,7 +933,7 @@ export class ${className}Resolver implements Resolve<boolean> {
 }
 `;
 
-    const filename = `${dasherize(className)}.resolver.ts`;
+    const filename = `${dasherize(className)}${this.config.typeSeparator}resolver.ts`;
 
     saveFile(folder, filename, content);
   }
@@ -1009,7 +1012,8 @@ export class ${className}Resolver implements Resolve<boolean> {
 export class ${className}Service {}
 `;
 
-    const filename = `${dasherize(className)}.service.ts`;
+    const omitSuffix = this.config.omitSuffix;
+    const filename = `${dasherize(className)}${omitSuffix ? '' : '.service'}.ts`;
 
     saveFile(folder, filename, content);
   }
@@ -1098,7 +1102,7 @@ export class ${className}Service {}
 
     const content = `import { TestBed } from '@angular/core/testing';
 
-import { ${className}${titleize(type)} } from './${dasherize(className)}.${type}';
+import { ${className}${titleize(type)} } from './${dasherize(className)}${this.config.typeSeparator}${type}';
 
 describe('${className}${titleize(type)}', () => {
   let ${type}: ${className}${titleize(type)};
