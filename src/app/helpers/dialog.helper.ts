@@ -1,4 +1,4 @@
-import { window } from 'vscode';
+import { QuickPickItem, window } from 'vscode';
 
 /**
  * Displays a message box with the provided message
@@ -72,6 +72,50 @@ export const pickItem = async (
   return await window.showQuickPick(items, {
     placeHolder,
   });
+};
+
+/**
+ * Enhanced item with icon and description for QuickPick
+ */
+interface EnhancedQuickPickItem extends QuickPickItem {
+  value: string;
+}
+
+/**
+ * Displays an enhanced selection box with icons and descriptions
+ *
+ * @param {Array} items - Array of objects with label, value, icon and description
+ * @param {string} placeHolder - The input placeholder
+ * @example
+ * const item = await pickItemWithIcons([
+ *   { label: 'Component', value: 'component', icon: '$(preview)', description: 'Create a new UI component' },
+ *   { label: 'Service', value: 'service', icon: '$(gear)', description: 'Create a new service' }
+ * ], 'Select item type');
+ *
+ * @returns {Promise<string | undefined>} - The selected item value
+ */
+export const pickItemWithIcons = async (
+  items: Array<{
+    label: string;
+    value: string;
+    icon?: string;
+    description?: string;
+  }>,
+  placeHolder: string,
+): Promise<string | undefined> => {
+  // Convert items to EnhancedQuickPickItem format
+  const quickPickItems: EnhancedQuickPickItem[] = items.map((item) => ({
+    label: item.icon ? `${item.icon} ${item.label}` : item.label,
+    value: item.value,
+    description: item.description || '',
+  }));
+
+  const selectedItem = await window.showQuickPick(quickPickItems, {
+    placeHolder,
+    matchOnDescription: true,
+  });
+
+  return selectedItem?.value;
 };
 
 /**

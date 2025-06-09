@@ -9,8 +9,11 @@ import {
   getName,
   getPath,
   pickItem,
+  pickItemWithIcons,
+  resolvePlaceholders,
   saveFile,
   showError,
+  showMessage,
   titleize,
 } from '../helpers';
 
@@ -74,18 +77,18 @@ export class FileController {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -96,36 +99,38 @@ export class FileController {
     // Get the class name
     const className = await getName(
       l10n.t('Enter the class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
     // Get the type
     let type = await getName(
       l10n.t('Enter the type name'),
-      'E.g. class, dto, entity, model...',
+      l10n.t('E.g. class, dto, entity, model...'),
       (type: string) => {
         if (!/[a-z]+/.test(type)) {
-          return 'Invalid format!';
+          return l10n.t('Invalid format!');
         }
         return;
       },
     );
 
     if (!type) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -168,18 +173,18 @@ export class FileController {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -190,18 +195,20 @@ export class FileController {
     // Get the class name
     const className = await getName(
       l10n.t('Enter the component class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -219,7 +226,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './${dasherize(className)}${omitSuffix ? '' : '.component'}.html',
   styleUrls: ['./${dasherize(className)}${omitSuffix ? '' : '.component'}.${this.config.style}'],
 })
-export class ${className}Component {}
+export class ${className}${omitSuffix ? '' : 'Component'} {}
 `;
     } else {
       content = `import { Component } from '@angular/core';
@@ -229,7 +236,7 @@ export class ${className}Component {}
   templateUrl: './${dasherize(className)}${omitSuffix ? '' : '.component'}.html',
   styleUrls: ['./${dasherize(className)}${omitSuffix ? '' : '.component'}.${this.config.style}'],
 })
-export class ${className}Component {}
+export class ${className}${omitSuffix ? '' : 'Component'} {}
 `;
     }
 
@@ -267,18 +274,18 @@ export class ${className}Component {}
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -289,30 +296,33 @@ export class ${className}Component {}
     // Get the class name
     const className = await getName(
       l10n.t('Enter the directive class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
+
+    const omitSuffix = this.config.omitSuffix;
 
     const content = `import { Directive } from '@angular/core';
 
 @Directive({
   selector: '[app${className}]',
 })
-export class ${className}Directive {}
+export class ${className}${omitSuffix ? '' : 'Directive'} {}
 `;
 
-    const omitSuffix = this.config.omitSuffix;
     const filename = `${dasherize(className)}${omitSuffix ? '' : '.directive'}.ts`;
 
     saveFile(folder, filename, content);
@@ -347,18 +357,18 @@ export class ${className}Directive {}
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -369,18 +379,20 @@ export class ${className}Directive {}
     // Get the class name
     const className = await getName(
       l10n.t('Enter the enum class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -422,18 +434,18 @@ export class ${className}Directive {}
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -444,18 +456,20 @@ export class ${className}Directive {}
     // Get the class name
     const entityName = await getName(
       l10n.t('Enter the guard name'),
-      'E.g. user, role, auth...',
+      l10n.t('E.g. user, role, auth...'),
       (name: string) => {
         if (!/^[a-z][\w-]+$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in camelCase.';
+          return l10n.t(
+            'Invalid format! Entity names MUST be declared in camelCase and have at least 1 character (e.g. user, authService).',
+          );
         }
         return;
       },
     );
 
     if (!entityName) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -468,19 +482,19 @@ export class ${className}Directive {}
 
     switch (guardType) {
       case 'CanActivate':
-        params = 'route, state';
+        params = l10n.t('route, state');
         break;
 
       case 'CanActivateChild':
-        params = 'childRoute, state';
+        params = l10n.t('childRoute, state');
         break;
 
       case 'CanDeactivate':
-        params = 'component, currentRoute, currentState, nextState';
+        params = l10n.t('component, currentRoute, currentState, nextState');
         break;
 
       case 'CanMatch':
-        params = 'route, segments';
+        params = l10n.t('route, segments');
         break;
     }
 
@@ -525,18 +539,18 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -547,18 +561,20 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
     // Get the class name
     const className = await getName(
       l10n.t('Enter the interceptor class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -616,18 +632,18 @@ export class ${className}Interceptor implements HttpInterceptor {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -638,36 +654,38 @@ export class ${className}Interceptor implements HttpInterceptor {
     // Get the class name
     const className = await getName(
       l10n.t('Enter the interface class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
     // Get the type
     let type = await getName(
       l10n.t('Enter the interface type name'),
-      'E.g. interface, dto, entity, model...',
+      l10n.t('E.g. interface, dto, entity, model...'),
       (type: string) => {
         if (!/[a-z]+/.test(type)) {
-          return 'Invalid format!';
+          return l10n.t('Invalid format!');
         }
         return;
       },
     );
 
     if (!type) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -710,18 +728,18 @@ export class ${className}Interceptor implements HttpInterceptor {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -732,18 +750,20 @@ export class ${className}Interceptor implements HttpInterceptor {
     // Get the class name
     const className = await getName(
       l10n.t('Enter the module class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -791,18 +811,18 @@ export class ${className}Module {}
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -813,18 +833,20 @@ export class ${className}Module {}
     // Get the class name
     const className = await getName(
       l10n.t('Enter the pipe class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -874,18 +896,18 @@ export class ${className}Pipe implements PipeTransform {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -896,18 +918,20 @@ export class ${className}Pipe implements PipeTransform {
     // Get the class name
     const className = await getName(
       l10n.t('Enter the resolver class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -967,18 +991,18 @@ export class ${className}Resolver implements Resolve<boolean> {
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -989,30 +1013,33 @@ export class ${className}Resolver implements Resolve<boolean> {
     // Get the class name
     const className = await getName(
       l10n.t('Enter the service class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
     );
 
     if (!className) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
+
+    const omitSuffix = this.config.omitSuffix;
 
     const content = `import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ${className}Service {}
+export class ${className}${omitSuffix ? '' : 'Service'} {}
 `;
 
-    const omitSuffix = this.config.omitSuffix;
     const filename = `${dasherize(className)}${omitSuffix ? '' : '.service'}.ts`;
 
     saveFile(folder, filename, content);
@@ -1047,18 +1074,18 @@ export class ${className}Service {}
       // Get the path to the folder
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
+        const message = l10n.t('Operation cancelled by user');
         showError(message);
         return;
       }
@@ -1069,10 +1096,12 @@ export class ${className}Service {}
     // Get the class name
     const className = await getName(
       l10n.t('Enter the test class name'),
-      'E.g. User, Role, Auth...',
+      l10n.t('E.g. User, Role, Auth...'),
       (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
+        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
+          return l10n.t(
+            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          );
         }
         return;
       },
@@ -1082,21 +1111,54 @@ export class ${className}Service {}
       return;
     }
 
-    // Get the type
-    let type = await getName(
-      l10n.t('Enter the test type name'),
-      'E.g. class, dto, entity, model...',
-      (type: string) => {
-        if (!/[a-z]+/.test(type)) {
-          return 'Invalid format!';
-        }
-        return;
+    // Get the type using enhanced selector with icons
+    const typeOptions = [
+      {
+        label: 'Class',
+        value: 'class',
+        icon: '$(symbol-class)',
+        description: 'Simple class for domain objects',
       },
+      {
+        label: 'Interface',
+        value: 'interface',
+        icon: '$(symbol-interface)',
+        description: 'Define object shapes and contracts',
+      },
+      {
+        label: 'DTO',
+        value: 'dto',
+        icon: '$(symbol-structure)',
+        description: 'Data Transfer Objects',
+      },
+      {
+        label: 'Model',
+        value: 'model',
+        icon: '$(database)',
+        description: 'Data models for business logic',
+      },
+      {
+        label: 'Entity',
+        value: 'entity',
+        icon: '$(references)',
+        description: 'Database entities',
+      },
+      {
+        label: 'Enum',
+        value: 'enum',
+        icon: '$(symbol-enum)',
+        description: 'Type-safe enumeration',
+      },
+    ];
+
+    let type = await pickItemWithIcons(
+      typeOptions,
+      l10n.t('Select the test type'),
     );
 
     if (!type) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
@@ -1137,7 +1199,7 @@ describe('${className}${titleize(type)}', () => {
    * @returns {Promise<void>} - The result of the operation
    */
   async generateCustomElement(path?: Uri): Promise<void> {
-    // Check if the path is a file
+    // Determine target folder
     if (path && statSync(path.fsPath).isFile()) {
       path = Uri.file(resolve(path.fsPath, '..'));
     }
@@ -1145,26 +1207,24 @@ describe('${className}${titleize(type)}', () => {
     // Get the relative path
     const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
-    const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
 
-    if (!folderPath || !skipFolderConfirmation) {
-      // Get the path to the folder
+    if (!folderPath || !this.config.skipFolderConfirmation) {
       folder = await getPath(
         l10n.t('Enter the folder name'),
-        'Folder name. E.g. src, app...',
+        l10n.t('Folder name. E.g. src, app...'),
         folderPath,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
-        showError(message);
+        const message = l10n.t('Operation cancelled by user');
+        showMessage(message);
         return;
       }
     } else {
@@ -1175,17 +1235,16 @@ describe('${className}${titleize(type)}', () => {
       const message = l10n.t(
         'The custom components list is empty. Please add custom components to the configuration',
       );
-      window.showErrorMessage(message);
+      showError(message);
       return;
     }
 
-    const items = this.config.templates.map((item: any) => {
-      return {
-        label: item.name,
-        description: item.description,
-        detail: item.type,
-      };
-    });
+    const items = this.config.templates.map((item: any) => ({
+      label: item.name,
+      description: item.description,
+      detail: item.type,
+      template: item.template,
+    }));
 
     const option = await window.showQuickPick(items, {
       placeHolder: l10n.t(
@@ -1194,72 +1253,40 @@ describe('${className}${titleize(type)}', () => {
     });
 
     if (!option) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
     const template = this.config.templates.find(
       (item: any) => item.name === option.label,
-    );
-
-    if (!template) {
-      const message = l10n.t(
-        'The template for the custom component does not exist. Please try again',
-      );
-      window.showErrorMessage(message);
-      return;
-    }
+    )!;
 
     let content = Object(template).template.join('\n');
 
-    // Get the class name
-    const className = await getName(
-      l10n.t('Enter the class name'),
-      'E.g. User, Role, Auth...',
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z]{2,}$/.test(name)) {
-          return 'Invalid format! Entity names MUST be declared in PascalCase.';
-        }
-        return;
-      },
-    );
+    // Resolve placeholders in template content
+    try {
+      content = await resolvePlaceholders(content, this.config.style);
+    } catch {
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
+      return;
+    }
 
-    if (!className) {
-      const message = l10n.t('Operation cancelled!');
+    // Generate filename
+    const ext = Object(template).type ? `.${Object(template).type}` : '';
+
+    // Extraer el nombre de la clase de forma segura
+    const classNameMatch = content.match(/class\s+(\w+)/);
+    if (!classNameMatch) {
+      const message = l10n.t('Could not extract class name from template');
       showError(message);
       return;
     }
 
-    content = content.replace(/{{ComponentName}}/g, className);
+    const filename = `${dasherize(classNameMatch[1])}${ext}.ts`;
 
-    if (content.includes('{{EntityName}}')) {
-      // Get the class name
-      const entityName = await getName(
-        l10n.t('Enter the entity name'),
-        'E.g. user, role, auth...',
-        (name: string) => {
-          if (!/^[a-z][\w-]+$/.test(name)) {
-            return 'Invalid format! Entity names MUST be declared in camelCase.';
-          }
-          return;
-        },
-      );
-
-      if (!entityName) {
-        const message = l10n.t('Operation cancelled!');
-        showError(message);
-        return;
-      }
-
-      content = content.replace(/{{EntityName}}/g, entityName);
-    }
-
-    const type =
-      Object(template).type.length !== 0 ? `.${Object(template).type}` : '';
-
-    const filename = `${dasherize(className)}${type}.ts`;
-
-    saveFile(folder, filename, content);
+    // Save file
+    saveFile(folder!, filename, content);
   }
 }

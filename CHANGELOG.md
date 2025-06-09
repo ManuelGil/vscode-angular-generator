@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.0] - 2025-06-07
+
+### Changed
+
+- Improve localization support for error messages and placeholders in `terminal.controller.ts`
+- Improve file handling in `filesystem.helper.ts` with progress notifications and error handling
+- Improve command execution to show progress notifications in `command.helper.ts`
+
+### Fixed
+
+- Fix potential runtime error in the `generateCustomElement` method by safely checking regex match results
+- Unified validation message handling across controllers
+
 ## [2.13.0] - 2025-06-04
 
 ### Added
@@ -355,7 +368,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.13.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.14.0...HEAD
+[2.14.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.11.0...v2.12.0
 [2.11.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.10.0...v2.11.0

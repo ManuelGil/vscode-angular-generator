@@ -1,8 +1,8 @@
 {
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator",
-  "description": "Angular File Generator is a Visual Studio Code extension that allows you to generate Angular files with a few clicks. It is based on the Angular CLI and uses the same schematics as the CLI. It also allows you to generate files from the terminal.",
-  "version": "2.13.0",
+  "description": "⚡ Supercharge your Angular development with intuitive and rapid file generation. Create components, services, modules, and more with just a few clicks - compatible with Angular 16-20. Boost your productivity with custom templates, integrated terminal commands, and multilingual support. Say goodbye to manual setup, hello to development speed!",
+  "version": "2.14.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -17,19 +17,36 @@
     "vscode": "^1.88.0"
   },
   "categories": [
+    "Programming Languages",
+    "Snippets",
     "Other"
   ],
   "keywords": [
-    "angular 18",
-    "angular 19",
+    "angular",
+    "angular-cli",
+    "angular file generator",
+    "productivity",
+    "developer-experience",
+    "dx",
+    "time-saving",
     "angular 20",
+    "angular 19",
+    "angular 18",
+    "angular 17",
+    "angular 16",
+    "custom-templates",
+    "multilingual",
+    "code-generation",
+    "workflow-automation",
+    "angular-16",
+    "angular-17",
     "angular-18",
     "angular-19",
     "angular-20",
-    "angular-cli",
     "angular-commands",
     "angular-extension",
     "angular-extensions",
+    "angular-file-generator",
     "angular-file-generator",
     "angular-file",
     "angular-files",
@@ -39,6 +56,8 @@
     "angular-templates",
     "angular-utilities",
     "angular",
+    "angular16",
+    "angular17",
     "angular18",
     "angular19",
     "angular20",
@@ -220,9 +239,24 @@
           },
           "default": [
             {
-              "name": "Custom Component",
+              "name": "Routing Module",
+              "command": "ng g m",
+              "args": "{{ComponentName}} --routing true"
+            },
+            {
+              "name": "Modern Page Component",
               "command": "ng g c",
-              "args": "--style css --standalone true --inline-style --inline-template"
+              "args": "--style scss --standalone true --change-detection OnPush --export"
+            },
+            {
+              "name": "Modern Page Component with Router",
+              "command": "ng g c",
+              "args": "--style scss --standalone true --change-detection OnPush --export --routing"
+            },
+            {
+              "name": "Modern Page Component with Router and Store",
+              "command": "ng g c",
+              "args": "--style scss --standalone true --change-detection OnPush --export --routing --store"
             }
           ],
           "scope": "resource",
@@ -271,18 +305,24 @@
               "description": "Generate a custom component",
               "type": "component",
               "template": [
-                "import { Component, OnInit } from '@angular/core';",
+                "import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';",
+                "import { CommonModule } from '@angular/common';",
                 "",
                 "@Component({",
                 "  selector: 'app-custom-component',",
+                "  standalone: true,",
+                "  imports: [CommonModule],",
                 "  templateUrl: './custom-component.component.html',",
-                "  styleUrls: ['./custom-component.component.css']",
+                "  styleUrls: ['./custom-component.component.{{style}}'],",
+                "  changeDetection: ChangeDetectionStrategy.OnPush",
                 "})",
-                "export class CustomComponentComponent implements OnInit {",
+                "export class {{ComponentName}}Component implements OnInit {",
+                "  // private readonly service = inject(Service);",
                 "",
                 "  constructor() { }",
                 "",
                 "  ngOnInit(): void {",
+                "    // Initialization logic here",
                 "  }",
                 "",
                 "}"
@@ -924,7 +964,7 @@
     "@types/glob": "^8.1.0",
     "@types/minimatch": "^3.0.5",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.29",
+    "@types/node": "^22.15.30",
     "@types/vscode": "^1.88.0",
     "@vscode/l10n-dev": "^0.0.35",
     "@vscode/test-cli": "^0.0.11",

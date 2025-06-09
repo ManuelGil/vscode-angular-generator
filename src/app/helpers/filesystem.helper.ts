@@ -1,6 +1,14 @@
-import { access, existsSync, mkdirSync, open, writeFile } from 'fs';
-import { dirname, join } from 'path';
-import { FilePermission, FileStat, Uri, l10n, window, workspace } from 'vscode';
+import { existsSync } from 'fs';
+import { normalize } from 'path';
+import {
+  FilePermission,
+  FileStat,
+  ProgressLocation,
+  Uri,
+  l10n,
+  window,
+  workspace,
+} from 'vscode';
 
 /**
  * Reads the contents of the file specified in the path.
@@ -63,39 +71,61 @@ export const saveFile = async (
     return;
   }
 
-  const file = join(folder, path, filename);
+  const dirUri = Uri.joinPath(Uri.file(folder), path);
+  const fileUri = Uri.joinPath(dirUri, filename);
 
-  if (!existsSync(dirname(file))) {
-    mkdirSync(dirname(file), { recursive: true });
-  }
+  await window.withProgress(
+    {
+      location: ProgressLocation.Notification,
+      title: `Creating file: ${filename}`,
+      cancellable: false,
+    },
+    async () => {
+      try {
+        await workspace.fs.createDirectory(dirUri);
 
-  access(file, (err: any) => {
-    if (err) {
-      open(file, 'w+', (err: any, fd: any) => {
-        if (err) {
-          throw err;
+        let alreadyExists = false;
+
+        try {
+          await workspace.fs.stat(fileUri);
+          alreadyExists = true;
+        } catch (statError: any) {
+          if ((statError as { code?: string }).code !== 'FileNotFound') {
+            throw statError;
+          }
         }
 
-        writeFile(fd, data, 'utf8', (err: any) => {
-          if (err) {
-            throw err;
-          }
+        if (alreadyExists) {
+          const message = l10n.t(
+            'File already exists: {0}. Please choose a different name.',
+            filename,
+          );
+          window.showErrorMessage(message);
+          return;
+        }
 
-          const openPath = Uri.file(file);
+        const encoded = Buffer.from(data, 'utf8');
+        await workspace.fs.writeFile(fileUri, encoded);
 
-          workspace.openTextDocument(openPath).then((filename) => {
-            window.showTextDocument(filename);
-          });
-        });
-      });
+        const document = await workspace.openTextDocument(fileUri);
+        await window.showTextDocument(document);
 
-      const message = l10n.t('Successfully created the file!');
-      window.showInformationMessage(message);
-    } else {
-      const message = l10n.t('Name already exist!');
-      window.showWarningMessage(message);
-    }
-  });
+        // Ensure the directory exists
+        const message = l10n.t(
+          'File created successfully: {0}',
+          normalize(fileUri.fsPath),
+        );
+        window.showInformationMessage(message);
+      } catch (err: any) {
+        // Handle errors during file creation
+        const message = l10n.t(
+          'Error creating file: {0}. Please check the path and try again.',
+          err.message ?? err,
+        );
+        window.showErrorMessage(message);
+      }
+    },
+  );
 };
 
 /**
@@ -117,13 +147,12 @@ export const deleteFiles = async (
   const files = await workspace.findFiles(`${path}/**/*`);
 
   files.forEach((file) => {
-    access(file.path, (err: any) => {
-      if (err) {
-        throw err;
-      }
-
+    try {
       workspace.fs.delete(file, options);
-    });
+    } catch (error: any) {
+      const errorMessage = error?.message || 'Unknown error';
+      window.showErrorMessage(l10n.t('Error deleting file: {0}', errorMessage));
+    }
   });
 };
 

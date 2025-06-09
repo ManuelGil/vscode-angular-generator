@@ -1,4 +1,4 @@
-import { Uri, window, workspace } from 'vscode';
+import { ProgressLocation, Uri, l10n, window, workspace } from 'vscode';
 
 /**
  * Runs a command in the terminal
@@ -21,11 +21,24 @@ export const runCommand = async (
     cwd = Uri.file(path);
   }
 
-  const terminal = window.createTerminal({
-    name,
-    cwd,
-  });
+  // Show a progress notification while executing the command
+  await window.withProgress(
+    {
+      location: ProgressLocation.Notification,
+      title: l10n.t('Executing: {0}', command),
+      cancellable: false,
+    },
+    async () => {
+      const terminal = window.createTerminal({
+        name,
+        cwd,
+      });
 
-  terminal.show();
-  terminal.sendText(command);
+      terminal.show();
+      terminal.sendText(command);
+
+      // Wait for the command to finish
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    },
+  );
 };

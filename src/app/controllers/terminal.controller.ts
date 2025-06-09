@@ -4,7 +4,14 @@ import { Uri, l10n, window, workspace } from 'vscode';
 
 // Import the Config and helper functions
 import { Config } from '../configs';
-import { getName, getPath, runCommand, showError } from '../helpers';
+import {
+  getName,
+  getPath,
+  resolvePlaceholders,
+  runCommand,
+  showError,
+  showMessage,
+} from '../helpers';
 
 /**
  * The TerminalController class.
@@ -363,7 +370,7 @@ export class TerminalController {
       `${folderPath}/`,
       (path: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-          return 'The folder name must be a valid name';
+          return l10n.t('The folder name must be a valid name');
         }
         return;
       },
@@ -514,7 +521,9 @@ export class TerminalController {
 
     if (options.find((item: any) => item.description === '--selector')) {
       const selector = await window.showInputBox({
-        placeHolder: 'The HTML selector to use for this component',
+        placeHolder: l10n.t(
+          'The prefix to apply to the generated component selector',
+        ),
       });
 
       if (selector) {
@@ -568,13 +577,13 @@ export class TerminalController {
   }
 
   /**
-   * Generates environments.
+   * Runs end-to-end tests.
    *
    * @function e2e
    * @public
    * @memberof TerminalController
    * @example
-   * controller.generateEnvironments();
+   * controller.e2e();
    *
    * @returns {void} - No return value
    */
@@ -635,7 +644,7 @@ export class TerminalController {
       `${folderPath}/`,
       (path: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-          return 'The folder name must be a valid name';
+          return l10n.t('The folder name must be a valid name');
         }
         return;
       },
@@ -820,7 +829,9 @@ export class TerminalController {
 
     if (options.find((item: any) => item.description === '--prefix')) {
       const prefix = await window.showInputBox({
-        placeHolder: 'A prefix to apply to generated selectors',
+        placeHolder: l10n.t(
+          'The prefix to apply to the generated component selector',
+        ),
       });
 
       if (prefix) {
@@ -887,7 +898,7 @@ export class TerminalController {
       `${folderPath}/`,
       (path: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-          return 'The folder name must be a valid name';
+          return l10n.t('The folder name must be a valid name');
         }
         return;
       },
@@ -1041,7 +1052,7 @@ export class TerminalController {
       `${folderPath}/`,
       (path: string) => {
         if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-          return 'The folder name must be a valid name';
+          return l10n.t('The folder name must be a valid name');
         }
         return;
       },
@@ -1161,7 +1172,7 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async generateCustomElement(path?: Uri): Promise<void> {
-    // Check if the path is a file
+    // Determine target folder
     if (path && statSync(path.fsPath).isFile()) {
       path = Uri.file(resolve(path.fsPath, '..'));
     }
@@ -1171,55 +1182,50 @@ export class TerminalController {
 
     if (this.config.cwd) {
       const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
-      folderPath = folderPath.replace(cwd, '');
-
-      if (folderPath.startsWith('/')) {
-        folderPath = folderPath.substring(1);
-      }
+      folderPath = folderPath.replace(cwd, '').replace(/^\/+/, '');
     }
 
-    const skipFolderConfirmation = this.config.skipFolderConfirmation;
+    // Confirm or skip folder
     let folder: string | undefined;
 
-    if (!skipFolderConfirmation) {
+    if (!this.config.skipFolderConfirmation) {
       // Get the path to the folder
-      let folder = await getPath(
+      folder = await getPath(
         l10n.t('Enter the element name'),
-        'Element name. E.g. src/app/modules/users, modules/users, modules/projects...',
+        l10n.t('Folder name. E.g. src, app...'),
         `${folderPath}/`,
         (path: string) => {
           if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return 'The folder name must be a valid name';
+            return l10n.t('The folder name must be a valid name');
           }
           return;
         },
       );
 
       if (!folder) {
-        const message = l10n.t('Operation cancelled!');
-        showError(message);
+        const message = l10n.t('Operation cancelled by user');
+        showMessage(message);
         return;
       }
     } else {
       folder = folderPath;
     }
 
+    // No custom commands?
     if (this.config.customCommands.length === 0) {
       const message = l10n.t(
         'The custom commands list is empty. Please add custom commands to the configuration',
       );
-      window.showErrorMessage(message);
+      showError(message);
       return;
     }
 
-    const items = this.config.customCommands.map((item: any) => {
-      return {
-        label: item.name,
-        description: item.command,
-        detail: item.args,
-      };
-    });
-
+    // QuickPick for command template
+    const items = this.config.customCommands.map((item: any) => ({
+      label: item.name,
+      description: item.command,
+      detail: item.args,
+    }));
     const option = await window.showQuickPick(items, {
       placeHolder: l10n.t(
         'Select the template for the custom element generation',
@@ -1227,16 +1233,29 @@ export class TerminalController {
     });
 
     if (!option) {
-      const message = l10n.t('Operation cancelled!');
-      showError(message);
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
       return;
     }
 
-    if (folder) {
-      folder = folder.replace('src/app/', '');
+    // Resolve placeholders in args
+    let processedArgs: string;
+
+    try {
+      processedArgs = await resolvePlaceholders(
+        option.detail,
+        this.config.style,
+      );
+    } catch {
+      const message = l10n.t('Operation cancelled by user');
+      showMessage(message);
+      return;
     }
 
-    const command = `${option.description} ${folder} ${option.detail}`;
+    folder = folder.replace('src/app/', '');
+
+    // Build and run final command
+    const command = `${option.description} ${folder} ${processedArgs}`.trim();
 
     runCommand('generate custom element', command, this.config.cwd);
   }
