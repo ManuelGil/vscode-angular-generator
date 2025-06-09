@@ -2,8 +2,7 @@ import { statSync } from 'fs';
 import { resolve } from 'path';
 import { Uri, l10n, window, workspace } from 'vscode';
 
-// Import the Config and helper functions
-import { Config } from '../configs';
+// Import the helpers
 import {
   getName,
   getPath,
@@ -11,7 +10,11 @@ import {
   runCommand,
   showError,
   showMessage,
+  validateFolderName,
 } from '../helpers';
+
+// Import the Config and helper functions
+import { Config } from '../configs';
 
 /**
  * The TerminalController class.
@@ -49,14 +52,22 @@ export class TerminalController {
    *
    * @function analyticsDisable
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.analyticsDisable();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  analyticsDisable(): void {
-    runCommand('analytics disable', 'ng analytics disable', this.config.cwd);
+  async analyticsDisable(): Promise<void> {
+    const result = await runCommand(
+      'analytics disable',
+      'ng analytics disable',
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to disable analytics. Please try again.'));
+    }
   }
 
   /**
@@ -64,14 +75,22 @@ export class TerminalController {
    *
    * @function analyticsEnable
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.analyticsEnable();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  analyticsEnable(): void {
-    runCommand('analytics enable', 'ng analytics enable', this.config.cwd);
+  async analyticsEnable(): Promise<void> {
+    const result = await runCommand(
+      'analytics enable',
+      'ng analytics enable',
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to enable analytics. Please try again.'));
+    }
   }
 
   /**
@@ -79,14 +98,24 @@ export class TerminalController {
    *
    * @function analyticsInfo
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.analyticsInfo();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  analyticsInfo(): void {
-    runCommand('analytics info', 'ng analytics info', this.config.cwd);
+  async analyticsInfo(): Promise<void> {
+    const result = await runCommand(
+      'analytics info',
+      'ng analytics info',
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(
+        l10n.t('Failed to get analytics information. Please try again.'),
+      );
+    }
   }
 
   /**
@@ -94,14 +123,22 @@ export class TerminalController {
    *
    * @function analyticsPrompt
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.analyticsPrompt();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  analyticsPrompt(): void {
-    runCommand('analytics prompt', 'ng analytics prompt', this.config.cwd);
+  async analyticsPrompt(): Promise<void> {
+    const result = await runCommand(
+      'analytics prompt',
+      'ng analytics prompt',
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to prompt for analytics. Please try again.'));
+    }
   }
 
   /**
@@ -109,14 +146,22 @@ export class TerminalController {
    *
    * @function cacheClear
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.cacheClear();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  cacheClear(): void {
-    runCommand('cache clean', 'ng cache clean', this.config.cwd);
+  async cacheClear(): Promise<void> {
+    const result = await runCommand(
+      'cache clean',
+      'ng cache clean',
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to clear cache. Please try again.'));
+    }
   }
 
   /**
@@ -124,14 +169,22 @@ export class TerminalController {
    *
    * @function cacheDisable
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.cacheDisable();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  cacheDisable(): void {
-    runCommand('cache disable', 'ng cache disable', this.config.cwd);
+  async cacheDisable(): Promise<void> {
+    const result = await runCommand(
+      'cache disable',
+      'ng cache disable',
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to disable cache. Please try again.'));
+    }
   }
 
   /**
@@ -139,14 +192,22 @@ export class TerminalController {
    *
    * @function cacheEnable
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.cacheEnable();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  cacheEnable(): void {
-    runCommand('cache enable', 'ng cache enable', this.config.cwd);
+  async cacheEnable(): Promise<void> {
+    const result = await runCommand(
+      'cache enable',
+      'ng cache enable',
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to enable cache. Please try again.'));
+    }
   }
 
   /**
@@ -154,14 +215,22 @@ export class TerminalController {
    *
    * @function cacheInfo
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.cacheInfo();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  cacheInfo(): void {
-    runCommand('cache info', 'ng cache info', this.config.cwd);
+  async cacheInfo(): Promise<void> {
+    const result = await runCommand(
+      'cache info',
+      'ng cache info',
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to get cache information. Please try again.'));
+    }
   }
 
   /**
@@ -329,7 +398,14 @@ export class TerminalController {
         : '') +
       (extras ? ' ' + extras.join(' ') : '');
 
-    runCommand('new application', command, this.config.cwd);
+    const result = await runCommand(
+      'new application',
+      command,
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to create new application. Please try again.'));
+    }
   }
 
   /**
@@ -573,7 +649,14 @@ export class TerminalController {
         : '') +
       (extras ? ' ' + extras.join(' ') : '');
 
-    runCommand('generate component', command, this.config.cwd);
+    const result = await runCommand(
+      'generate component',
+      command,
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to generate component. Please try again.'));
+    }
   }
 
   /**
@@ -581,14 +664,18 @@ export class TerminalController {
    *
    * @function e2e
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.e2e();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  e2e(): void {
-    runCommand('e2e', 'ng e', this.config.cwd);
+  async e2e(): Promise<void> {
+    const result = await runCommand('e2e', 'ng e', this.config.cwd);
+    if (!result.success) {
+      showError(l10n.t('Failed to run end-to-end tests. Please try again.'));
+    }
   }
 
   /**
@@ -596,14 +683,22 @@ export class TerminalController {
    *
    * @function generateEnvironments
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.generateEnvironments();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  generateEnvironments(): void {
-    runCommand('generate environments', 'ng g environments', this.config.cwd);
+  async generateEnvironments(): Promise<void> {
+    const result = await runCommand(
+      'generate environments',
+      'ng g environments',
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to generate environments. Please try again.'));
+    }
   }
 
   /**
@@ -735,7 +830,10 @@ export class TerminalController {
         : '') +
       (extras ? ' ' + extras.join(' ') : '');
 
-    runCommand('generate guard', command, this.config.cwd);
+    const result = await runCommand('generate guard', command, this.config.cwd);
+    if (!result.success) {
+      showError(l10n.t('Failed to generate guard. Please try again.'));
+    }
   }
 
   /**
@@ -755,12 +853,7 @@ export class TerminalController {
     let folder = await getName(
       l10n.t('Enter the library name'),
       'Library name. E.g. users, projects...',
-      (name: string) => {
-        if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(name)) {
-          return 'The library name must be a valid name';
-        }
-        return;
-      },
+      validateFolderName,
     );
 
     if (!folder) {
@@ -857,7 +950,14 @@ export class TerminalController {
         ? ' ' + options.map((item: any) => item.description).join(' ')
         : '');
 
-    runCommand('generate library', command, this.config.cwd);
+    const result = await runCommand(
+      'generate library',
+      command,
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to generate library. Please try again.'));
+    }
   }
 
   /**
@@ -996,7 +1096,10 @@ export class TerminalController {
         : '') +
       (extras ? ' ' + extras.join(' ') : '');
 
-    runCommand('generate pipe', command, this.config.cwd);
+    const result = await runCommand('generate pipe', command, this.config.cwd);
+    if (!result.success) {
+      showError(l10n.t('Failed to generate pipe. Please try again.'));
+    }
   }
 
   /**
@@ -1004,14 +1107,15 @@ export class TerminalController {
    *
    * @function start
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.start();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  start(): void {
-    runCommand('start', 'ng s', this.config.cwd);
+  async start(): Promise<void> {
+    await runCommand('start', 'ng s', this.config.cwd, true, false);
   }
 
   /**
@@ -1125,7 +1229,14 @@ export class TerminalController {
         : '') +
       (extras ? ' ' + extras.join(' ') : '');
 
-    runCommand('generate service', command, this.config.cwd);
+    const result = await runCommand(
+      'generate service',
+      command,
+      this.config.cwd,
+    );
+    if (!result.success) {
+      showError(l10n.t('Failed to generate service. Please try again.'));
+    }
   }
 
   /**
@@ -1133,14 +1244,18 @@ export class TerminalController {
    *
    * @function test
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.test();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  test(): void {
-    runCommand('test', 'ng t', this.config.cwd);
+  async test(): Promise<void> {
+    const result = await runCommand('test', 'ng t', this.config.cwd);
+    if (!result.success) {
+      showError(l10n.t('Failed to run tests. Please try again.'));
+    }
   }
 
   /**
@@ -1148,42 +1263,41 @@ export class TerminalController {
    *
    * @function version
    * @public
+   * @async
    * @memberof TerminalController
    * @example
    * controller.version();
    *
-   * @returns {void} - No return value
+   * @returns {Promise<void>} - No return value
    */
-  version(): void {
-    runCommand('version', 'ng v', this.config.cwd);
+  async version(): Promise<void> {
+    const result = await runCommand('version', 'ng v', this.config.cwd);
+    if (!result.success) {
+      showError(l10n.t('Failed to display version. Please try again.'));
+    }
   }
 
   /**
    * Generates a custom element.
    *
    * @function generateCustomElement
-   * @param {Uri} [path] - The path
+   * @param {Uri} [path] - The path to the folder
    * @public
    * @async
    * @memberof TerminalController
    * @example
-   * controller.generateCustomElement();
+   * generateCustomElement();
    *
-   * @returns {Promise<void>} - No return value
+   * @returns {Promise<void>} - The result of the operation
    */
   async generateCustomElement(path?: Uri): Promise<void> {
-    // Determine target folder
+    // Check if the path is a file
     if (path && statSync(path.fsPath).isFile()) {
       path = Uri.file(resolve(path.fsPath, '..'));
     }
 
     // Get the relative path
-    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
-
-    if (this.config.cwd) {
-      const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
-      folderPath = folderPath.replace(cwd, '').replace(/^\/+/, '');
-    }
+    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
 
     // Confirm or skip folder
     let folder: string | undefined;
@@ -1194,12 +1308,7 @@ export class TerminalController {
         l10n.t('Enter the element name'),
         l10n.t('Folder name. E.g. src, app...'),
         `${folderPath}/`,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {

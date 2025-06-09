@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.14.0] - 2025-06-07
+## [2.15.0] - 2025-06-09
+
+### Added
+
+- Add centralized validation helpers for folder, class, and entity names
+- Refactor `FileController` and `TerminalController` to utilize new validation functions
+- Improve command execution handling in `command.helper.ts` to support output capturing and cancellation
+
+## [2.14.0] - 2025-06-08
 
 ### Changed
 
@@ -368,7 +376,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.14.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.0...HEAD
+[2.15.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.11.0...v2.12.0

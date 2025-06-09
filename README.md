@@ -18,7 +18,7 @@
 - **Custom Templates** - Create your own reusable file templates and snippets
 - **Modern Development** - Built-in support for Angular's new Signals, Effects & Reactivity
 
-- [![Watch the demo](https://img.youtube.com/vi/4UW8UQly4v0/maxresdefault.jpg)](https://youtu.be/4UW8UQly4v0?feature=shared)
+[![Watch the demo](https://img.youtube.com/vi/4UW8UQly4v0/maxresdefault.jpg)](https://youtu.be/4UW8UQly4v0?feature=shared)
 
 ## Table of Contents
 

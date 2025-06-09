@@ -15,6 +15,9 @@ import {
   showError,
   showMessage,
   titleize,
+  validateClassName,
+  validateEntityName,
+  validateFolderName,
 } from '../helpers';
 
 /**
@@ -79,12 +82,7 @@ export class FileController {
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -100,14 +98,7 @@ export class FileController {
     const className = await getName(
       l10n.t('Enter the class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -120,12 +111,7 @@ export class FileController {
     let type = await getName(
       l10n.t('Enter the type name'),
       l10n.t('E.g. class, dto, entity, model...'),
-      (type: string) => {
-        if (!/[a-z]+/.test(type)) {
-          return l10n.t('Invalid format!');
-        }
-        return;
-      },
+      validateEntityName,
     );
 
     if (!type) {
@@ -175,12 +161,7 @@ export class FileController {
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -196,14 +177,7 @@ export class FileController {
     const className = await getName(
       l10n.t('Enter the component class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -276,12 +250,7 @@ export class ${className}${omitSuffix ? '' : 'Component'} {}
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -297,14 +266,7 @@ export class ${className}${omitSuffix ? '' : 'Component'} {}
     const className = await getName(
       l10n.t('Enter the directive class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -359,12 +321,7 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -380,14 +337,7 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
     const className = await getName(
       l10n.t('Enter the enum class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -436,12 +386,7 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -541,12 +486,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -562,14 +502,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
     const className = await getName(
       l10n.t('Enter the interceptor class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -634,12 +567,7 @@ export class ${className}Interceptor implements HttpInterceptor {
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -655,14 +583,7 @@ export class ${className}Interceptor implements HttpInterceptor {
     const className = await getName(
       l10n.t('Enter the interface class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -675,12 +596,7 @@ export class ${className}Interceptor implements HttpInterceptor {
     let type = await getName(
       l10n.t('Enter the interface type name'),
       l10n.t('E.g. interface, dto, entity, model...'),
-      (type: string) => {
-        if (!/[a-z]+/.test(type)) {
-          return l10n.t('Invalid format!');
-        }
-        return;
-      },
+      validateEntityName,
     );
 
     if (!type) {
@@ -730,12 +646,7 @@ export class ${className}Interceptor implements HttpInterceptor {
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -751,14 +662,7 @@ export class ${className}Interceptor implements HttpInterceptor {
     const className = await getName(
       l10n.t('Enter the module class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -813,12 +717,7 @@ export class ${className}Module {}
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -834,14 +733,7 @@ export class ${className}Module {}
     const className = await getName(
       l10n.t('Enter the pipe class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -898,12 +790,7 @@ export class ${className}Pipe implements PipeTransform {
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -919,14 +806,7 @@ export class ${className}Pipe implements PipeTransform {
     const className = await getName(
       l10n.t('Enter the resolver class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -993,12 +873,7 @@ export class ${className}Resolver implements Resolve<boolean> {
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -1014,14 +889,7 @@ export class ${className}Resolver implements Resolve<boolean> {
     const className = await getName(
       l10n.t('Enter the service class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -1076,12 +944,7 @@ export class ${className}${omitSuffix ? '' : 'Service'} {}
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
@@ -1097,14 +960,7 @@ export class ${className}${omitSuffix ? '' : 'Service'} {}
     const className = await getName(
       l10n.t('Enter the test class name'),
       l10n.t('E.g. User, Role, Auth...'),
-      (name: string) => {
-        if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(name)) {
-          return l10n.t(
-            'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
-          );
-        }
-        return;
-      },
+      validateClassName,
     );
 
     if (!className) {
@@ -1214,12 +1070,7 @@ describe('${className}${titleize(type)}', () => {
         l10n.t('Enter the folder name'),
         l10n.t('Folder name. E.g. src, app...'),
         folderPath,
-        (path: string) => {
-          if (!/^(?!\/)[^\sÀ-ÿ]+?$/.test(path)) {
-            return l10n.t('The folder name must be a valid name');
-          }
-          return;
-        },
+        validateFolderName,
       );
 
       if (!folder) {
