@@ -64,7 +64,11 @@ export class TerminalController {
       'analytics disable',
       'ng analytics disable',
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to disable analytics. Please try again.'));
     }
@@ -87,7 +91,11 @@ export class TerminalController {
       'analytics enable',
       'ng analytics enable',
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to enable analytics. Please try again.'));
     }
@@ -110,7 +118,11 @@ export class TerminalController {
       'analytics info',
       'ng analytics info',
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(
         l10n.t('Failed to get analytics information. Please try again.'),
@@ -135,7 +147,11 @@ export class TerminalController {
       'analytics prompt',
       'ng analytics prompt',
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to prompt for analytics. Please try again.'));
     }
@@ -158,7 +174,11 @@ export class TerminalController {
       'cache clean',
       'ng cache clean',
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to clear cache. Please try again.'));
     }
@@ -181,7 +201,11 @@ export class TerminalController {
       'cache disable',
       'ng cache disable',
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to disable cache. Please try again.'));
     }
@@ -204,7 +228,11 @@ export class TerminalController {
       'cache enable',
       'ng cache enable',
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to enable cache. Please try again.'));
     }
@@ -227,7 +255,11 @@ export class TerminalController {
       'cache info',
       'ng cache info',
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to get cache information. Please try again.'));
     }
@@ -402,7 +434,11 @@ export class TerminalController {
       'new application',
       command,
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to create new application. Please try again.'));
     }
@@ -653,7 +689,11 @@ export class TerminalController {
       'generate component',
       command,
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to generate component. Please try again.'));
     }
@@ -672,7 +712,15 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async e2e(): Promise<void> {
-    const result = await runCommand('e2e', 'ng e', this.config.cwd);
+    const result = await runCommand(
+      'e2e',
+      'ng e',
+      this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
+    );
+
     if (!result.success) {
       showError(l10n.t('Failed to run end-to-end tests. Please try again.'));
     }
@@ -695,7 +743,11 @@ export class TerminalController {
       'generate environments',
       'ng g environments',
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to generate environments. Please try again.'));
     }
@@ -830,7 +882,15 @@ export class TerminalController {
         : '') +
       (extras ? ' ' + extras.join(' ') : '');
 
-    const result = await runCommand('generate guard', command, this.config.cwd);
+    const result = await runCommand(
+      'generate guard',
+      command,
+      this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
+    );
+
     if (!result.success) {
       showError(l10n.t('Failed to generate guard. Please try again.'));
     }
@@ -954,7 +1014,11 @@ export class TerminalController {
       'generate library',
       command,
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to generate library. Please try again.'));
     }
@@ -1096,7 +1160,15 @@ export class TerminalController {
         : '') +
       (extras ? ' ' + extras.join(' ') : '');
 
-    const result = await runCommand('generate pipe', command, this.config.cwd);
+    const result = await runCommand(
+      'generate pipe',
+      command,
+      this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
+    );
+
     if (!result.success) {
       showError(l10n.t('Failed to generate pipe. Please try again.'));
     }
@@ -1115,7 +1187,16 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async start(): Promise<void> {
-    await runCommand('start', 'ng s', this.config.cwd, true, false);
+    // Use waitResponse instead of captureOutput to avoid blocking the main thread
+    // This is critical for long-running processes like the Angular dev server
+    await runCommand(
+      'start',
+      'ng s',
+      this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
+    );
   }
 
   /**
@@ -1233,7 +1314,11 @@ export class TerminalController {
       'generate service',
       command,
       this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
     );
+
     if (!result.success) {
       showError(l10n.t('Failed to generate service. Please try again.'));
     }
@@ -1252,7 +1337,15 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async test(): Promise<void> {
-    const result = await runCommand('test', 'ng t', this.config.cwd);
+    const result = await runCommand(
+      'test',
+      'ng t',
+      this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
+    );
+
     if (!result.success) {
       showError(l10n.t('Failed to run tests. Please try again.'));
     }
@@ -1271,7 +1364,15 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async version(): Promise<void> {
-    const result = await runCommand('version', 'ng v', this.config.cwd);
+    const result = await runCommand(
+      'version',
+      'ng v',
+      this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
+    );
+
     if (!result.success) {
       showError(l10n.t('Failed to display version. Please try again.'));
     }
@@ -1366,6 +1467,17 @@ export class TerminalController {
     // Build and run final command
     const command = `${option.description} ${folder} ${processedArgs}`.trim();
 
-    runCommand('generate custom element', command, this.config.cwd);
+    const result = await runCommand(
+      'generate custom element',
+      command,
+      this.config.cwd,
+      false, // captureOutput=false
+      true, // showTerminal=true
+      true, // waitResponse=true
+    );
+
+    if (!result.success) {
+      showError(l10n.t('Failed to generate custom element. Please try again.'));
+    }
   }
 }

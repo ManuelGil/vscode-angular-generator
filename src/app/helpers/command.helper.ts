@@ -4,6 +4,7 @@ import {
   ProgressLocation,
   ShellExecution,
   Task,
+  TaskPanelKind,
   TaskRevealKind,
   TaskScope,
   Uri,
@@ -12,7 +13,6 @@ import {
   window,
   workspace,
 } from 'vscode';
-import { showError } from './dialog.helper';
 
 /**
  * Execute a shell command inside VS Code.
@@ -24,9 +24,9 @@ import { showError } from './dialog.helper';
  * @param {string} name - Name of the terminal
  * @param {string} command - Command to run
  * @param {string} [cwdPath] - Working directory path
- * @param {boolean} [captureOutput=true] - Whether to capture command output
+ * @param {boolean} [captureOutput=false] - Whether to capture command output
  * @param {boolean} [showTerminal=true] - Whether to show the terminal
- * @param {boolean} [waitResponse=true] - Whether to wait for response without blocking main thread
+ * @param {boolean} [waitResponse=false] - Whether to wait for response without blocking main thread
  * @example
  * runCommand('echo', 'echo "Hello, World!"');
  * // Wait for response asynchronously
@@ -45,9 +45,9 @@ export const runCommand = async (
   name: string,
   command: string,
   cwdPath?: string,
-  captureOutput: boolean = true,
+  captureOutput: boolean = false,
   showTerminal: boolean = true,
-  waitResponse: boolean = true,
+  waitResponse: boolean = false,
 ): Promise<{ success: boolean; output?: string; error?: string }> => {
   // Determine a valid workspace URI for cwd (or undefined)
   const cwdUri = cwdPath ? Uri.file(cwdPath) : undefined;
@@ -71,7 +71,7 @@ export const runCommand = async (
 
         // Register cancellation handler
         const disposable = token.onCancellationRequested(() => {
-          showError(l10n.t('Command cancelled: {0}', command));
+          window.showErrorMessage(l10n.t('Command cancelled: {0}', command));
           terminal.dispose();
         });
 
@@ -92,17 +92,22 @@ export const runCommand = async (
         : TaskScope.Global;
 
       const task = new Task(
-        { type: 'shell', command },
+        { type: 'shell' },
         taskScope,
         name,
-        'extension',
+        'Angular CLI',
         shellExec,
       );
 
       // Control terminal presentation
       task.presentationOptions = {
         reveal: showTerminal ? TaskRevealKind.Always : TaskRevealKind.Never,
-        clear: true, // Clear terminal before execution
+        echo: false,
+        focus: false,
+        // Ensure we don't interfere with controller error messages
+        panel: TaskPanelKind.Shared, // Using proper TaskPanelKind enum
+        showReuseMessage: false,
+        clear: false,
       };
 
       // Determine if we're using the non-blocking mode with waitResponse
@@ -117,12 +122,13 @@ export const runCommand = async (
         const resultEmitter = new EventEmitter<CommandResultEvent>();
 
         // Create a custom task to monitor the execution
+        const monitorShellExec = new ShellExecution(command, { cwd: cwdPath });
         const waitTask = new Task(
-          { type: 'shell', command: 'echo "Command execution completed"' },
+          { type: 'shell', command },
           TaskScope.Global,
           `${name}-monitor`,
           'extension',
-          shellExec,
+          monitorShellExec,
         );
 
         waitTask.presentationOptions = {
@@ -130,8 +136,24 @@ export const runCommand = async (
           clear: false,
         };
 
+        // Handle cancellation
+        const cancelDisposable = token.onCancellationRequested(() => {
+          window.showErrorMessage(l10n.t('Command cancelled: {0}', command));
+          terminal.dispose();
+          resultEmitter.fire({ success: false, error: 'Cancelled by user' });
+        });
+
         // Start a background monitoring process that doesn't block the UI
         setTimeout(async () => {
+          // Check if the operation was cancelled before we start
+          if (token.isCancellationRequested) {
+            resultEmitter.fire({
+              success: false,
+              error: 'Cancelled by user before execution',
+            });
+            return;
+          }
+
           if (showTerminal) {
             terminal.show();
           }
@@ -141,30 +163,64 @@ export const runCommand = async (
           try {
             const exec = await tasks.executeTask(waitTask);
 
+            // Variable to prevent duplicate emissions
+            let hasEmitted = false;
+
             // Monitor for completion
             const disposable = tasks.onDidEndTaskProcess((e) => {
-              if (e.execution === exec) {
+              if (e.execution === exec && !hasEmitted) {
+                hasEmitted = true;
+                const isSuccess = e.exitCode === 0;
+                const errorMsg = !isSuccess
+                  ? `Command '${command}' exited with code ${e.exitCode}`
+                  : undefined;
+
                 resultEmitter.fire({
-                  success: e.exitCode === 0,
-                  error:
-                    e.exitCode !== 0
-                      ? `Exited with code ${e.exitCode}`
-                      : undefined,
+                  success: isSuccess,
+                  error: errorMsg,
+                  output: isSuccess
+                    ? `Command '${command}' executed successfully`
+                    : undefined,
                 });
                 disposable.dispose();
               }
             });
+
+            // Additional safeguard - add task termination handler
+            tasks.onDidEndTask((e) => {
+              if (e.execution === exec && !hasEmitted) {
+                hasEmitted = true;
+                // Task ended but process handler didn't fire - this is a safety net
+                resultEmitter.fire({
+                  success: true,
+                  output: `Command '${command}' task completed`,
+                });
+              }
+            });
           } catch (err) {
+            const errorMsg = err instanceof Error ? err.message : String(err);
             resultEmitter.fire({
               success: false,
-              error: err instanceof Error ? err.message : String(err),
+              error: errorMsg,
             });
+
+            // Ensure we clean up the terminal on error
+            try {
+              terminal.dispose();
+            } catch (disposeError) {
+              // Ignore errors during cleanup
+            }
           }
         }, 100);
 
         // Return a promise that resolves when the command completes
         return new Promise<CommandResultEvent>((resolve) => {
-          resultEmitter.event((result) => {
+          // Proper way to subscribe to a one-time event
+          const disposable = resultEmitter.event((result) => {
+            // Clean up event listener
+            disposable.dispose();
+            // Clean up cancellation handler
+            cancelDisposable.dispose();
             resolve(result);
           });
         });
@@ -183,7 +239,7 @@ export const runCommand = async (
         // Handle cancellation
         disposables.push(
           token.onCancellationRequested(() => {
-            showError(l10n.t('Command cancelled: {0}', command));
+            window.showErrorMessage(l10n.t('Command cancelled: {0}', command));
             cleanupDisposables();
             resolve({ success: false, error: 'Cancelled by user' });
           }),
@@ -193,13 +249,16 @@ export const runCommand = async (
         disposables.push(
           tasks.onDidEndTaskProcess((e) => {
             if (e.execution === exec) {
-              if (e.exitCode === 0) {
-                resolve({ success: true });
+              const isSuccess = e.exitCode === 0;
+              if (isSuccess) {
+                resolve({
+                  success: true,
+                  output: `Command '${command}' executed successfully`,
+                });
               } else {
-                const errMsg = `Exited with code ${e.exitCode}`;
-                showError(
-                  l10n.t('Command failed: {0}\n\n{1}', command, errMsg),
-                );
+                // Capture error message without showing it automatically
+                // This allows the controller to show its own custom message
+                const errMsg = `Command '${command}' exited with code ${e.exitCode}`;
                 resolve({ success: false, error: errMsg });
               }
               // Clean up all disposables
@@ -215,7 +274,16 @@ export const runCommand = async (
          * @private
          */
         function cleanupDisposables() {
-          disposables.forEach((d) => d.dispose());
+          // Safely dispose of all resources
+          disposables.forEach((d) => {
+            try {
+              d.dispose();
+            } catch (error) {
+              // Silently handle disposal errors to ensure all resources are cleaned up
+            }
+          });
+          // Clear the array to help garbage collection
+          disposables.length = 0;
         }
 
         // Kick off the task

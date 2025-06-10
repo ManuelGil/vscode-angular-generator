@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator",
   "description": "⚡ Supercharge your Angular development with intuitive and rapid file generation. Create components, services, modules, and more with just a few clicks - compatible with Angular 16-20. Boost your productivity with custom templates, integrated terminal commands, and multilingual support.",
-  "version": "2.15.0",
+  "version": "2.15.1",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",

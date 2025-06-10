@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.15.1] - 2025-06-09
+
+### Fixed
+
+- Improve `command.helper.ts` with enhanced error handling and resource management
+
 ## [2.15.0] - 2025-06-09
 
 ### Added
@@ -376,7 +382,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.1...HEAD
+[2.15.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.0...v2.15.1
 [2.15.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.12.0...v2.13.0
