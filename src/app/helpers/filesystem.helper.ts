@@ -48,18 +48,15 @@ export const directoryMap = async (
 /**
  * Writes data to the file specified in the path. If the file does not exist then the function will create it.
  *
- * @param {string} path - Path to the file
+ * @param {string} directoryPath - Path to the directory
  * @param {string} filename - Name of the file
- * @param {string} data - Data to write to the file
- * @example
- * await saveFile('src', 'file.ts', 'console.log("Hello World")');
- *
+ * @param {string} fileContent - Data to write to the file
  * @returns {Promise<void>} - Confirmation of the write operation
  */
 export const saveFile = async (
-  path: string,
+  directoryPath: string,
   filename: string,
-  data: string,
+  fileContent: string,
 ): Promise<void> => {
   let folder: string = '';
 
@@ -71,7 +68,7 @@ export const saveFile = async (
     return;
   }
 
-  const dirUri = Uri.joinPath(Uri.file(folder), path);
+  const dirUri = Uri.joinPath(Uri.file(folder), directoryPath);
   const fileUri = Uri.joinPath(dirUri, filename);
 
   await window.withProgress(
@@ -104,7 +101,7 @@ export const saveFile = async (
           return;
         }
 
-        const encoded = Buffer.from(data, 'utf8');
+        const encoded = Buffer.from(fileContent, 'utf8');
         await workspace.fs.writeFile(fileUri, encoded);
 
         const document = await workspace.openTextDocument(fileUri);

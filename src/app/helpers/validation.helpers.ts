@@ -21,18 +21,19 @@ export const FOLDER_NAME_VALIDATION_MESSAGE =
 export const CLASS_NAME_PATTERN = /^[A-Z][A-Za-z0-9]{2,}$/;
 
 /**
- * Message for class name validation errors
+ * Error message for invalid class names.
  */
-export const CLASS_NAME_VALIDATION_MESSAGE =
+export const INVALID_CLASS_NAME_MESSAGE =
   'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).';
 
 /**
- * Regular expression pattern for validating entity names
+ * Regular expression pattern for validating entity names.
+ * Ensures entity names are in camelCase and have at least 1 character.
  */
 export const ENTITY_NAME_PATTERN = /^[a-z][A-Za-z0-9-]+$/;
 
 /**
- * Message for entity name validation errors
+ * Error message for invalid entity names.
  */
 export const ENTITY_NAME_VALIDATION_MESSAGE =
   'Invalid format! Entity names MUST be declared in camelCase and have at least 1 character (e.g. user, authService).';
@@ -70,16 +71,16 @@ export function validateFolderName(path: string): string | undefined {
  */
 export function validateClassName(name: string): string | undefined {
   if (!CLASS_NAME_PATTERN.test(name)) {
-    return l10n.t(CLASS_NAME_VALIDATION_MESSAGE);
+    return l10n.t(INVALID_CLASS_NAME_MESSAGE);
   }
   return;
 }
 
 /**
- * Validates an entity name using the centralized entity name pattern
+ * Validates an entity name using the centralized entity name pattern.
  *
- * @param name - The entity name to validate
- * @returns A validation error message if invalid, undefined if valid
+ * @param name - The entity name to validate.
+ * @returns A validation error message if invalid, undefined if valid.
  */
 export function validateEntityName(name: string): string | undefined {
   if (!ENTITY_NAME_PATTERN.test(name)) {

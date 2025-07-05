@@ -51,14 +51,12 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
 
   // Public properties
   /**
-   * The onDidChangeTreeData event.
-   * @type {Event<NodeModel | undefined | null | void>}
-   * @public
-   * @memberof ListModulesProvider
-   * @example
-   * readonly onDidChangeTreeData: Event<Node | undefined | null | void>;
-   * this.onDidChangeTreeData = this._onDidChangeTreeData.event;
+   * Event that signals when the module tree data has changed.
+   * Used by VSCode to refresh the explorer view when modules are added, removed, or updated.
    *
+   * @public
+   * @readonly
+   * @type {Event<NodeModel | undefined | null | void>}
    * @see https://code.visualstudio.com/api/references/vscode-api#Event
    */
   readonly onDidChangeTreeData: Event<NodeModel | undefined | null | void>;
@@ -68,11 +66,11 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
   // -----------------------------------------------------------------
 
   /**
-   * Constructor for the ListModulesProvider class
+   * Creates an instance of ListModulesProvider for the VSCode explorer tree.
+   * Associates the provider with a ListFilesController to manage file discovery and navigation.
    *
-   * @constructor
+   * @param {ListFilesController} controller - The controller responsible for listing files in the workspace.
    * @public
-   * @memberof ListModulesProvider
    */
   constructor() {
     this._onDidChangeTreeData = new EventEmitter<
@@ -87,36 +85,24 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
 
   // Public methods
   /**
-   * Returns the tree item for the supplied element.
+   * Returns the TreeItem representation for a given NodeModel element.
+   * Used by VSCode to render nodes in the explorer tree.
    *
-   * @function getTreeItem
-   * @param {NodeModel} element - The element
+   * @param {NodeModel} element - The node model representing a file or section.
+   * @returns {TreeItem} The corresponding TreeItem for the VSCode explorer.
    * @public
-   * @memberof ListModulesProvider
-   * @example
-   * const treeItem = provider.getTreeItem(element);
-   *
-   * @returns {TreeItem | Thenable<TreeItem>} - The tree item
-   *
-   * @see https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider
    */
   getTreeItem(element: NodeModel): TreeItem | Thenable<TreeItem> {
     return element;
   }
 
   /**
-   * Returns the children for the supplied element.
+   * Returns the child nodes for a given module node or root.
+   * If no element is provided, returns the top-level module nodes; otherwise, returns children for the given node.
    *
-   * @function getChildren
-   * @param {NodeModel} [element] - The element
+   * @param {NodeModel} [element] - The parent node to retrieve children for.
+   * @returns {ProviderResult<NodeModel[]>} Array of child NodeModel elements or undefined if none.
    * @public
-   * @memberof ListModulesProvider
-   * @example
-   * const children = provider.getChildren(element);
-   *
-   * @returns {ProviderResult<NodeModel[]>} - The children
-   *
-   * @see https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider
    */
   getChildren(element?: NodeModel): ProviderResult<NodeModel[]> {
     if (element) {
@@ -143,15 +129,13 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
 
   // Private methods
   /**
-   * Returns the list of files.
+   * Retrieves all Angular module files in the workspace and parses their structure.
+   * Filters files ending with 'module.ts' and scans for key sections (declarations, exports, imports, bootstrap, providers).
    *
-   * @function getListModules
    * @private
-   * @memberof ListModulesProvider
+   * @returns {Promise<NodeModel[] | undefined>} Array of NodeModel representing Angular module sections, or undefined if none found.
    * @example
-   * const files = provider.getListModules();
-   *
-   * @returns {Promise<NodeModel[] | undefined>} - The list of files
+   * const modules = await provider.getListModules();
    */
   private async getListModules(): Promise<NodeModel[] | undefined> {
     const files = await ListFilesController.getFiles();
@@ -160,7 +144,6 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
       return;
     }
 
-    // List of Modules
     const nodes = files.filter((file) =>
       file.label.toString().includes('module.ts'),
     );

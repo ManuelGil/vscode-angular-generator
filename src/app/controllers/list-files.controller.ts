@@ -14,14 +14,12 @@ import { directoryMap, getRelativePath } from '../helpers';
 import { NodeModel } from '../models';
 
 /**
- * The ListFilesController class.
+ * Controller for listing and navigating Angular files in the workspace.
+ * ListFilesController manages navigation and display of files and folders in the workspace.
+ * All public methods and properties are documented with JSDoc for clarity and maintainability.
  *
- * @class
- * @classdesc The class that represents the list files controller.
- * @export
- * @public
- * @example
- * const controller = new ListFilesController();
+ * @class ListFilesController
+ * @module controllers/list-files.controller
  */
 export class ListFilesController {
   // -----------------------------------------------------------------
@@ -62,17 +60,9 @@ export class ListFilesController {
 
   // Public methods
   /**
-   * The getFiles method.
-   *
-   * @function getFiles
-   * @param {number} maxResults - The maximum number of results
-   * @public
-   * @async
-   * @memberof ListFilesController
-   * @example
-   * controller.getFiles();
-   *
-   * @returns {Promise<NodeModel[] | void>} - The list of files
+   * Returns a list of files in the workspace as NodeModel objects.
+   * @param maxResults Maximum number of results to return.
+   * @returns Promise resolved with an array of NodeModel or void if none found.
    */
   static async getFiles(
     maxResults: number = Number.MAX_SAFE_INTEGER,
@@ -123,16 +113,8 @@ export class ListFilesController {
   }
 
   /**
-   * The openFile method.
-   *
-   * @function openFile
-   * @param {Uri} uri - The file URI
-   * @public
-   * @memberof ListFilesController
-   * @example
-   * controller.openFile('file:///path/to/file');
-   *
-   * @returns {Promise<void>} - The promise
+   * Opens the specified file in the VSCode editor.
+   * @param uri File Uri to open.
    */
   openFile(uri: Uri) {
     workspace.openTextDocument(uri).then((filename) => {
@@ -141,17 +123,9 @@ export class ListFilesController {
   }
 
   /**
-   * The gotoLine method.
-   *
-   * @function gotoLine
-   * @param {Uri} uri - The file URI
-   * @param {number} line - The line number
-   * @public
-   * @memberof ListFilesController
-   * @example
-   * controller.gotoLine('file:///path/to/file', 1);
-   *
-   * @returns {void} - The promise
+   * Opens the specified file and moves the cursor to the given line.
+   * @param uri File Uri to open.
+   * @param line Line number to navigate to.
    */
   gotoLine(uri: Uri, line: number) {
     workspace.openTextDocument(uri).then((document) => {

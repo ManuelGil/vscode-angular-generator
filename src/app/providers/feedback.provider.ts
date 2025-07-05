@@ -107,17 +107,8 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
 
   /**
    * Returns the children for the supplied element.
-   *
-   * @function getChildren
-   * @param {NodeModel} [element] - The element
-   * @public
-   * @memberof FeedbackProvider
-   * @example
-   * const children = provider.getChildren(element);
-   *
-   * @returns {ProviderResult<NodeModel[]>} - The children
-   *
-   * @see https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider
+   * @param {NodeModel} [element] - The element.
+   * @returns {ProviderResult<NodeModel[]>} - The children.
    */
   getChildren(element?: NodeModel): ProviderResult<NodeModel[]> {
     if (element) {

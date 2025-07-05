@@ -21,15 +21,11 @@ import {
 } from '../helpers';
 
 /**
- * The FileController class.
+ * FileController handles file generation and management for Angular elements.
+ * All public methods are documented with JSDoc for clarity and maintainability.
  *
- * @class
- * @classdesc The class that represents the example controller.
- * @export
- * @public
- * @property {Config} config - The configuration
- * @example
- * const controller = new FileController(config);
+ * @class FileController
+ * @module controllers/file.controller
  */
 export class FileController {
   // -----------------------------------------------------------------
@@ -52,17 +48,9 @@ export class FileController {
 
   // Public methods
   /**
-   * Creates a new class.
-   *
-   * @function generateClass
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateClass();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new class file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateClass(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -131,17 +119,9 @@ export class FileController {
   }
 
   /**
-   * Creates a new component.
-   *
-   * @function generateComponent
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateComponent();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new Angular component file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateComponent(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -220,17 +200,9 @@ export class ${className}${omitSuffix ? '' : 'Component'} {}
   }
 
   /**
-   * Creates a new directive.
-   *
-   * @function generateDirective
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateDirective();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new Angular directive file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateDirective(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -291,17 +263,9 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
   }
 
   /**
-   * Creates a new enum.
-   *
-   * @function generateEnum
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateEnum();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new TypeScript enum file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateEnum(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -356,17 +320,9 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
   }
 
   /**
-   * Creates a new guard.
-   *
-   * @function generateGuard
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateGuard();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new Angular guard file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateGuard(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -456,17 +412,9 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
   }
 
   /**
-   * Creates a new interceptor.
-   *
-   * @function generateInterceptor
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateInterceptor();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new Angular interceptor file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateInterceptor(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -537,17 +485,9 @@ export class ${className}Interceptor implements HttpInterceptor {
   }
 
   /**
-   * Creates a new interface.
-   *
-   * @function generateInterface
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateInterface();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new interface file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateInterface(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -616,17 +556,9 @@ export class ${className}Interceptor implements HttpInterceptor {
   }
 
   /**
-   * Creates a new module.
-   *
-   * @function generateModule
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateModule();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new Angular module file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateModule(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -687,17 +619,9 @@ export class ${className}Module {}
   }
 
   /**
-   * Creates a new pipe.
-   *
-   * @function generatePipe
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generatePipe();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new Angular pipe file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generatePipe(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -760,17 +684,9 @@ export class ${className}Pipe implements PipeTransform {
   }
 
   /**
-   * Creates a new resolver.
-   *
-   * @function generateResolver
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateResolver();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new Angular resolver file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateResolver(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -843,17 +759,9 @@ export class ${className}Resolver implements Resolve<boolean> {
   }
 
   /**
-   * Creates a new service.
-   *
-   * @function generateService
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateService();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new Angular service file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateService(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -914,17 +822,9 @@ export class ${className}${omitSuffix ? '' : 'Service'} {}
   }
 
   /**
-   * Creates a new test.
-   *
-   * @function generateTest
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateTest();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new Angular test (spec) file based on user input.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateTest(path?: Uri): Promise<void> {
     // Check if the path is a file
@@ -1042,17 +942,9 @@ describe('${className}${titleize(type)}', () => {
   }
 
   /**
-   * Creates a new custom element.
-   *
-   * @function generateCustomElement
-   * @param {Uri} [path] - The path to the folder
-   * @public
-   * @async
-   * @memberof FileController
-   * @example
-   * generateCustomElement();
-   *
-   * @returns {Promise<void>} - The result of the operation
+   * Generates a new custom element file based on user input and selected template.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the file is created or operation is cancelled.
    */
   async generateCustomElement(path?: Uri): Promise<void> {
     // Determine target folder

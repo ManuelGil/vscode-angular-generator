@@ -35,12 +35,6 @@ export const getPath = async (
  * @param {string} prompt - The prompt to display
  * @param {string} placeHolder - The input placeholder
  * @param {string} validate - The validation function
- * @example
- * const name = await getName('Enter a name', 'foo', (name) => {
- *   if (name.length === 0) {
- *     return 'Name cannot be empty';
- * });
- *
  * @returns {Promise<string | undefined>} - The selected name
  */
 export const getName = async (
@@ -75,7 +69,8 @@ export const pickItem = async (
 };
 
 /**
- * Enhanced item with icon and description for QuickPick
+ * Enhanced QuickPick item with icon and description for richer VSCode prompts.
+ * Used to provide additional context in selection dialogs.
  */
 interface EnhancedQuickPickItem extends QuickPickItem {
   value: string;

@@ -17,13 +17,9 @@ import {
 } from './constants';
 
 /**
- * The Config class.
- *
- * @class
- * @classdesc The class that represents the configuration of the extension.
- * @export
- * @public
- * @property {WorkspaceConfiguration} config - The workspace configuration
+ * Configuration settings and utilities for the Angular VSCode extension.
+ * Provides a single source of truth for extension configuration, used throughout the codebase.
+ * All exported constants, functions, and classes are documented with JSDoc for clarity and maintainability.
  * @property {string} style - The style file extension
  * @property {boolean} standalone - The standalone option
  * @property {string[]} include - The files to include

@@ -20,12 +20,6 @@ import { NodeModel } from '../models';
  * @export
  * @public
  * @implements {TreeDataProvider<NodeModel>}
- * @property {EventEmitter<NodeModel | undefined | null | void>} _onDidChangeTreeData - The onDidChangeTreeData event emitter
- * @property {Event<NodeModel | undefined | null | void>} onDidChangeTreeData - The onDidChangeTreeData event
- * @property {ListFilesController} controller - The list of files controller
- * @example
- * const provider = new ListRoutesProvider();
- *
  * @see https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider
  */
 export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
@@ -35,15 +29,10 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
 
   // Private properties
   /**
-   * The onDidChangeTreeData event emitter.
-   * @type {EventEmitter<NodeModel | undefined | null | void>}
-   * @private
-   * @memberof ListRoutesProvider
-   * @example
-   * this._onDidChangeTreeData = new EventEmitter<Node | undefined | null | void>();
-   * this.onDidChangeTreeData = this._onDidChangeTreeData.event;
+   * Event emitter for tree data changes.
    *
-   * @see https://code.visualstudio.com/api/references/vscode-api#EventEmitter
+   * @private
+   * @type {EventEmitter<NodeModel | undefined | null | void>}
    */
   private _onDidChangeTreeData: EventEmitter<
     NodeModel | undefined | null | void
@@ -51,6 +40,9 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
 
   // Public properties
   /**
+   * Event for tree data changes.
+   *
+   * @public
    * The onDidChangeTreeData event.
    * @type {Event<NodeModel | undefined | null | void>}
    * @public

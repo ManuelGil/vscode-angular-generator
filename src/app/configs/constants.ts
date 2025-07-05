@@ -1,5 +1,10 @@
 /**
- * EXTENSION_ID: The unique identifier of the extension.
+ * Constants used throughout the Angular VSCode extension.
+ * All exported constants are documented with JSDoc for clarity and maintainability.
+ */
+
+/**
+ * Unique identifier of the extension.
  * @type {string}
  * @public
  * @memberof Constants
@@ -11,50 +16,38 @@
 export const EXTENSION_ID: string = 'angular';
 
 /**
- * EXTENSION_NAME: The repository ID of the extension.
+ * Repository ID of the extension (used for publishing and identification).
  * @type {string}
  * @public
- * @memberof Constants
  * @example
- * console.log(EXTENSION_NAME);
- *
- * @returns {string} - The repository ID of the extension
+ * console.log(EXTENSION_NAME); // vscode-angular-generator
  */
 export const EXTENSION_NAME: string = 'vscode-angular-generator';
 
 /**
- * EXTENSION_DISPLAY_NAME: The name of the extension.
+ * Human-readable name of the extension (shown in VSCode marketplace and UI).
  * @type {string}
  * @public
- * @memberof Constants
  * @example
- * console.log(EXTENSION_DISPLAY_NAME);
- *
- * @returns {string} - The name of the extension
+ * console.log(EXTENSION_DISPLAY_NAME); // Angular File Generator
  */
 export const EXTENSION_DISPLAY_NAME: string = 'Angular File Generator';
 
 /**
- * USER_NAME: The githubUsername of the extension.
+ * GitHub username of the extension maintainer or author.
  * @type {string}
  * @public
- * @memberof Constants
  * @example
- * console.log(USER_NAME);
- *
- * @returns {string} - The githubUsername of the extension
+ * console.log(USER_NAME); // ManuelGil
  */
 export const USER_NAME: string = 'ManuelGil';
 
 /**
- * USER_PUBLISHER: The publisher of the extension.
+ * Publisher of the extension in the VSCode marketplace.
+ * Used for publishing and marketplace identification.
  * @type {string}
- * @public
- * @memberof Constants
  * @example
- * console.log(USER_PUBLISHER);
- *
- * @returns {string} - The publisher of the extension
+ * console.log(USER_PUBLISHER); // 'imgildev'
  */
 export const USER_PUBLISHER: string = 'imgildev';
 

@@ -8,16 +8,14 @@ import {
 } from 'vscode';
 
 /**
- * The Node class
+ * NodeModel represents a file or folder in the workspace tree.
+ * Used for navigation, display, and file operations in the extension.
+ * All properties and methods are documented with JSDoc for clarity.
  *
  * @class
- * @classdesc The class that represents a node in the tree view.
+ * @extends {TreeItem}
  * @export
  * @public
- * @extends {TreeItem}
- * @property {string | TreeItemLabel} label - The label
- * @property {string | Uri | { light: string | Uri; dark: string | Uri } | ThemeIcon} [iconPath] - The icon path
- * @property {Command} [command] - The command
  * @property {Uri} [resourceUri] - The resource URI
  * @property {string} [contextValue] - The context value
  * @property {Node[]} [children] - The children

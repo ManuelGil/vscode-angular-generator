@@ -7,24 +7,51 @@
 [![GitHub Repo stars](https://img.shields.io/github/stars/ManuelGil/vscode-angular-generator?style=for-the-badge&logo=github)](https://github.com/ManuelGil/vscode-angular-generator)
 [![GitHub license](https://img.shields.io/github/license/ManuelGil/vscode-angular-generator?style=for-the-badge&logo=github)](https://github.com/ManuelGil/vscode-angular-generator/blob/main/LICENSE)
 
-## Supercharge Your Angular Development
+**The fastest way to generate Angular files, right from your editor.**
 
-> _**Speed up your workflow with a single click!** Angular File Generator integrates Angular CLI seamlessly into any VSCode-based editor, eliminating nested menus and boosting productivity. From Angular 9 to Angular 20+, create files, navigate code, and transform components instantly. Save time. Write better code. Ship faster._
+Stop memorizing CLI commands and switching contexts. This extension integrates the Angular CLI into the VSCode UI, letting you scaffold components, services, and modules with a simple right-click.
 
-### Key Benefits
+<p align="center">
+  <a href="https://youtu.be/4UW8UQly4v0" title="Watch the Angular File Generator demo">
+      <img src="https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/demo.gif" alt="Angular File Generator Demo">
+  </a>
+</p
 
-- **Time-Saving** - Generate components, services, modules with just one click
-- **Clean Workspace** - Navigate your Angular project with specialized sidebar views
-- **Custom Templates** - Create your own reusable file templates and snippets
-- **Modern Development** - Built-in support for Angular's new Signals, Effects & Reactivity
+---
 
-[![Watch the demo](https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/thumbnail.png)](https://youtu.be/4UW8UQly4v0)
+## Why You'll Love It
+
+- **Save Time on Every Feature:** Generate boilerplate for components, services, and more in seconds.
+- **Enforce Code Consistency:** Keep your project clean with standardized file structures and your own custom templates.
+- **Eliminate CLI Errors:** A guided UI helps you avoid typos and forgotten flags in `ng generate` commands.
+- **Stay Focused:** Never leave your editor to scaffold new parts of your application.
+- **Modern Angular Ready:** Full support for Standalone Components, Signals, and the latest Angular features.
+
+## A Better Workflow: UI vs. CLI
+
+Here's how much simpler it is to create a new component:
+
+### The Old Way (CLI)
+
+```bash
+ng generate component path/to/my-feature
+```
+
+### The Fast Way (This Extension)
+
+1. **Right-click** a folder in the Explorer.
+2. Select **Angular: Generate Component**.
+3. Enter the name **my-feature** and press Enter.
+
+That's it. The extension creates all necessary files with the correct boilerplate and updates your module automatically.
 
 ## Table of Contents
 
 - [Angular File Generator](#angular-file-generator)
-  - [Supercharge Your Angular Development](#supercharge-your-angular-development)
-    - [Key Benefits](#key-benefits)
+  - [Why You'll Love It](#why-youll-love-it)
+  - [A Better Workflow: UI vs. CLI](#a-better-workflow-ui-vs-cli)
+    - [The Old Way (CLI)](#the-old-way-cli)
+    - [The Fast Way (This Extension)](#the-fast-way-this-extension)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
   - [What's New](#whats-new)

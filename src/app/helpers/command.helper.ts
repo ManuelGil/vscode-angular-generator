@@ -15,6 +15,29 @@ import {
 } from 'vscode';
 
 /**
+ * Command helpers for executing VSCode and Angular CLI commands.
+ * All exported functions are documented with JSDoc for clarity and maintainability.
+ */
+
+/**
+ * Interface for command result event data.
+ */
+export interface CommandResultEvent {
+  /**
+   * Whether the command was successful.
+   */
+  success: boolean;
+  /**
+   * Optional output of the command.
+   */
+  output?: string;
+  /**
+   * Optional error message of the command.
+   */
+  error?: string;
+}
+
+/**
  * Execute a shell command inside VS Code.
  *
  * - If `captureOutput` is false: spins up an integrated terminal, sends the command, and resolves immediately.
@@ -280,6 +303,7 @@ export const runCommand = async (
               d.dispose();
             } catch (error) {
               // Silently handle disposal errors to ensure all resources are cleaned up
+              // This prevents a single disposal failure from blocking resource cleanup
             }
           });
           // Clear the array to help garbage collection

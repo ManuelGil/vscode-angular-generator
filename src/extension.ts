@@ -1,5 +1,13 @@
-// The module 'vscode' contains the VSCode extensibility API
-// Import the module and reference it with the alias vscode in your code below
+/**
+ * Main entry point for the Angular VSCode extension.
+ * Handles activation, command registration, provider setup, and resource cleanup.
+ * All logic is modular and follows Angular/TypeScript best practices.
+ *
+ * @file extension.ts
+ * @author ManuelGil
+ * @see https://code.visualstudio.com/api
+ */
+
 import * as vscode from 'vscode';
 import { VSCodeMarketplaceClient } from 'vscode-marketplace-client';
 
@@ -25,8 +33,16 @@ import {
   ListRoutesProvider,
 } from './app/providers';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+/**
+ * Called when the Angular VSCode extension is activated (first time a command is executed).
+ * Registers all commands, providers, and event listeners needed for the extension.
+ *
+ * @param {vscode.ExtensionContext} context - The VSCode extension context object.
+ * @returns {Promise<void>} Resolves when activation is complete.
+ * @example
+ * // In VSCode, extension host calls:
+ * activate(context);
+ */
 export async function activate(context: vscode.ExtensionContext) {
   // The code you place here will be executed every time your command is executed
   let resource: vscode.WorkspaceFolder | undefined;
@@ -43,10 +59,33 @@ export async function activate(context: vscode.ExtensionContext) {
     return;
   }
 
-  // Optionally, prompt the user to select a workspace folder if multiple are available
+  // Try to load previously selected workspace folder from global state
+  const previousFolderUri = context.globalState.get<string>(
+    'selectedWorkspaceFolder',
+  );
+  let previousFolder: vscode.WorkspaceFolder | undefined;
+
+  if (previousFolderUri) {
+    // Find the workspace folder by URI
+    previousFolder = vscode.workspace.workspaceFolders.find(
+      (folder) => folder.uri.toString() === previousFolderUri,
+    );
+  }
+
   if (vscode.workspace.workspaceFolders.length === 1) {
+    // Determine the workspace folder to use
+    // Only one workspace folder available
     resource = vscode.workspace.workspaceFolders[0];
+  } else if (previousFolder) {
+    // Use previously selected workspace folder if available
+    resource = previousFolder;
+
+    // Notify the user which workspace is being used
+    vscode.window.showInformationMessage(
+      vscode.l10n.t('Using workspace folder: {0}', [resource.name]),
+    );
   } else {
+    // Multiple workspace folders and no previous selection
     const placeHolder = vscode.l10n.t(
       'Select a workspace folder to use. This folder will be used to load workspace-specific configuration for the extension',
     );
@@ -55,6 +94,14 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     resource = selectedFolder;
+
+    // Remember the selection for future use
+    if (resource) {
+      context.globalState.update(
+        'selectedWorkspaceFolder',
+        resource.uri.toString(),
+      );
+    }
   }
 
   // -----------------------------------------------------------------
@@ -302,6 +349,40 @@ export async function activate(context: vscode.ExtensionContext) {
     'setContext',
     `${EXTENSION_ID}.activateItem.file.template`,
     config.activateItem.file.template,
+  );
+
+  // -----------------------------------------------------------------
+  // Register commands
+  // -----------------------------------------------------------------
+
+  // Register a command to change the selected workspace folder
+  const disposableChangeWorkspace = vscode.commands.registerCommand(
+    `${EXTENSION_ID}.changeWorkspace`,
+    async () => {
+      const placeHolder = vscode.l10n.t('Select a workspace folder to use');
+      const selectedFolder = await vscode.window.showWorkspaceFolderPick({
+        placeHolder,
+      });
+
+      if (selectedFolder) {
+        resource = selectedFolder;
+        context.globalState.update(
+          'selectedWorkspaceFolder',
+          resource.uri.toString(),
+        );
+
+        // Update configuration for the new workspace folder
+        const workspaceConfig = vscode.workspace.getConfiguration(
+          EXTENSION_ID,
+          resource?.uri,
+        );
+        config.update(workspaceConfig);
+
+        vscode.window.showInformationMessage(
+          vscode.l10n.t('Switched to workspace folder: {0}', [resource.name]),
+        );
+      }
+    },
   );
 
   // -----------------------------------------------------------------
@@ -1066,6 +1147,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
+    disposableChangeWorkspace,
     disposableFileClass,
     disposableFileComponent,
     disposableFileDirective,
@@ -1116,4 +1198,12 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 }
 
+/**
+ * Called when the Angular VSCode extension is deactivated.
+ * Used for cleanup if necessary (currently a no-op).
+ *
+ * @example
+ * // VSCode calls this automatically on extension deactivation
+ * deactivate();
+ */
 export function deactivate() {}

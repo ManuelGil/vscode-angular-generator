@@ -40,6 +40,9 @@ const defaultPrompts: Record<
 };
 
 /**
+ * Helper functions for resolving template placeholders in code generation.
+ * Each exported function is documented for clarity.
+ *
  * Replaces all {{Key}} placeholders in `rawString`:
  *  - If Key ∈ defaultPrompts and is a function, calls it(defaultStyle)
  *  - If Key ∈ defaultPrompts and is InputBoxOptions, shows an input box

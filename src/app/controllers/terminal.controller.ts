@@ -17,15 +17,13 @@ import {
 import { Config } from '../configs';
 
 /**
- * The TerminalController class.
+ * TerminalController manages Angular CLI command execution and terminal interactions.
+ * All public methods are documented with JSDoc for clarity and maintainability.
  *
- * @class
- * @classdesc The class that represents the example controller.
+ * @class TerminalController
+ * @module controllers/terminal.controller
  * @export
  * @public
- * @property {Config} config - The configuration
- * @example
- * const controller = new TerminalController(config);
  */
 export class TerminalController {
   // -----------------------------------------------------------------
@@ -33,6 +31,7 @@ export class TerminalController {
   // -----------------------------------------------------------------
 
   /**
+   * Initializes the TerminalController instance.
    * Constructor for the TerminalController class.
    *
    * @constructor
@@ -445,17 +444,9 @@ export class TerminalController {
   }
 
   /**
-   * Generates a component.
-   *
-   * @function generateComponent
-   * @param {Uri} [path] - The path
-   * @public
-   * @async
-   * @memberof TerminalController
-   * @example
-   * controller.generateComponent();
-   *
-   * @returns {Promise<void>} - No return value
+   * Generates a new Angular component using the CLI.
+   * @param path Optional Uri for the target folder. If a file is provided, its parent folder is used.
+   * @returns Promise resolved when the operation completes or is cancelled.
    */
   async generateComponent(path?: Uri): Promise<void> {
     // Check if the path is a file

@@ -6,14 +6,10 @@ import { Range, TextEditor, l10n, window, workspace } from 'vscode';
 import { showError } from '../helpers';
 
 /**
- * The TransformController class.
- *
- * @class
- * @classdesc The class that represents the example controller.
- * @export
- * @public
- * @example
- * const controller = new TransformController();
+ * TransformController handles parsing, validation, and code generation for Angular elements.
+ * All public methods are documented with JSDoc for clarity and maintainability.
+ * @class TransformController
+ * @module controllers/transform.controller
  */
 export class TransformController {
   // -----------------------------------------------------------------
@@ -22,16 +18,8 @@ export class TransformController {
 
   // Public methods
   /**
-   * The json2ts method.
-   *
-   * @function json2ts
-   * @public
-   * @async
-   * @memberof TransformController
-   * @example
-   * await controller.json2ts();
-   *
-   * @returns {Promise<TextEditor | void>} The result
+   * Converts selected JSON text to TypeScript interfaces and opens it in a new editor.
+   * @returns Promise resolved with the opened TextEditor or void if cancelled.
    */
   async json2ts(): Promise<TextEditor | void> {
     let editor;
@@ -101,16 +89,9 @@ export class TransformController {
 
   // Private methods
   /**
-   * The tryParseJSONObject method.
-   *
-   * @private
-   * @memberof TransformController
-   * @param {string} str - The string to parse
-   * @returns {boolean | object} The result
-   * @example
-   * const object = controller.tryParseJSONObject(str);
-   *
-   * @returns {boolean | object} The result
+   * Attempts to parse a string as a JSON object using JSON5.
+   * @param str String to parse.
+   * @returns Parsed object if valid, or false if invalid.
    */
   private tryParseJSONObject(str: string): boolean | object {
     try {

@@ -9,14 +9,11 @@ import {
 } from '../configs';
 
 /**
- * The FeedbackController class.
+ * FeedbackController manages user feedback actions (About Us, Report Issues, Rate Us, Support Us).
+ * All public methods are documented with JSDoc for clarity and maintainability.
  *
- * @class
- * @classdesc The class that represents the feedback controller.
- * @export
- * @public
- * @example
- * const controller = new FeedbackController();
+ * @class FeedbackController
+ * @module controllers/feedback.controller
  */
 export class FeedbackController {
   // -----------------------------------------------------------------
@@ -38,39 +35,21 @@ export class FeedbackController {
 
   // Public methods
   /**
-   * The aboutUs method.
-   *
-   * @function aboutUs
-   * @public
-   * @memberof FeedbackController
-   *
-   * @returns {void} - No return value
+   * Opens the extension's marketplace page in the browser.
    */
   aboutUs(): void {
     env.openExternal(Uri.parse(EXTENSION_MARKETPLACE_URL));
   }
 
   /**
-   * The reportIssues method.
-   *
-   * @function reportIssues
-   * @public
-   * @memberof FeedbackController
-   *
-   * @returns {void} - No return value
+   * Opens the extension's repository issues page in the browser.
    */
   reportIssues(): void {
     env.openExternal(Uri.parse(`${EXTENSION_REPOSITORY_URL}/issues`));
   }
 
   /**
-   * The rateUs method.
-   *
-   * @function rateUs
-   * @public
-   * @memberof FeedbackController
-   *
-   * @returns {void} - No return value
+   * Opens the review page for the extension in the marketplace.
    */
   rateUs(): void {
     env.openExternal(
@@ -79,14 +58,8 @@ export class FeedbackController {
   }
 
   /**
-   * The supportUs method.
-   *
-   * @function supportUs
-   * @public
-   * @async
-   * @memberof FeedbackController
-   *
-   * @returns {Promise<void>} - The promise that resolves with no value
+   * Shows support options (Sponsor, PayPal) and opens the selected link.
+   * @returns Promise resolved when the user selects an option or cancels.
    */
   async supportUs(): Promise<void> {
     // Create the actions
