@@ -15,19 +15,17 @@ Stop memorizing CLI commands and switching contexts. This extension integrates t
   <a href="https://youtu.be/4UW8UQly4v0" title="Watch the Angular File Generator demo">
       <img src="https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/demo.gif" alt="Angular File Generator Demo">
   </a>
-</p
+</p>
 
----
+## Key Features
 
-## Why You'll Love It
+- **Accelerate Development:** Quickly scaffold components, services, and other schematics directly from the editor.
+- **Enforce Project Standards:** Ensure consistency with standardized file structures and support for custom templates.
+- **Reduce Command-Line Errors:** Guided UI minimizes mistakes and forgotten flags in `ng generate` commands.
+- **Maintain Focus:** Scaffold, code, and test without leaving your development environment.
+- **Stay Up-to-Date:** Full compatibility with the latest Angular features, including standalone components and signals.
 
-- **Save Time on Every Feature:** Generate boilerplate for components, services, and more in seconds.
-- **Enforce Code Consistency:** Keep your project clean with standardized file structures and your own custom templates.
-- **Eliminate CLI Errors:** A guided UI helps you avoid typos and forgotten flags in `ng generate` commands.
-- **Stay Focused:** Never leave your editor to scaffold new parts of your application.
-- **Modern Angular Ready:** Full support for Standalone Components, Signals, and the latest Angular features.
-
-## A Better Workflow: UI vs. CLI
+## Workflow Comparison: UI vs. CLI
 
 Here's how much simpler it is to create a new component:
 
@@ -40,16 +38,16 @@ ng generate component path/to/my-feature
 ### The Fast Way (This Extension)
 
 1. **Right-click** a folder in the Explorer.
-2. Select **Angular: Generate Component**.
-3. Enter the name **my-feature** and press Enter.
+2. Select **Angular File Generator: Generate Component With CLI**.
+3. Enter the **path/to/my-feature** and press Enter.
 
-That's it. The extension creates all necessary files with the correct boilerplate and updates your module automatically.
+The extension then creates all necessary files with the correct boilerplate and updates the relevant module automatically.
 
 ## Table of Contents
 
 - [Angular File Generator](#angular-file-generator)
-  - [Why You'll Love It](#why-youll-love-it)
-  - [A Better Workflow: UI vs. CLI](#a-better-workflow-ui-vs-cli)
+  - [Key Features](#key-features)
+  - [Workflow Comparison: UI vs. CLI](#workflow-comparison-ui-vs-cli)
     - [The Old Way (CLI)](#the-old-way-cli)
     - [The Fast Way (This Extension)](#the-fast-way-this-extension)
   - [Table of Contents](#table-of-contents)
@@ -62,10 +60,10 @@ That's it. The extension creates all necessary files with the correct boilerplat
   - [Main Features](#main-features)
     - [Flat, Descriptive Context Menu](#flat-descriptive-context-menu)
     - [Sidebar "Angular File Generator" Panel](#sidebar-angular-file-generator-panel)
-    - [Naming \& Styling: Legacy vs. Angular 20+](#naming--styling-legacy-vs-angular-20)
-      - [A. Legacy Mode (Angular 9–19)](#a-legacy-mode-angular-919)
+    - [Configurable Naming Conventions](#configurable-naming-conventions)
+      - [A. Legacy Mode (Angular 9-19)](#a-legacy-mode-angular-9-19)
       - [B. Angular 20+ Mode](#b-angular-20-mode)
-    - [Built-In Reactivity Snippets \& Templates (Angular 20+)](#built-in-reactivity-snippets--templates-angular-20)
+    - [Built-in Snippets for Modern Development (Angular 20+)](#built-in-snippets-for-modern-development-angular-20)
   - [Configuration](#configuration)
     - [Essential Project Configuration](#essential-project-configuration)
     - [Settings Options](#settings-options)
@@ -80,26 +78,34 @@ That's it. The extension creates all necessary files with the correct boilerplat
   - [Authors](#authors)
   - [Follow Me](#follow-me)
   - [Other Extensions](#other-extensions)
+  - [Recommended Browser Extension](#recommended-browser-extension)
   - [License](#license)
 
 ## Description
 
-Angular File Generator integrates the Angular CLI into any VSCode-based editor, such as VSCode, VSCodium, WindSurf, Cursor, or others, to provide file generation and project navigation without nested menus. With Angular File Generator you can:
+Angular File Generator seamlessly integrates the Angular CLI into any VSCode-based editor (including VSCode, VSCodium, WindSurf, Cursor, and others), enabling you to generate files and navigate your Angular project efficiently, without nested menus or manual command-line input.
 
-- Create **Components**, **Services**, **Modules**, **Pipes**, **Guards**, **Interceptors**, **Resolvers**, **Directives**, **Classes**, **Enums**, **Interfaces**, **Tests (specs)**, and **Templates** with one click.
-- Execute Angular CLI commands (`ng generate`) from VSCode using convenient shortcuts.
-- Define custom templates to generate files with your own boilerplate.
-- Transform JSON blocks into TypeScript interfaces on the fly.
-- Explore files, routes, and modules from a dedicated sidebar panel.
-- Access native **snippets** for Angular 20+ reactivity APIs (signals, computed, effect, etc.).
+Key capabilities:
 
-Angular File Generator supports projects from Angular 9 through Angular 20+ and is ready to adopt Angular 20 conventions and new features, such as "omit suffix" filenames, dash-separated naming, and standalone components.
+- Generate all major Angular artifacts (**components**, **services**, **modules**, **pipes**, **guards**, **interceptors**, **resolvers**, **directives**, **classes**, **enums**, **interfaces**, **tests**, and **templates**) with a single click.
+- Run Angular CLI commands (`ng generate`) directly from the editor.
+- Use custom templates to match your team's standards.
+- Instantly convert JSON blocks to TypeScript interfaces.
+- Explore files, routes, and modules from a dedicated sidebar.
+- Access built-in snippets for Angular 20+ reactivity APIs (`signal`, `computed`, `effect`, etc.).
+
+**Compatibility:** Supports Angular 9-20+, fully aligned with Angular 20 conventions: suffix omission, dash-case file naming, and standalone components.
 
 ## What's New
 
-This release updates Angular File Generator to support Angular 20 by including signal-based snippets (`signal`, `computed`, `effect`, `toSignal`) and removing redundant file suffixes (`.component.ts`, `.service.ts`) to streamline project structure and embrace Angular 20 conventions.
+- **Full Angular 20 Compatibility:** Embraces Angular 20 best practices, including dash-case file names and automatic omission of redundant suffixes (e.g., `.component.ts`, `.service.ts`).
+- **Modern Reactivity Snippets:** Includes ready-to-use snippets for the latest Angular reactivity APIs: `signal`, `computed`, `effect`, and `toSignal`.
+- **Smarter File Generation:** Output structure and naming are now fully aligned with current Angular standards, ensuring consistency and maintainability across your codebase.
 
 ## Features
+
+<details>
+<summary><strong>File Generation Commands (Click to Expand)</strong></summary>
 
 ### File Generation
 
@@ -118,6 +124,11 @@ This release updates Angular File Generator to support Angular 20 by including s
 | Angular: Generate Service     | Creates a new, generic service definition       |
 | Angular: Generate Test        | Creates a new, generic test definition          |
 | Angular: Generate Template    | Creates a new file with a template definition   |
+
+</details>
+
+<details>
+<summary><strong>CLI Commands (Click to Expand)</strong></summary>
 
 ### Commands
 
@@ -142,6 +153,11 @@ This release updates Angular File Generator to support Angular 20 by including s
 | Angular: Generate Service with CLI   | Creates a new, generic service definition using Angular CLI              |
 | Angular: Generate Environments       | Generates and configures environment files for a project                 |
 | Angular: Generate Library            | Creates a new, generic library project in the current workspace          |
+
+</details>
+
+<details>
+<summary><strong>Built-in Snippets (Click to Expand)</strong></summary>
 
 ### Snippets
 
@@ -181,6 +197,8 @@ This release updates Angular File Generator to support Angular 20 by including s
 | `ng_loading`                               | `@loading {}`                                |
 | `ng_router_outlet`                         | `<router-outlet></router-outlet>`            |
 | `ng_router_link`                           | `<a routerLink=""></a>`                      |
+
+</details>
 
 ## Main Features
 
@@ -238,11 +256,11 @@ Angular File Generator adds a new icon to VSCode's Activity Bar. Clicking it ope
      - Click an item to open its link in your browser.
      - No right-click, just click.
 
-### Naming & Styling: Legacy vs. Angular 20+
+### Configurable Naming Conventions
 
 Angular File Generator offers two naming modes for files and classes:
 
-#### A. Legacy Mode (Angular 9–19)
+#### A. Legacy Mode (Angular 9-19)
 
 ```jsonc
 "angular.fileGenerator.omitSuffix": false,
@@ -250,7 +268,7 @@ Angular File Generator offers two naming modes for files and classes:
 ````
 
 - Generates traditional names like `my-component.component.ts`, `my-service.service.ts`, etc.
-- Ideal if you maintain older conventions and don't want structural changes to filenames.
+- This mode is suitable for projects that maintain legacy naming conventions.
 
 #### B. Angular 20+ Mode
 
@@ -268,9 +286,9 @@ Angular File Generator offers two naming modes for files and classes:
 
 This flexibility lets you migrate gradually between conventions without reconfiguring every template manually.
 
-### Built-In Reactivity Snippets & Templates (Angular 20+)
+### Built-in Snippets for Modern Development (Angular 20+)
 
-Although Angular File Generator **does not** include full templates that automatically inject `signal`, `computed`, etc., it provides several **snippets** to help you adopt Angular 20's reactivity APIs more quickly. Just type the prefix and press Tab:
+Although Angular File Generator **does not** include full templates that automatically inject `signal`, `computed`, etc., it provides several **snippets** to accelerate the adoption of Angular's reactivity APIs. Type a prefix and press Tab to expand the snippet:
 
 1. **Signal** (`ng_signal`)
 
@@ -316,14 +334,14 @@ Although Angular File Generator **does not** include full templates that automat
    const myResource = resource(() => fetch('/api/data').then(r => r.json()));
    ```
 
-> **Custom Templates:**
-> To generate a full file that already includes imports of `signal`, `computed`, or effects, create your own template under `angular.submenu.templates` (see the "Configuration" section). That way you can copy complete examples and adapt them to your project.
+> **Note on Custom Templates:**
+> To generate files that include specific imports like `signal` or `computed` by default, it is recommended to create a custom template under the `angular.submenu.templates` setting. This allows for full control over the generated boilerplate.
 
 ## Configuration
 
 ### Essential Project Configuration
 
-Add these options to your `.vscode/settings.json` to get the most out of Angular File Generator. Adjust values according to your team's conventions.
+For optimal performance and to align with project conventions, consider adding the following options to your `.vscode/settings.json` file.
 
 ```jsonc
 {
@@ -368,7 +386,7 @@ Add these options to your `.vscode/settings.json` to get the most out of Angular
       "description": "Component with header + basic logging",
       "type": "component",
       "template": [
-        "/* Company XYZ – Confidential */",
+        "/* Company XYZ - Confidential */",
         "import { Component } from '@angular/core';",
         "import { LoggingService } from 'src/app/shared/logging.service';",
         "@Component({",
@@ -569,7 +587,7 @@ For a complete list of changes, see the [CHANGELOG.md](https://github.com/Manuel
 
 ## Authors
 
-- **Manuel Gil** – _Owner_ – [@ManuelGil](https://github.com/ManuelGil)
+- **Manuel Gil** - _Owner_ - [@ManuelGil](https://github.com/ManuelGil)
 
 See also the list of [contributors](https://github.com/ManuelGil/vscode-angular-generator/contributors) who participated in this project.
 
@@ -607,8 +625,17 @@ See also the list of [contributors](https://github.com/ManuelGil/vscode-angular-
 - **[CodeIgniter 4 Shield Snippets](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-codeigniter4-shield-snippets)**
   Snippets tailored to CodeIgniter 4 Shield for faster authentication and security-related code.
 
-- **[Mustache Template Engine – Snippets & Autocomplete](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-mustache-snippets)**
+- **[Mustache Template Engine - Snippets & Autocomplete](https://marketplace.visualstudio.com/items?itemName=imgildev.vscode-mustache-snippets)**
   Snippets and autocomplete support for Mustache templates, making HTML templating faster and more reliable.
+
+## Recommended Browser Extension
+
+For developers who work with `.vsix` files for offline installations or distribution, the complementary [**One-Click VSIX**](https://chromewebstore.google.com/detail/imojppdbcecfpeafjagncfplelddhigc?utm_source=item-share-cb) extension is recommended, available for both Chrome and Firefox.
+
+> **One-Click VSIX** integrates a direct "Download Extension" button into each VSCode Marketplace page, ensuring the file is saved with the `.vsix` extension, even if the server provides a `.zip` archive. This simplifies the process of installing or sharing extensions offline by eliminating the need for manual file renaming.
+
+- [Get One-Click VSIX for Chrome &rarr;](https://chromewebstore.google.com/detail/imojppdbcecfpeafjagncfplelddhigc?utm_source=item-share-cb)
+- [Get One-Click VSIX for Firefox &rarr;](https://addons.mozilla.org/es-ES/firefox/addon/one-click-vsix/)
 
 ## License
 
