@@ -114,35 +114,37 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   // Watch for changes in the configuration
-  vscode.workspace.onDidChangeConfiguration((event) => {
-    const workspaceConfig = vscode.workspace.getConfiguration(
-      EXTENSION_ID,
-      resource?.uri,
-    );
+  const disposableConfigChange = vscode.workspace.onDidChangeConfiguration(
+    (event) => {
+      const workspaceConfig = vscode.workspace.getConfiguration(
+        EXTENSION_ID,
+        resource?.uri,
+      );
 
-    if (event.affectsConfiguration(`${EXTENSION_ID}.enable`, resource?.uri)) {
-      const isEnabled = workspaceConfig.get<boolean>('enable');
+      if (event.affectsConfiguration(`${EXTENSION_ID}.enable`, resource?.uri)) {
+        const isEnabled = workspaceConfig.get<boolean>('enable');
 
-      config.update(workspaceConfig);
+        config.update(workspaceConfig);
 
-      if (isEnabled) {
-        const message = vscode.l10n.t(
-          'The {0} extension is now enabled and ready to use',
-          [EXTENSION_DISPLAY_NAME],
-        );
-        vscode.window.showInformationMessage(message);
-      } else {
-        const message = vscode.l10n.t('The {0} extension is now disabled', [
-          EXTENSION_DISPLAY_NAME,
-        ]);
-        vscode.window.showInformationMessage(message);
+        if (isEnabled) {
+          const message = vscode.l10n.t(
+            'The {0} extension is now enabled and ready to use',
+            [EXTENSION_DISPLAY_NAME],
+          );
+          vscode.window.showInformationMessage(message);
+        } else {
+          const message = vscode.l10n.t('The {0} extension is now disabled', [
+            EXTENSION_DISPLAY_NAME,
+          ]);
+          vscode.window.showInformationMessage(message);
+        }
       }
-    }
 
-    if (event.affectsConfiguration(EXTENSION_ID, resource?.uri)) {
-      config.update(workspaceConfig);
-    }
-  });
+      if (event.affectsConfiguration(EXTENSION_ID, resource?.uri)) {
+        config.update(workspaceConfig);
+      }
+    },
+  );
 
   // -----------------------------------------------------------------
   // Get version of the extension
@@ -211,47 +213,48 @@ export async function activate(context: vscode.ExtensionContext) {
   // Check for updates to the extension
   try {
     // Retrieve the latest version
-    VSCodeMarketplaceClient.getLatestVersion(
-      USER_PUBLISHER,
-      EXTENSION_NAME,
-    ).then((latestVersion) => {
-      // Check if the latest version is different from the current version
-      if (latestVersion !== currentVersion) {
-        const actions: vscode.MessageItem[] = [
-          {
-            title: vscode.l10n.t('Update Now'),
-          },
-          {
-            title: vscode.l10n.t('Dismiss'),
-          },
-        ];
+    VSCodeMarketplaceClient.getLatestVersion(USER_PUBLISHER, EXTENSION_NAME)
+      .then((latestVersion) => {
+        // Check if the latest version is different from the current version
+        if (latestVersion !== currentVersion) {
+          const actions: vscode.MessageItem[] = [
+            {
+              title: vscode.l10n.t('Update Now'),
+            },
+            {
+              title: vscode.l10n.t('Dismiss'),
+            },
+          ];
 
-        const message = vscode.l10n.t(
-          'A new version of {0} is available. Update to version {1} now',
-          [EXTENSION_DISPLAY_NAME, latestVersion],
-        );
-        vscode.window
-          .showInformationMessage(message, ...actions)
-          .then(async (option) => {
-            if (!option) {
-              return;
-            }
+          const message = vscode.l10n.t(
+            'A new version of {0} is available. Update to version {1} now',
+            [EXTENSION_DISPLAY_NAME, latestVersion],
+          );
+          vscode.window
+            .showInformationMessage(message, ...actions)
+            .then(async (option) => {
+              if (!option) {
+                return;
+              }
 
-            // Handle the actions
-            switch (option?.title) {
-              case actions[0].title:
-                await vscode.commands.executeCommand(
-                  'workbench.extensions.action.install.anotherVersion',
-                  `${USER_PUBLISHER}.${EXTENSION_NAME}`,
-                );
-                break;
+              // Handle the actions
+              switch (option?.title) {
+                case actions[0].title:
+                  await vscode.commands.executeCommand(
+                    'workbench.extensions.action.install.anotherVersion',
+                    `${USER_PUBLISHER}.${EXTENSION_NAME}`,
+                  );
+                  break;
 
-              default:
-                break;
-            }
-          });
-      }
-    });
+                default:
+                  break;
+              }
+            });
+        }
+      })
+      .catch((error) => {
+        console.error('Error checking for extension updates:', error);
+      });
   } catch (error) {
     console.error('Error retrieving extension version:', error);
   }
@@ -1097,17 +1100,19 @@ export async function activate(context: vscode.ExtensionContext) {
   // Register provider events
   // -----------------------------------------------------------------
 
-  vscode.workspace.onDidCreateFiles(() => {
+  const disposableCreateFiles = vscode.workspace.onDidCreateFiles(() => {
     listFilesProvider.refresh();
     listRoutesProvider.refresh();
     listModulesProvider.refresh();
   });
-  vscode.workspace.onDidDeleteFiles(() => {
+
+  const disposableDeleteFiles = vscode.workspace.onDidDeleteFiles(() => {
     listFilesProvider.refresh();
     listRoutesProvider.refresh();
     listModulesProvider.refresh();
   });
-  vscode.workspace.onDidRenameFiles(() => {
+
+  const disposableRenameFiles = vscode.workspace.onDidRenameFiles(() => {
     listFilesProvider.refresh();
     listRoutesProvider.refresh();
     listModulesProvider.refresh();
@@ -1147,6 +1152,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
+    disposableConfigChange,
     disposableChangeWorkspace,
     disposableFileClass,
     disposableFileComponent,
@@ -1184,12 +1190,20 @@ export async function activate(context: vscode.ExtensionContext) {
     disposableTransformJson2Ts,
     disposableListOpenFile,
     disposableListGotoLine,
+    listFilesProvider,
     disposableListFilesTreeView,
     disposableRefreshListFiles,
+    listRoutesProvider,
     disposableListRoutesTreeView,
     disposableRefreshListRoutes,
+    listModulesProvider,
     disposableListModulesTreeView,
     disposableRefreshListModules,
+    disposableCreateFiles,
+    disposableDeleteFiles,
+    disposableRenameFiles,
+    disposableConfigChange,
+    feedbackProvider,
     disposableFeedbackTreeView,
     disposableFeedbackAboutUs,
     disposableFeedbackReportIssues,

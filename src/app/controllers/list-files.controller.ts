@@ -10,7 +10,7 @@ import {
 } from 'vscode';
 
 import { Config, EXTENSION_ID } from '../configs';
-import { directoryMap, getRelativePath } from '../helpers';
+import { directoryMap } from '../helpers';
 import { NodeModel } from '../models';
 
 /**
@@ -80,9 +80,7 @@ export class ListFilesController {
       files.sort((a, b) => a.path.localeCompare(b.path));
 
       for (const file of files) {
-        const document = await workspace.openTextDocument(file);
-
-        const path = await getRelativePath(document.fileName);
+        const path = workspace.asRelativePath(file);
         let filename = path.split('/').pop();
 
         if (filename && this.config.showPath) {
@@ -98,10 +96,10 @@ export class ListFilesController {
             {
               command: `${EXTENSION_ID}.list.openFile`,
               title: 'Open File',
-              arguments: [document.uri],
+              arguments: [file],
             },
-            document.uri,
-            document.fileName,
+            file,
+            file.fsPath,
           ),
         );
       }

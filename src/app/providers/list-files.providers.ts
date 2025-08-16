@@ -1,3 +1,4 @@
+import pLimit from 'p-limit';
 import {
   Event,
   EventEmitter,
@@ -47,6 +48,37 @@ export class ListFilesProvider implements TreeDataProvider<NodeModel> {
   private _onDidChangeTreeData: EventEmitter<
     NodeModel | undefined | null | void
   >;
+
+  /**
+   * Indicates whether the provider has been disposed.
+   * @type {boolean}
+   * @private
+   * @memberof ListFilesProvider
+   * @example
+   * this._isDisposed = false;
+   */
+  private _isDisposed = false;
+
+  /**
+   * The cached nodes.
+   * @type {NodeModel[] | undefined}
+   * @private
+   * @memberof ListFilesProvider
+   * @example
+   * this._cachedNodes = undefined;
+   */
+  private _cachedNodes: NodeModel[] | undefined = undefined;
+
+  /**
+   * The cache promise.
+   * @type {Promise<NodeModel[] | undefined> | undefined}
+   * @private
+   * @memberof ListFilesProvider
+   * @example
+   * this._cachePromise = undefined;
+   */
+  private _cachePromise: Promise<NodeModel[] | undefined> | undefined =
+    undefined;
 
   // Public properties
   /**
@@ -122,22 +154,62 @@ export class ListFilesProvider implements TreeDataProvider<NodeModel> {
       return element.children;
     }
 
-    return this.getListFiles();
+    if (this._cachedNodes) {
+      return this._cachedNodes;
+    }
+
+    if (this._cachePromise) {
+      return this._cachePromise;
+    }
+
+    this._cachePromise = this.getListFiles().then((nodes) => {
+      this._cachedNodes = nodes;
+      this._cachePromise = undefined;
+      return nodes;
+    });
+
+    return this._cachePromise;
   }
 
   /**
-   * Refreshes the tree data.
+   * Refreshes the tree data by firing the event.
    *
    * @function refresh
    * @public
-   * @memberof FeedbackProvider
+   * @memberof ListFilesProvider
    * @example
    * provider.refresh();
    *
    * @returns {void} - No return value
    */
   refresh(): void {
+    this._cachedNodes = undefined;
+    this._cachePromise = undefined;
     this._onDidChangeTreeData.fire();
+  }
+
+  /**
+   * Disposes the provider.
+   *
+   * @function dispose
+   * @public
+   * @memberof ListFilesProvider
+   * @example
+   * provider.dispose();
+   *
+   * @returns {void} - No return value
+   */
+  dispose(): void {
+    this._onDidChangeTreeData.dispose();
+    if (this._isDisposed) {
+      return;
+    }
+
+    this._isDisposed = true;
+
+    if (this._onDidChangeTreeData) {
+      this._onDidChangeTreeData.dispose();
+    }
   }
 
   // Private methods
@@ -152,40 +224,42 @@ export class ListFilesProvider implements TreeDataProvider<NodeModel> {
    *
    * @returns {Promise<NodeModel[] | undefined>} - The list of files
    */
-  private async getListFiles(): Promise<NodeModel[] | undefined> {
+  private async getListFiles(): Promise<NodeModel[]> {
     const files = await ListFilesController.getFiles();
 
     if (!files) {
-      return;
+      return [];
     }
-
-    const nodes: NodeModel[] = [];
 
     const fileTypes = ListFilesController.config.watch;
 
-    for (const fileType of fileTypes) {
-      const children = files.filter((file) =>
-        file.label.toString().includes(`${singularize(fileType)}.ts`),
-      );
+    const limit = pLimit(2);
 
-      if (children.length !== 0) {
-        const node = new NodeModel(
-          `${titleize(fileType)}: ${children.length}`,
-          new ThemeIcon('folder-opened'),
-          undefined,
-          undefined,
-          fileType,
-          children,
-        );
+    const groups = await Promise.all(
+      fileTypes.map((type) =>
+        limit(async () => {
+          const suffix = `${singularize(type)}.ts`;
 
-        nodes.push(node);
-      }
-    }
+          const children = files.filter((file) =>
+            file.label.toString().includes(suffix),
+          );
 
-    if (nodes.length === 0) {
-      return;
-    }
+          if (children.length === 0) {
+            return;
+          }
 
-    return nodes;
+          return new NodeModel(
+            `${titleize(type)}: ${children.length}`,
+            new ThemeIcon('folder-opened'),
+            undefined,
+            undefined,
+            type,
+            children,
+          );
+        }),
+      ),
+    );
+
+    return groups.filter((node): node is NodeModel => node !== undefined);
   }
 }

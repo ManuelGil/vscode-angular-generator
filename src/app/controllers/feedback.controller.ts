@@ -1,9 +1,9 @@
 import { MessageItem, Uri, env, l10n, window } from 'vscode';
 
 import {
+  EXTENSION_BUY_ME_A_COFFEE_URL,
   EXTENSION_DISPLAY_NAME,
   EXTENSION_MARKETPLACE_URL,
-  EXTENSION_PAYPAL_URL,
   EXTENSION_REPOSITORY_URL,
   EXTENSION_SPONSOR_URL,
 } from '../configs';
@@ -58,14 +58,14 @@ export class FeedbackController {
   }
 
   /**
-   * Shows support options (Sponsor, PayPal) and opens the selected link.
+   * Shows support options (Sponsor, Buy Me a Coffee) and opens the selected link.
    * @returns Promise resolved when the user selects an option or cancels.
    */
   async supportUs(): Promise<void> {
     // Create the actions
     const actions: MessageItem[] = [
       { title: l10n.t('Become a Sponsor') },
-      { title: l10n.t('Donate via PayPal') },
+      { title: l10n.t('Buy Me a Coffee') },
     ];
 
     // Show the message
@@ -82,7 +82,7 @@ export class FeedbackController {
         break;
 
       case actions[1].title:
-        env.openExternal(Uri.parse(EXTENSION_PAYPAL_URL));
+        env.openExternal(Uri.parse(EXTENSION_BUY_ME_A_COFFEE_URL));
         break;
     }
   }

@@ -49,6 +49,16 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
     NodeModel | undefined | null | void
   >;
 
+  /**
+   * Indicates whether the provider has been disposed.
+   * @type {boolean}
+   * @private
+   * @memberof FeedbackProvider
+   * @example
+   * this._isDisposed = false;
+   */
+  private _isDisposed = false;
+
   // Public properties
   /**
    * The onDidChangeTreeData event.
@@ -131,6 +141,30 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
    */
   refresh(): void {
     this._onDidChangeTreeData.fire();
+  }
+
+  /**
+   * Disposes the provider.
+   *
+   * @function dispose
+   * @public
+   * @memberof FeedbackProvider
+   * @example
+   * provider.dispose();
+   *
+   * @returns {void} - No return value
+   */
+  dispose(): void {
+    this._onDidChangeTreeData.dispose();
+    if (this._isDisposed) {
+      return;
+    }
+
+    this._isDisposed = true;
+
+    if (this._onDidChangeTreeData) {
+      this._onDidChangeTreeData.dispose();
+    }
   }
 
   // Private methods

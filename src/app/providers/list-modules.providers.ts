@@ -1,3 +1,4 @@
+import pLimit from 'p-limit';
 import {
   Event,
   EventEmitter,
@@ -48,6 +49,37 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
   private _onDidChangeTreeData: EventEmitter<
     NodeModel | undefined | null | void
   >;
+
+  /**
+   * Indicates whether the provider has been disposed.
+   * @type {boolean}
+   * @private
+   * @memberof ListModulesProvider
+   * @example
+   * this._isDisposed = false;
+   */
+  private _isDisposed = false;
+
+  /**
+   * The cached nodes.
+   * @type {NodeModel[] | undefined}
+   * @private
+   * @memberof ListModulesProvider
+   * @example
+   * this._cachedNodes = undefined;
+   */
+  private _cachedNodes: NodeModel[] | undefined = undefined;
+
+  /**
+   * The cache promise.
+   * @type {Promise<NodeModel[] | undefined> | undefined}
+   * @private
+   * @memberof ListModulesProvider
+   * @example
+   * this._cachePromise = undefined;
+   */
+  private _cachePromise: Promise<NodeModel[] | undefined> | undefined =
+    undefined;
 
   // Public properties
   /**
@@ -109,22 +141,62 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
       return element.children;
     }
 
-    return this.getListModules();
+    if (this._cachedNodes) {
+      return this._cachedNodes;
+    }
+
+    if (this._cachePromise) {
+      return this._cachePromise;
+    }
+
+    this._cachePromise = this.getListModules().then((nodes) => {
+      this._cachedNodes = nodes;
+      this._cachePromise = undefined;
+      return nodes;
+    });
+
+    return this._cachePromise;
   }
 
   /**
-   * Refreshes the tree data.
+   * Refreshes the tree data by firing the event.
    *
    * @function refresh
    * @public
-   * @memberof FeedbackProvider
+   * @memberof ListModulesProvider
    * @example
    * provider.refresh();
    *
    * @returns {void} - No return value
    */
   refresh(): void {
+    this._cachedNodes = undefined;
+    this._cachePromise = undefined;
     this._onDidChangeTreeData.fire();
+  }
+
+  /**
+   * Disposes the provider.
+   *
+   * @function dispose
+   * @public
+   * @memberof ListModulesProvider
+   * @example
+   * provider.dispose();
+   *
+   * @returns {void} - No return value
+   */
+  dispose(): void {
+    this._onDidChangeTreeData.dispose();
+    if (this._isDisposed) {
+      return;
+    }
+
+    this._isDisposed = true;
+
+    if (this._onDidChangeTreeData) {
+      this._onDidChangeTreeData.dispose();
+    }
   }
 
   // Private methods
@@ -133,57 +205,67 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    * Filters files ending with 'module.ts' and scans for key sections (declarations, exports, imports, bootstrap, providers).
    *
    * @private
-   * @returns {Promise<NodeModel[] | undefined>} Array of NodeModel representing Angular module sections, or undefined if none found.
+   * @returns {Promise<NodeModel[]>} Array of NodeModel representing Angular module sections, or undefined if none found.
    * @example
    * const modules = await provider.getListModules();
    */
-  private async getListModules(): Promise<NodeModel[] | undefined> {
+  private async getListModules(): Promise<NodeModel[]> {
     const files = await ListFilesController.getFiles();
 
     if (!files) {
-      return;
+      return [];
     }
 
     const nodes = files.filter((file) =>
       file.label.toString().includes('module.ts'),
     );
 
-    for (const file of nodes) {
-      const document = await workspace.openTextDocument(
-        file.resourceUri?.path ?? '',
-      );
+    const ngModuleDeclarationRegex =
+      /^\s*(declarations|exports|imports|bootstrap|providers)\s*:\s*\[/i;
 
-      const children = Array.from(
-        { length: document.lineCount },
-        (_, index) => {
-          const line = document.lineAt(index);
+    const limit = pLimit(2);
 
-          let node: NodeModel | undefined;
-
-          if (
-            line.text.match(
-              /(declarations|exports|imports|bootstrap|providers): \[/g,
-            )
-          ) {
-            node = new NodeModel(
-              line.text.trim(),
-              new ThemeIcon('symbol-module'),
-              {
-                command: `${EXTENSION_ID}.list.gotoLine`,
-                title: line.text,
-                arguments: [file.resourceUri, index],
-              },
-            );
+    await Promise.all(
+      nodes.map((file) =>
+        limit(async () => {
+          if (!file.resourceUri) {
+            return file.setChildren([]);
           }
 
-          return node;
-        },
-      );
+          try {
+            const document = await workspace.openTextDocument(file.resourceUri);
+            const children: NodeModel[] = [];
 
-      file.setChildren(
-        children.filter((child) => child !== undefined) as NodeModel[],
-      );
-    }
+            for (let i = 0; i < document.lineCount; i++) {
+              const text = document.lineAt(i).text;
+              const match = ngModuleDeclarationRegex.exec(text);
+
+              if (match) {
+                const propertyName = match[1]; // 'declarations', 'imports', etc.
+                const label = `${propertyName}: [`;
+
+                children.push(
+                  new NodeModel(label, new ThemeIcon('symbol-module'), {
+                    command: `${EXTENSION_ID}.list.gotoLine`,
+                    title: text.trim(),
+                    arguments: [file.resourceUri, i],
+                  }),
+                );
+              }
+            }
+
+            file.setChildren(children);
+          } catch (err) {
+            console.error(
+              `Error reading file ${file.resourceUri?.fsPath}:`,
+              err instanceof Error ? err.message : String(err),
+            );
+
+            file.setChildren([]);
+          }
+        }),
+      ),
+    );
 
     return nodes.filter((file) => file.children && file.children.length !== 0);
   }

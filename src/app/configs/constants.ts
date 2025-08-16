@@ -89,17 +89,17 @@ export const EXTENSION_SPONSOR_URL: string =
   'https://github.com/sponsors/ManuelGil';
 
 /**
- * EXTENSION_PAYPAL_URL: The PayPal URL of the extension.
+ * EXTENSION_BUY_ME_A_COFFEE_URL: The Buy Me A Coffee URL of the extension.
  * @type {string}
  * @public
  * @memberof Constants
  * @example
- * console.log(EXTENSION_PAYPAL_URL);
+ * console.log(EXTENSION_BUY_ME_A_COFFEE_URL);
  *
- * @returns {string} - The PayPal URL of the extension
+ * @returns {string} - The Buy Me A Coffee URL of the extension
  */
-export const EXTENSION_PAYPAL_URL: string =
-  'https://www.paypal.com/paypalme/ManuelFGil';
+export const EXTENSION_BUY_ME_A_COFFEE_URL: string =
+  'https://www.buymeacoffee.com/ManuelGil';
 
 /**
  * STYLE: The style file extension when generating a new component.

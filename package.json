@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator",
   "description": "The fastest way to generate Angular files from your editor. Integrates the Angular CLI into the VSCode UI to scaffold components, services, and modules with a simple right-click.",
-  "version": "2.15.2",
+  "version": "2.16.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -871,28 +871,29 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.2.0",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@compodoc/compodoc": "^1.1.26",
-    "@types/glob": "^8.1.0",
-    "@types/minimatch": "^3.0.5",
+    "@types/glob": "^9.0.0",
+    "@types/minimatch": "^6.0.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.30",
+    "@types/node": "^24.2.1",
     "@types/vscode": "^1.88.0",
     "@vscode/l10n-dev": "^0.0.35",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
-    "cpy-cli": "^5.0.0",
-    "glob": "^11.0.2",
+    "cpy-cli": "^6.0.0",
+    "glob": "^11.0.3",
     "husky": "^9.1.7",
-    "lint-staged": "^16.1.0",
+    "lint-staged": "^16.1.5",
     "rimraf": "^6.0.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "json-to-ts": "^2.1.0",
     "json5": "^2.2.3",
+    "p-limit": "^7.0.0",
     "vscode-marketplace-client": "^1.1.0"
   }
 }

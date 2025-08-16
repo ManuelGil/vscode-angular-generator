@@ -57,13 +57,6 @@ export interface CommandResultEvent {
  *
  * @returns {Promise<{ success: boolean; output?: string; error?: string }>} - Result with success status and optional output/error
  */
-
-// Interface for command result event data
-export interface CommandResultEvent {
-  success: boolean;
-  output?: string;
-  error?: string;
-}
 export const runCommand = async (
   name: string,
   command: string,

@@ -1,3 +1,4 @@
+import pLimit from 'p-limit';
 import {
   Event,
   EventEmitter,
@@ -37,6 +38,37 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
   private _onDidChangeTreeData: EventEmitter<
     NodeModel | undefined | null | void
   >;
+
+  /**
+   * Indicates whether the provider has been disposed.
+   * @type {boolean}
+   * @private
+   * @memberof ListRoutesProvider
+   * @example
+   * this._isDisposed = false;
+   */
+  private _isDisposed = false;
+
+  /**
+   * The cached nodes.
+   * @type {NodeModel[] | undefined}
+   * @private
+   * @memberof ListRoutesProvider
+   * @example
+   * this._cachedNodes = undefined;
+   */
+  private _cachedNodes: NodeModel[] | undefined = undefined;
+
+  /**
+   * The cache promise.
+   * @type {Promise<NodeModel[] | undefined> | undefined}
+   * @private
+   * @memberof ListRoutesProvider
+   * @example
+   * this._cachePromise = undefined;
+   */
+  private _cachePromise: Promise<NodeModel[] | undefined> | undefined =
+    undefined;
 
   // Public properties
   /**
@@ -115,22 +147,62 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
       return element.children;
     }
 
-    return this.getListRoutes();
+    if (this._cachedNodes) {
+      return this._cachedNodes;
+    }
+
+    if (this._cachePromise) {
+      return this._cachePromise;
+    }
+
+    this._cachePromise = this.getListRoutes().then((nodes) => {
+      this._cachedNodes = nodes;
+      this._cachePromise = undefined;
+      return nodes;
+    });
+
+    return this._cachePromise;
   }
 
   /**
-   * Refreshes the tree data.
+   * Refreshes the tree data by firing the event.
    *
    * @function refresh
    * @public
-   * @memberof FeedbackProvider
+   * @memberof ListRoutesProvider
    * @example
    * provider.refresh();
    *
    * @returns {void} - No return value
    */
   refresh(): void {
+    this._cachedNodes = undefined;
+    this._cachePromise = undefined;
     this._onDidChangeTreeData.fire();
+  }
+
+  /**
+   * Disposes the provider.
+   *
+   * @function dispose
+   * @public
+   * @memberof ListRoutesProvider
+   * @example
+   * provider.dispose();
+   *
+   * @returns {void} - No return value
+   */
+  dispose(): void {
+    this._onDidChangeTreeData.dispose();
+    if (this._isDisposed) {
+      return;
+    }
+
+    this._isDisposed = true;
+
+    if (this._onDidChangeTreeData) {
+      this._onDidChangeTreeData.dispose();
+    }
   }
 
   // Private methods
@@ -143,13 +215,13 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
    * @example
    * const files = provider.getListRoutes();
    *
-   * @returns {Promise<NodeModel[] | undefined>} - The list of files
+   * @returns {Promise<NodeModel[]>} - The list of files
    */
-  private async getListRoutes(): Promise<NodeModel[] | undefined> {
+  private async getListRoutes(): Promise<NodeModel[]> {
     const files = await ListFilesController.getFiles();
 
     if (!files) {
-      return;
+      return []; // Return an empty array if no files found
     }
 
     // List of Modules
@@ -159,43 +231,55 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
         file.label.toString().includes('routes.ts'),
     );
 
-    for (const file of nodes) {
-      const document = await workspace.openTextDocument(
-        file.resourceUri?.path ?? '',
-      );
+    const pathPattern = /^\s*path\s*:\s*['"]?([^'",\]\s}]+)/i;
 
-      const children = Array.from(
-        { length: document.lineCount },
-        (_, index) => {
-          const line = document.lineAt(index);
+    const limit = pLimit(2);
 
-          let node: NodeModel | undefined;
-
-          if (line.text.match(/path:/gi)) {
-            const path = line.text
-              .replace(/[\{\}]/gi, '')
-              .split(',')[0]
-              .trim();
-
-            node = new NodeModel(path, new ThemeIcon('symbol-reference'), {
-              command: `${EXTENSION_ID}.list.gotoLine`,
-              title: line.text,
-              arguments: [file.resourceUri, index],
-            });
+    await Promise.all(
+      files.map((file) =>
+        limit(async () => {
+          if (!file.resourceUri) {
+            return file.setChildren([]);
           }
 
-          return node;
-        },
-      );
+          try {
+            const document = await workspace.openTextDocument(file.resourceUri);
 
-      if (children.length === 0) {
-        continue;
-      }
+            const children: NodeModel[] = [];
 
-      file.setChildren(
-        children.filter((child) => child !== undefined) as NodeModel[],
-      );
-    }
+            for (let i = 0; i < document.lineCount; i++) {
+              const text = document.lineAt(i).text;
+              const match = pathPattern.exec(text);
+
+              if (match) {
+                const extractedPath = match[1].trim();
+
+                children.push(
+                  new NodeModel(
+                    extractedPath,
+                    new ThemeIcon('symbol-reference'),
+                    {
+                      command: `${EXTENSION_ID}.list.gotoLine`,
+                      title: text,
+                      arguments: [file.resourceUri, i],
+                    },
+                  ),
+                );
+              }
+            }
+
+            file.setChildren(children);
+          } catch (error) {
+            console.error(
+              `Error reading file ${file.resourceUri?.fsPath}:`,
+              error instanceof Error ? error.message : String(error),
+            );
+
+            file.setChildren([]);
+          }
+        }),
+      ),
+    );
 
     return nodes.filter((file) => file.children?.length !== 0);
   }

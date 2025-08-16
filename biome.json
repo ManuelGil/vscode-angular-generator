@@ -1,10 +1,9 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
   "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
   "files": {
-    "include": ["src/**/*.ts"],
-    "ignoreUnknown": false,
-    "ignore": []
+    "includes": ["**/src/**/*.ts"],
+    "ignoreUnknown": false
   },
   "formatter": {
     "enabled": true,
@@ -16,16 +15,17 @@
     "lineWidth": 80,
     "attributePosition": "auto",
     "bracketSpacing": true,
-    "ignore": [
-      "./.vscode",
-      "./compodoc",
-      "./coverage",
-      "./docs",
-      "./node_modules",
-      "./out"
+    "includes": [
+      "**",
+      "!.vscode",
+      "!compodoc",
+      "!coverage",
+      "!docs",
+      "!node_modules",
+      "!out"
     ]
   },
-  "organizeImports": { "enabled": true },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
@@ -40,16 +40,17 @@
       },
       "suspicious": { "noDoubleEquals": "warn" }
     },
-    "ignore": [
-      "**/out",
-      "**/*.d.ts",
-      "**/.vscode/",
-      "**/compodoc/",
-      "**/coverage/",
-      "**/docs/",
-      "**/node_modules/",
-      "**/out/",
-      "**/commitlint.config.js"
+    "includes": [
+      "**",
+      "!**/out",
+      "!**/*.d.ts",
+      "!**/.vscode/",
+      "!**/compodoc/",
+      "!**/coverage/",
+      "!**/docs/",
+      "!**/node_modules/",
+      "!**/out/",
+      "!**/commitlint.config.js"
     ]
   },
   "javascript": {

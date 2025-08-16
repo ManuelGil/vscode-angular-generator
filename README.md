@@ -52,7 +52,6 @@ The extension then creates all necessary files with the correct boilerplate and 
     - [The Fast Way (This Extension)](#the-fast-way-this-extension)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
-  - [What's New](#whats-new)
   - [Features](#features)
     - [File Generation](#file-generation)
     - [Commands](#commands)
@@ -95,12 +94,6 @@ Key capabilities:
 - Access built-in snippets for Angular 20+ reactivity APIs (`signal`, `computed`, `effect`, etc.).
 
 **Compatibility:** Supports Angular 9-20+, fully aligned with Angular 20 conventions: suffix omission, dash-case file naming, and standalone components.
-
-## What's New
-
-- **Full Angular 20 Compatibility:** Embraces Angular 20 best practices, including dash-case file names and automatic omission of redundant suffixes (e.g., `.component.ts`, `.service.ts`).
-- **Modern Reactivity Snippets:** Includes ready-to-use snippets for the latest Angular reactivity APIs: `signal`, `computed`, `effect`, and `toSignal`.
-- **Smarter File Generation:** Output structure and naming are now fully aligned with current Angular standards, ensuring consistency and maintainability across your codebase.
 
 ## Features
 
@@ -531,7 +524,7 @@ This aligns with Angular 20's approach to file naming and simplifies your projec
    - Run an Angular CLI command.
    - Use a custom template.
 
-4. To use the **Command Palette**, press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS), type "Angular File Generator," and pick the desired command.
+4. To use the **Command Palette**, press `Ctrl+Shift+P` on Windows/Linux or `⌘+Shift+P` on macOS, type "Angular File Generator," and pick the desired command.
 5. To **browse your code** with side panels:
 
    - Click the Angular File Generator icon in the Activity Bar.
@@ -543,7 +536,7 @@ This aligns with Angular 20's approach to file naming and simplifies your projec
 ## Installation
 
 1. Open your VSCode-based editor (e.g., VSCode, VSCodium, WindSurf, Cursor).
-2. Go to the **Extensions** view (`Ctrl+Shift+X` / `Cmd+Shift+X`).
+2. Go to the **Extensions** view (`Ctrl+Shift+X` on Windows/Linux or `⌘+Shift+X` on macOS).
 3. Search for **"Angular File Generator"** (author: Manuel Gil).
 4. Click **Install**.
 5. (Optional) Clone or download the repository and open the folder in VSCode to test the latest development version.

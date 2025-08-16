@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.16.0] - 2025-08-15
+
+- Enhance `FeedbackProvider` and `ListFilesProvider` with caching mechanisms and dispose methods
+- Implement caching in `ListModulesProvider` and `ListRoutesProvider` for improved performance
+- Update `getListModules` and `getListRoutes` methods to handle file reading and parsing more efficiently
+- Add error handling for file operations in `ListModulesProvider` and `ListRoutesProvider`
+- Refactor `extension.ts` to improve event handling and ensure proper disposal of subscriptions
+
 ## [2.15.2] - 2025-07-04
 
 ### Changed
@@ -388,7 +396,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.2...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.16.0...HEAD
+[2.16.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.2...v2.16.0
 [2.15.2]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.1...v2.15.2
 [2.15.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.0...v2.15.1
 [2.15.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.14.0...v2.15.0
