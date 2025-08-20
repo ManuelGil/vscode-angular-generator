@@ -1,5 +1,4 @@
-import { window, InputBoxOptions } from 'vscode';
-import { l10n } from 'vscode';
+import { InputBoxOptions, l10n, window } from 'vscode';
 
 /**
  * Built-in prompt definitions for known placeholders:
@@ -17,7 +16,7 @@ const defaultPrompts: Record<
     validateInput: (value: string) => {
       if (!/^[A-Z][A-Za-z0-9]{2,}$/.test(value)) {
         return l10n.t(
-          'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).',
+          'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService)',
         );
       }
       return;
@@ -29,7 +28,7 @@ const defaultPrompts: Record<
     validateInput: (value: string) => {
       if (!/^[a-z][A-Za-z0-9-]+$/.test(value)) {
         return l10n.t(
-          'Invalid format! Entity names MUST be declared in camelCase (e.g. user, authService, userRole).',
+          'Invalid format! Entity names MUST be declared in camelCase (e.g. user, authService, userRole)',
         );
       }
       return;

@@ -81,5 +81,11 @@
   "angular.feedbackView": "Help and Feedback",
   "viewsWelcome.angular.listFilesView": "To effectively capture files, ensure you include the plural form of the file type within the workspace settings.\n[Open Workspace Setting](command:workbench.action.openWorkspaceSettingsFile)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator).",
   "viewsWelcome.angular.listRoutesView": "Your project currently lacks routes. You can begin by adding a new route to initiate your work.\n[Generate Class](command:angular.file.class)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator).",
-  "viewsWelcome.angular.listModulesView": "Your project currently lacks modules. You can begin by adding a new module to initiate your work.\n[Generate Module](command:angular.file.module)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator)."
+  "viewsWelcome.angular.listModulesView": "Your project currently lacks modules. You can begin by adding a new module to initiate your work.\n[Generate Module](command:angular.file.module)\nTo learn more about how to use Angular File Generator for VS Code [read our docs](https://github.com/ManuelGil/vscode-angular-generator).",
+  "angular.list.openFile": "Open File",
+  "angular.list.gotoLine": "Go to Line",
+  "angular.feedback.aboutUs": "About Us",
+  "angular.feedback.reportIssues": "Report Issues",
+  "angular.feedback.rateUs": "Rate Us",
+  "angular.feedback.supportUs": "Support Us"
 }

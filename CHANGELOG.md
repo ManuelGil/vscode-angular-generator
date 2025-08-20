@@ -7,7 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.17.0] - 2025-08-19
+
+### Changed
+
+- Introduce new commands for feedback: `openFile`, `gotoLine`, `aboutUs`, `reportIssues`, `rateUs`, and `supportUs` in package.json
+- Update `package.nls.json` and `package.nls.es.json` with corresponding localization strings for new commands
+- Create scripts for localization checks: `check-l10n.js` and `check-nls.js` to ensure all keys are present in localization files
+- Refactor `feedback.controller.ts` and other controllers to improve import order and ensure consistent usage of localization
+- Enhance filesystem helper functions to validate directory paths and handle file creation with user prompts
+- Update feedback provider to reflect new command titles and improve user experience
+
 ## [2.16.0] - 2025-08-15
+
+### Changed
 
 - Enhance `FeedbackProvider` and `ListFilesProvider` with caching mechanisms and dispose methods
 - Implement caching in `ListModulesProvider` and `ListRoutesProvider` for improved performance
@@ -396,7 +409,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.16.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.17.0...HEAD
+[2.17.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.2...v2.16.0
 [2.15.2]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.1...v2.15.2
 [2.15.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.0...v2.15.1

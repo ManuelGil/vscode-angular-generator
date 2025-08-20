@@ -1,15 +1,15 @@
 import {
   Disposable,
   EventEmitter,
+  l10n,
   ProgressLocation,
   ShellExecution,
   Task,
   TaskPanelKind,
   TaskRevealKind,
   TaskScope,
-  Uri,
-  l10n,
   tasks,
+  Uri,
   window,
   workspace,
 } from 'vscode';

@@ -1,4 +1,3 @@
-import pLimit from 'p-limit';
 import {
   Event,
   EventEmitter,
@@ -178,7 +177,7 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
   refresh(): void {
     this._cachedNodes = undefined;
     this._cachePromise = undefined;
-    this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire(undefined);
   }
 
   /**
@@ -225,18 +224,19 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
     }
 
     // List of Modules
-    const nodes = files.filter(
-      (file) =>
+    const nodes: NodeModel[] = files.filter(
+      (file: NodeModel) =>
         file.label.toString().includes('module.ts') ||
         file.label.toString().includes('routes.ts'),
     );
 
     const pathPattern = /^\s*path\s*:\s*['"]?([^'",\]\s}]+)/i;
 
+    const { default: pLimit } = await import('p-limit');
     const limit = pLimit(2);
 
     await Promise.all(
-      files.map((file) =>
+      nodes.map((file: NodeModel) =>
         limit(async () => {
           if (!file.resourceUri) {
             return file.setChildren([]);
@@ -249,6 +249,16 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
 
             for (let i = 0; i < document.lineCount; i++) {
               const text = document.lineAt(i).text;
+              // Skip commented lines (single-line and common block comment markers)
+              const trimmed = text.trim();
+              if (
+                trimmed.startsWith('//') ||
+                trimmed.startsWith('/*') ||
+                trimmed.startsWith('*/') ||
+                trimmed.startsWith('*')
+              ) {
+                continue;
+              }
               const match = pathPattern.exec(text);
 
               if (match) {
@@ -281,6 +291,6 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
       ),
     );
 
-    return nodes.filter((file) => file.children?.length !== 0);
+    return nodes.filter((file: NodeModel) => file.children?.length !== 0);
   }
 }

@@ -1,4 +1,3 @@
-import pLimit from 'p-limit';
 import {
   Event,
   EventEmitter,
@@ -6,15 +5,14 @@ import {
   ThemeIcon,
   TreeDataProvider,
   TreeItem,
-  workspace,
 } from 'vscode';
 
-import { EXTENSION_ID } from '../configs';
 import { ListFilesController } from '../controllers';
+import { singularize, titleize } from '../helpers';
 import { NodeModel } from '../models';
 
 /**
- * The ListModulesProvider class
+ * The ListFilesProvider class
  *
  * @class
  * @classdesc The class that represents the list of files provider.
@@ -25,11 +23,11 @@ import { NodeModel } from '../models';
  * @property {Event<NodeModel | undefined | null | void>} onDidChangeTreeData - The onDidChangeTreeData event
  * @property {ListFilesController} controller - The list of files controller
  * @example
- * const provider = new ListModulesProvider();
+ * const provider = new ListFilesProvider();
  *
  * @see https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider
  */
-export class ListModulesProvider implements TreeDataProvider<NodeModel> {
+export class ListFilesProvider implements TreeDataProvider<NodeModel> {
   // -----------------------------------------------------------------
   // Properties
   // -----------------------------------------------------------------
@@ -39,7 +37,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    * The onDidChangeTreeData event emitter.
    * @type {EventEmitter<NodeModel | undefined | null | void>}
    * @private
-   * @memberof ListModulesProvider
+   * @memberof ListFilesProvider
    * @example
    * this._onDidChangeTreeData = new EventEmitter<Node | undefined | null | void>();
    * this.onDidChangeTreeData = this._onDidChangeTreeData.event;
@@ -54,7 +52,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    * Indicates whether the provider has been disposed.
    * @type {boolean}
    * @private
-   * @memberof ListModulesProvider
+   * @memberof ListFilesProvider
    * @example
    * this._isDisposed = false;
    */
@@ -64,7 +62,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    * The cached nodes.
    * @type {NodeModel[] | undefined}
    * @private
-   * @memberof ListModulesProvider
+   * @memberof ListFilesProvider
    * @example
    * this._cachedNodes = undefined;
    */
@@ -74,7 +72,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    * The cache promise.
    * @type {Promise<NodeModel[] | undefined> | undefined}
    * @private
-   * @memberof ListModulesProvider
+   * @memberof ListFilesProvider
    * @example
    * this._cachePromise = undefined;
    */
@@ -83,12 +81,14 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
 
   // Public properties
   /**
-   * Event that signals when the module tree data has changed.
-   * Used by VSCode to refresh the explorer view when modules are added, removed, or updated.
-   *
-   * @public
-   * @readonly
+   * The onDidChangeTreeData event.
    * @type {Event<NodeModel | undefined | null | void>}
+   * @public
+   * @memberof ListFilesProvider
+   * @example
+   * readonly onDidChangeTreeData: Event<Node | undefined | null | void>;
+   * this.onDidChangeTreeData = this._onDidChangeTreeData.event;
+   *
    * @see https://code.visualstudio.com/api/references/vscode-api#Event
    */
   readonly onDidChangeTreeData: Event<NodeModel | undefined | null | void>;
@@ -98,11 +98,11 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
   // -----------------------------------------------------------------
 
   /**
-   * Creates an instance of ListModulesProvider for the VSCode explorer tree.
-   * Associates the provider with a ListFilesController to manage file discovery and navigation.
+   * Constructor for the ListFilesProvider class
    *
-   * @param {ListFilesController} controller - The controller responsible for listing files in the workspace.
+   * @constructor
    * @public
+   * @memberof ListFilesProvider
    */
   constructor() {
     this._onDidChangeTreeData = new EventEmitter<
@@ -117,24 +117,36 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
 
   // Public methods
   /**
-   * Returns the TreeItem representation for a given NodeModel element.
-   * Used by VSCode to render nodes in the explorer tree.
+   * Returns the tree item for the supplied element.
    *
-   * @param {NodeModel} element - The node model representing a file or section.
-   * @returns {TreeItem} The corresponding TreeItem for the VSCode explorer.
+   * @function getTreeItem
+   * @param {NodeModel} element - The element
    * @public
+   * @memberof ListFilesProvider
+   * @example
+   * const treeItem = provider.getTreeItem(element);
+   *
+   * @returns {TreeItem | Thenable<TreeItem>} - The tree item
+   *
+   * @see https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider
    */
   getTreeItem(element: NodeModel): TreeItem | Thenable<TreeItem> {
     return element;
   }
 
   /**
-   * Returns the child nodes for a given module node or root.
-   * If no element is provided, returns the top-level module nodes; otherwise, returns children for the given node.
+   * Returns the children for the supplied element.
    *
-   * @param {NodeModel} [element] - The parent node to retrieve children for.
-   * @returns {ProviderResult<NodeModel[]>} Array of child NodeModel elements or undefined if none.
+   * @function getChildren
+   * @param {NodeModel} [element] - The element
    * @public
+   * @memberof ListFilesProvider
+   * @example
+   * const children = provider.getChildren(element);
+   *
+   * @returns {ProviderResult<NodeModel[]>} - The children
+   *
+   * @see https://code.visualstudio.com/api/references/vscode-api#TreeDataProvider
    */
   getChildren(element?: NodeModel): ProviderResult<NodeModel[]> {
     if (element) {
@@ -149,7 +161,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
       return this._cachePromise;
     }
 
-    this._cachePromise = this.getListModules().then((nodes) => {
+    this._cachePromise = this.getListFiles().then((nodes) => {
       this._cachedNodes = nodes;
       this._cachePromise = undefined;
       return nodes;
@@ -163,7 +175,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    *
    * @function refresh
    * @public
-   * @memberof ListModulesProvider
+   * @memberof ListFilesProvider
    * @example
    * provider.refresh();
    *
@@ -180,7 +192,7 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
    *
    * @function dispose
    * @public
-   * @memberof ListModulesProvider
+   * @memberof ListFilesProvider
    * @example
    * provider.dispose();
    *
@@ -201,72 +213,53 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
 
   // Private methods
   /**
-   * Retrieves all Angular module files in the workspace and parses their structure.
-   * Filters files ending with 'module.ts' and scans for key sections (declarations, exports, imports, bootstrap, providers).
+   * Gets the list of files.
    *
+   * @function getListFiles
    * @private
-   * @returns {Promise<NodeModel[]>} Array of NodeModel representing Angular module sections, or undefined if none found.
+   * @memberof ListFilesProvider
    * @example
-   * const modules = await provider.getListModules();
+   * const files = provider.getListFiles();
+   *
+   * @returns {Promise<NodeModel[] | undefined>} - The list of files
    */
-  private async getListModules(): Promise<NodeModel[]> {
+  private async getListFiles(): Promise<NodeModel[]> {
     const files = await ListFilesController.getFiles();
 
     if (!files) {
       return [];
     }
 
-    const nodes = files.filter((file) =>
-      file.label.toString().includes('module.ts'),
-    );
+    const fileTypes = ListFilesController.config.watch;
 
-    const ngModuleDeclarationRegex =
-      /^\s*(declarations|exports|imports|bootstrap|providers)\s*:\s*\[/i;
-
+    const { default: pLimit } = await import('p-limit');
     const limit = pLimit(2);
 
-    await Promise.all(
-      nodes.map((file) =>
+    const groups = await Promise.all(
+      fileTypes.map((type) =>
         limit(async () => {
-          if (!file.resourceUri) {
-            return file.setChildren([]);
+          const suffix = `${singularize(type)}.ts`;
+
+          const children: NodeModel[] = files.filter((file: NodeModel) =>
+            file.label.toString().includes(suffix),
+          );
+
+          if (children.length === 0) {
+            return;
           }
 
-          try {
-            const document = await workspace.openTextDocument(file.resourceUri);
-            const children: NodeModel[] = [];
-
-            for (let i = 0; i < document.lineCount; i++) {
-              const text = document.lineAt(i).text;
-              const match = ngModuleDeclarationRegex.exec(text);
-
-              if (match) {
-                const propertyName = match[1]; // 'declarations', 'imports', etc.
-                const label = `${propertyName}: [`;
-
-                children.push(
-                  new NodeModel(label, new ThemeIcon('symbol-module'), {
-                    command: `${EXTENSION_ID}.list.gotoLine`,
-                    title: text.trim(),
-                    arguments: [file.resourceUri, i],
-                  }),
-                );
-              }
-            }
-
-            file.setChildren(children);
-          } catch (err) {
-            console.error(
-              `Error reading file ${file.resourceUri?.fsPath}:`,
-              err instanceof Error ? err.message : String(err),
-            );
-
-            file.setChildren([]);
-          }
+          return new NodeModel(
+            `${titleize(type)}: ${children.length}`,
+            new ThemeIcon('folder-opened'),
+            undefined,
+            undefined,
+            type,
+            children,
+          );
         }),
       ),
     );
 
-    return nodes.filter((file) => file.children && file.children.length !== 0);
+    return groups.filter((node): node is NodeModel => node !== undefined);
   }
 }

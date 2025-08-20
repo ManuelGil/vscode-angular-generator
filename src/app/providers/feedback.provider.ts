@@ -1,11 +1,11 @@
 import {
   Event,
   EventEmitter,
+  l10n,
   ProviderResult,
   ThemeIcon,
   TreeDataProvider,
   TreeItem,
-  l10n,
 } from 'vscode';
 
 import { EXTENSION_ID } from '../configs';
@@ -185,8 +185,8 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
         title: 'About Us',
         command: `${EXTENSION_ID}.feedback.aboutUs`,
       }),
-      new NodeModel(l10n.t('Report Issues'), new ThemeIcon('bug'), {
-        title: 'Report Issues',
+      new NodeModel(l10n.t('Report an Issue'), new ThemeIcon('bug'), {
+        title: 'Report an Issue',
         command: `${EXTENSION_ID}.feedback.reportIssues`,
       }),
       new NodeModel(l10n.t('Rate Us'), new ThemeIcon('star'), {

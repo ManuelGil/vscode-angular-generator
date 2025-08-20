@@ -24,7 +24,7 @@ export const CLASS_NAME_PATTERN = /^[A-Z][A-Za-z0-9]{2,}$/;
  * Error message for invalid class names.
  */
 export const INVALID_CLASS_NAME_MESSAGE =
-  'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService).';
+  'Invalid format! Class names MUST be declared in PascalCase and have at least 3 characters (e.g. User, AuthService)';
 
 /**
  * Regular expression pattern for validating entity names.
@@ -36,7 +36,7 @@ export const ENTITY_NAME_PATTERN = /^[a-z][A-Za-z0-9-]+$/;
  * Error message for invalid entity names.
  */
 export const ENTITY_NAME_VALIDATION_MESSAGE =
-  'Invalid format! Entity names MUST be declared in camelCase and have at least 1 character (e.g. user, authService).';
+  'Invalid format! Entity names MUST be declared in camelCase and have at least 1 character (e.g. user, authService)';
 
 /**
  * Error messages for validation

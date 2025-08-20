@@ -1,8 +1,9 @@
 import { existsSync } from 'fs';
-import { normalize } from 'path';
+import { isAbsolute, normalize } from 'path';
 import {
   FilePermission,
-  FileStat,
+  FileSystemError,
+  FileType,
   ProgressLocation,
   Uri,
   l10n,
@@ -46,11 +47,14 @@ export const directoryMap = async (
 };
 
 /**
- * Writes data to the file specified in the path. If the file does not exist then the function will create it.
+ * Writes content to the file specified in the path. If the file does not exist then the function will create it.
  *
- * @param {string} directoryPath - Path to the directory
+ * @param {string} directoryPath - Relative path to the directory where the file should be created
  * @param {string} filename - Name of the file
- * @param {string} fileContent - Data to write to the file
+ * @param {string} fileContent - Content to write to the file
+ * @example
+ * await saveFile('src', 'file.ts', 'console.log("Hello World")');
+ *
  * @returns {Promise<void>} - Confirmation of the write operation
  */
 export const saveFile = async (
@@ -58,71 +62,138 @@ export const saveFile = async (
   filename: string,
   fileContent: string,
 ): Promise<void> => {
-  let folder: string = '';
-
-  if (workspace.workspaceFolders) {
-    folder = workspace.workspaceFolders[0].uri.fsPath;
-  } else {
-    const message = l10n.t('The file has not been created!');
-    window.showErrorMessage(message);
+  // Ensure there is an open workspace
+  if (!workspace.workspaceFolders || workspace.workspaceFolders.length === 0) {
+    const message = l10n.t('No workspace folder open');
+    await window.showErrorMessage(message);
     return;
   }
 
-  const dirUri = Uri.joinPath(Uri.file(folder), directoryPath);
-  const fileUri = Uri.joinPath(dirUri, filename);
+  // Validate and normalize the provided directory path to avoid escaping the workspace root
+  const normalizedRelativeDirectoryPath = normalize(directoryPath || '.');
+  if (
+    isAbsolute(normalizedRelativeDirectoryPath) ||
+    normalizedRelativeDirectoryPath.split(/[\\\/]/).includes('..')
+  ) {
+    await window.showErrorMessage(l10n.t('Invalid directory path'));
+    return;
+  }
 
-  await window.withProgress(
-    {
-      location: ProgressLocation.Notification,
-      title: `Creating file: ${filename}`,
-      cancellable: false,
-    },
-    async () => {
-      try {
-        await workspace.fs.createDirectory(dirUri);
+  // Split into path segments in a cross-platform way and remove empty/'./' segments
+  const relativePathSegments = normalizedRelativeDirectoryPath
+    .split(/[\\/]+/)
+    .filter((s) => s !== '' && s !== '.');
 
-        let alreadyExists = false;
+  // Disallow parent-directory traversals
+  if (relativePathSegments.includes('..')) {
+    await window.showErrorMessage(l10n.t('Invalid directory path'));
+    return;
+  }
 
+  // Determine base folder (first workspace folder)
+  const workspaceRootUri = workspace.workspaceFolders?.[0]?.uri;
+  if (!workspaceRootUri) {
+    await window.showErrorMessage(l10n.t('No workspace folder open'));
+    return;
+  }
+
+  // Build directory and file URIs using segments to ensure proper joining on all platforms
+  const targetDirectoryUri =
+    relativePathSegments.length > 0
+      ? Uri.joinPath(workspaceRootUri, ...relativePathSegments)
+      : workspaceRootUri;
+  const targetFileUri = Uri.joinPath(targetDirectoryUri, filename);
+
+  // Track success to show notification after progress completes
+  let createdFileFsPath: string | undefined;
+
+  try {
+    await window.withProgress(
+      {
+        location: ProgressLocation.Notification,
+        title: l10n.t('Creating file: {0}', filename),
+        cancellable: true,
+      },
+      async (_progress, cancellationToken) => {
         try {
-          await workspace.fs.stat(fileUri);
-          alreadyExists = true;
-        } catch (statError: any) {
-          if ((statError as { code?: string }).code !== 'FileNotFound') {
-            throw statError;
+          // If the user canceled immediately, stop.
+          if (cancellationToken.isCancellationRequested) {
+            return;
           }
-        }
 
-        if (alreadyExists) {
-          const message = l10n.t(
-            'File already exists: {0}. Please choose a different name.',
-            filename,
+          // Create the directory only if it's not the workspace root (no-op if it already exists).
+          if (targetDirectoryUri.toString() !== workspaceRootUri.toString()) {
+            await workspace.fs.createDirectory(targetDirectoryUri);
+          }
+
+          // Check if file exists. Treat FileSystemError from stat as "not exists".
+          let targetFileExists = false;
+          try {
+            await workspace.fs.stat(targetFileUri);
+            targetFileExists = true;
+          } catch (error: unknown) {
+            if (error instanceof FileSystemError) {
+              targetFileExists = false;
+            } else {
+              // Unknown error - rethrow so outer catch can show it
+              throw error;
+            }
+          }
+
+          if (cancellationToken.isCancellationRequested) {
+            return;
+          }
+
+          // If file exists, offer to open it instead of overwriting
+          if (targetFileExists) {
+            const openLabel = l10n.t('Open File');
+            const choice = await window.showWarningMessage(
+              l10n.t('File already exists: {0}', filename),
+              openLabel,
+            );
+            if (choice === openLabel) {
+              const textDocument =
+                await workspace.openTextDocument(targetFileUri);
+              await window.showTextDocument(textDocument);
+            }
+            return;
+          }
+
+          // Write file contents (TextEncoder -> Uint8Array)
+          const encodedFileContent = new TextEncoder().encode(fileContent);
+          await workspace.fs.writeFile(targetFileUri, encodedFileContent);
+
+          if (cancellationToken.isCancellationRequested) {
+            return;
+          }
+
+          // Open the created file in the editor
+          const createdTextDocument =
+            await workspace.openTextDocument(targetFileUri);
+          await window.showTextDocument(createdTextDocument);
+
+          // Mark success; show notification after progress resolves
+          createdFileFsPath = targetFileUri.fsPath;
+        } catch (error: any) {
+          // Show a helpful error message including the underlying error if available
+          await window.showErrorMessage(
+            l10n.t('Error creating file: {0}', error?.message ?? String(error)),
           );
-          window.showErrorMessage(message);
-          return;
         }
-
-        const encoded = Buffer.from(fileContent, 'utf8');
-        await workspace.fs.writeFile(fileUri, encoded);
-
-        const document = await workspace.openTextDocument(fileUri);
-        await window.showTextDocument(document);
-
-        // Ensure the directory exists
-        const message = l10n.t(
-          'File created successfully: {0}',
-          normalize(fileUri.fsPath),
-        );
-        window.showInformationMessage(message);
-      } catch (err: any) {
-        // Handle errors during file creation
-        const message = l10n.t(
-          'Error creating file: {0}. Please check the path and try again.',
-          err.message ?? err,
-        );
-        window.showErrorMessage(message);
-      }
-    },
-  );
+      },
+    );
+    // Show success notification after progress dialog closes
+    if (createdFileFsPath) {
+      await window.showInformationMessage(
+        l10n.t('File created successfully: {0}', createdFileFsPath),
+      );
+    }
+  } catch (error: any) {
+    // Catch failures from withProgress or other unexpected issues
+    await window.showErrorMessage(
+      l10n.t('Error creating file: {0}', error?.message ?? String(error)),
+    );
+  }
 };
 
 /**
@@ -143,14 +214,18 @@ export const deleteFiles = async (
 ): Promise<void> => {
   const files = await workspace.findFiles(`${path}/**/*`);
 
-  files.forEach((file) => {
-    try {
-      workspace.fs.delete(file, options);
-    } catch (error: any) {
-      const errorMessage = error?.message || 'Unknown error';
-      window.showErrorMessage(l10n.t('Error deleting file: {0}', errorMessage));
-    }
-  });
+  await Promise.all(
+    files.map(async (file) => {
+      try {
+        await workspace.fs.delete(file, options);
+      } catch (error: any) {
+        const errorMessage = error?.message || 'Unknown error';
+        window.showErrorMessage(
+          l10n.t('Error deleting file: {0}', errorMessage),
+        );
+      }
+    }),
+  );
 };
 
 /**
@@ -172,7 +247,8 @@ export const getFilenames = async (
 ): Promise<string[]> => {
   const files = await directoryMap(path, options);
 
-  return files.map((file) => file.path);
+  // Use fsPath to ensure OS-correct path formatting (e.g., backslashes on Windows)
+  return files.map((file) => file.fsPath);
 };
 
 /**
@@ -251,10 +327,18 @@ export const sameFile = async (
   file1: string,
   file2: string,
 ): Promise<boolean> => {
-  const file1Info = await getFileInfo(file1);
-  const file2Info = await getFileInfo(file2);
+  const [file1Info, file2Info] = await Promise.all([
+    workspace.fs.stat(Uri.file(file1)),
+    workspace.fs.stat(Uri.file(file2)),
+  ]);
 
-  return file1Info === file2Info;
+  // Compare key attributes to determine if both refer to the same file contents/entry
+  return (
+    file1Info.type === file2Info.type &&
+    file1Info.size === file2Info.size &&
+    file1Info.mtime === file2Info.mtime &&
+    file1Info.ctime === file2Info.ctime
+  );
 };
 
 /**
@@ -264,14 +348,13 @@ export const sameFile = async (
  * @example
  * await setRealpath('src/file.ts');
  *
- * @returns {Promise<Uri | FileStat>} - Uri or FileStat object for the file
+ * @returns {Promise<Uri>} - Uri for the file if it exists
  */
-export const setRealpath = async (path: string): Promise<Uri | FileStat> => {
-  return (await workspace.fs.stat)
-    ? await workspace.fs.stat(Uri.file(path))
-    : await workspace
-        .openTextDocument(Uri.file(path))
-        .then((filename) => filename.uri);
+export const setRealpath = async (path: string): Promise<Uri> => {
+  // Validate the file exists; will throw if not
+  await workspace.fs.stat(Uri.file(path));
+  // Return a proper Uri for the supplied path
+  return Uri.file(path);
 };
 
 /**
@@ -324,5 +407,5 @@ export const exists = async (path: string): Promise<boolean> => {
  * @returns {Promise<boolean>} - Confirmation of the directory
  */
 export const isDirectory = async (path: string): Promise<boolean> => {
-  return (await workspace.fs.stat(Uri.file(path))).type === 2;
+  return (await workspace.fs.stat(Uri.file(path))).type === FileType.Directory;
 };

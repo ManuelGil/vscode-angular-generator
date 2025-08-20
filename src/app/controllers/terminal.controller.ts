@@ -1,7 +1,9 @@
 import { statSync } from 'fs';
 import { resolve } from 'path';
-import { Uri, l10n, window, workspace } from 'vscode';
+import { l10n, Uri, window, workspace } from 'vscode';
 
+// Import the Config and helper functions
+import { Config } from '../configs';
 // Import the helpers
 import {
   getName,
@@ -12,9 +14,6 @@ import {
   showMessage,
   validateFolderName,
 } from '../helpers';
-
-// Import the Config and helper functions
-import { Config } from '../configs';
 
 /**
  * TerminalController manages Angular CLI command execution and terminal interactions.
@@ -69,7 +68,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to disable analytics. Please try again.'));
+      showError(l10n.t('Failed to disable analytics. Please try again'));
     }
   }
 
@@ -96,7 +95,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to enable analytics. Please try again.'));
+      showError(l10n.t('Failed to enable analytics. Please try again'));
     }
   }
 
@@ -124,7 +123,7 @@ export class TerminalController {
 
     if (!result.success) {
       showError(
-        l10n.t('Failed to get analytics information. Please try again.'),
+        l10n.t('Failed to get analytics information. Please try again'),
       );
     }
   }
@@ -152,7 +151,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to prompt for analytics. Please try again.'));
+      showError(l10n.t('Failed to prompt for analytics. Please try again'));
     }
   }
 
@@ -179,7 +178,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to clear cache. Please try again.'));
+      showError(l10n.t('Failed to clear cache. Please try again'));
     }
   }
 
@@ -206,7 +205,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to disable cache. Please try again.'));
+      showError(l10n.t('Failed to disable cache. Please try again'));
     }
   }
 
@@ -233,7 +232,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to enable cache. Please try again.'));
+      showError(l10n.t('Failed to enable cache. Please try again'));
     }
   }
 
@@ -260,7 +259,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to get cache information. Please try again.'));
+      showError(l10n.t('Failed to get cache information. Please try again'));
     }
   }
 
@@ -380,7 +379,7 @@ export class TerminalController {
     if (options.find((item: any) => item.description === '--prefix')) {
       const prefix = await window.showInputBox({
         placeHolder: l10n.t(
-          'The prefix to apply to generated selectors for the initial project.',
+          'The prefix to apply to generated selectors for the initial project',
         ),
       });
 
@@ -399,7 +398,7 @@ export class TerminalController {
         ['Emulated', 'None', 'ShadowDom'],
         {
           placeHolder: l10n.t(
-            'The view encapsulation strategy to use in the initial project.',
+            'The view encapsulation strategy to use in the initial project',
           ),
         },
       );
@@ -439,7 +438,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to create new application. Please try again.'));
+      showError(l10n.t('Failed to create new application. Please try again'));
     }
   }
 
@@ -686,7 +685,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to generate component. Please try again.'));
+      showError(l10n.t('Failed to generate component. Please try again'));
     }
   }
 
@@ -713,7 +712,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to run end-to-end tests. Please try again.'));
+      showError(l10n.t('Failed to run end-to-end tests. Please try again'));
     }
   }
 
@@ -740,7 +739,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to generate environments. Please try again.'));
+      showError(l10n.t('Failed to generate environments. Please try again'));
     }
   }
 
@@ -843,7 +842,7 @@ export class TerminalController {
     if (options.find((item: any) => item.description === '--type-separator')) {
       const separator = await window.showQuickPick(['-', '.'], {
         placeHolder: l10n.t(
-          "The type separator to use before the type within the generated file's name.",
+          "The type separator to use before the type within the generated file's name",
         ),
       });
 
@@ -883,7 +882,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to generate guard. Please try again.'));
+      showError(l10n.t('Failed to generate guard. Please try again'));
     }
   }
 
@@ -1011,7 +1010,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to generate library. Please try again.'));
+      showError(l10n.t('Failed to generate library. Please try again'));
     }
   }
 
@@ -1161,7 +1160,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to generate pipe. Please try again.'));
+      showError(l10n.t('Failed to generate pipe. Please try again'));
     }
   }
 
@@ -1311,7 +1310,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to generate service. Please try again.'));
+      showError(l10n.t('Failed to generate service. Please try again'));
     }
   }
 
@@ -1338,7 +1337,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to run tests. Please try again.'));
+      showError(l10n.t('Failed to run tests. Please try again'));
     }
   }
 
@@ -1365,7 +1364,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to display version. Please try again.'));
+      showError(l10n.t('Failed to display version. Please try again'));
     }
   }
 
@@ -1468,7 +1467,7 @@ export class TerminalController {
     );
 
     if (!result.success) {
-      showError(l10n.t('Failed to generate custom element. Please try again.'));
+      showError(l10n.t('Failed to generate custom element. Please try again'));
     }
   }
 }

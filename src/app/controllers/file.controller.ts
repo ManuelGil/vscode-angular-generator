@@ -1,6 +1,6 @@
 import { statSync } from 'fs';
 import { resolve } from 'path';
-import { Uri, l10n, window, workspace } from 'vscode';
+import { l10n, Uri, window, workspace } from 'vscode';
 
 // Import the Config and helper functions
 import { Config } from '../configs';
@@ -361,7 +361,7 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
       (name: string) => {
         if (!/^[a-z][\w-]+$/.test(name)) {
           return l10n.t(
-            'Invalid format! Entity names MUST be declared in camelCase and have at least 1 character (e.g. user, authService).',
+            'Invalid format! Entity names MUST be declared in camelCase and have at least 1 character (e.g. user, authService)',
           );
         }
         return;

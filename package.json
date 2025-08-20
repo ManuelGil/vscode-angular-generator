@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator",
   "description": "The fastest way to generate Angular files from your editor. Integrates the Angular CLI into the VSCode UI to scaffold components, services, and modules with a simple right-click.",
-  "version": "2.16.0",
+  "version": "2.17.0",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -594,6 +594,42 @@
         "title": "%angular.listModules.refreshList%",
         "category": "Angular",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "angular.list.openFile",
+        "title": "%angular.list.openFile%",
+        "category": "Angular",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "angular.list.gotoLine",
+        "title": "%angular.list.gotoLine%",
+        "category": "Angular",
+        "icon": "$(go-to-line)"
+      },
+      {
+        "command": "angular.feedback.aboutUs",
+        "title": "%angular.feedback.aboutUs%",
+        "category": "Angular",
+        "icon": "$(info)"
+      },
+      {
+        "command": "angular.feedback.reportIssues",
+        "title": "%angular.feedback.reportIssues%",
+        "category": "Angular",
+        "icon": "$(bug)"
+      },
+      {
+        "command": "angular.feedback.rateUs",
+        "title": "%angular.feedback.rateUs%",
+        "category": "Angular",
+        "icon": "$(star)"
+      },
+      {
+        "command": "angular.feedback.supportUs",
+        "title": "%angular.feedback.supportUs%",
+        "category": "Angular",
+        "icon": "$(heart)"
       }
     ],
     "submenus": [
@@ -626,6 +662,30 @@
           "command": "angular.listModules.refreshList",
           "when": "view == angular.listModulesView",
           "group": "navigation"
+        },
+        {
+          "command": "angular.feedback.aboutUs",
+          "title": "%angular.feedback.aboutUs%",
+          "when": "view == angular.feedbackView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "angular.feedback.reportIssues",
+          "title": "%angular.feedback.reportIssues%",
+          "when": "view == angular.feedbackView",
+          "group": "navigation@2"
+        },
+        {
+          "command": "angular.feedback.rateUs",
+          "title": "%angular.feedback.rateUs%",
+          "when": "view == angular.feedbackView",
+          "group": "navigation@3"
+        },
+        {
+          "command": "angular.feedback.supportUs",
+          "title": "%angular.feedback.supportUs%",
+          "when": "view == angular.feedbackView",
+          "group": "navigation@4"
         }
       ],
       "explorer/context": [
@@ -819,7 +879,7 @@
         {
           "id": "angular-explorer",
           "title": "Angular File Generator",
-          "icon": "out/assets/logo.svg"
+          "icon": "src/assets/logo.svg"
         }
       ]
     },
@@ -847,7 +907,7 @@
           "id": "angular.feedbackView",
           "name": "%angular.feedbackView%",
           "visibility": "visible",
-          "icon": "$(icon-feedback)"
+          "icon": "$(comment-discussion)"
         }
       ]
     },
@@ -868,6 +928,8 @@
     "lint:check": "biome check --write",
     "test": "vscode-test",
     "compodoc": "npx compodoc -p tsconfig.doc.json -d compodoc --theme readthedocs -s",
+    "l10n:check": "node scripts/check-l10n.js",
+    "nls:check": "node scripts/check-nls.js",
     "prepare": "husky"
   },
   "devDependencies": {
