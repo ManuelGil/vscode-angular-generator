@@ -1,5 +1,5 @@
 import { statSync } from 'fs';
-import { resolve } from 'path';
+import { relative, resolve } from 'path';
 import { l10n, Uri, window, workspace } from 'vscode';
 
 // Import the Config and helper functions
@@ -264,6 +264,38 @@ export class TerminalController {
   }
 
   /**
+   * Generates a relative path from the workspace root to the specified path.
+   * If the given path is a file, it will be resolved to the parent folder.
+   * If showPath is disabled, it will return the relative path from the workspace root using
+   * {@linkcode Workspace.asRelativePath}.
+   * @param {Uri} [path] - The path to generate the relative path from.
+   * @returns {string} The relative path.
+   * @memberof TerminalController
+   */
+  relativePath(path?: Uri): string {
+    // Check if the path is a file
+    if (path && statSync(path.fsPath).isFile()) {
+      path = Uri.file(resolve(path.fsPath, '..'));
+    }
+
+    let folderPath: string = '';
+
+    if (this.config.useRootWorkspace) {
+      // First workspace is the root => https://code.visualstudio.com/api/references/vscode-api#workspace
+      const wsFolder = workspace.workspaceFolders
+        ? workspace.workspaceFolders[0]
+        : '';
+      if (wsFolder && path) {
+        folderPath = relative(wsFolder.uri.fsPath, path.fsPath);
+      }
+    } else {
+      folderPath = path ? workspace.asRelativePath(path.fsPath, false) : '';
+    }
+
+    return folderPath;
+  }
+
+  /**
    * Creates a new application.
    *
    * @function newApp
@@ -448,13 +480,8 @@ export class TerminalController {
    * @returns Promise resolved when the operation completes or is cancelled.
    */
   async generateComponent(path?: Uri): Promise<void> {
-    // Check if the path is a file
-    if (path && statSync(path.fsPath).isFile()) {
-      path = Uri.file(resolve(path.fsPath, '..'));
-    }
-
     // Get the relative path
-    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+    let folderPath: string = this.relativePath(path);
 
     if (this.config.cwd) {
       const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
@@ -757,13 +784,8 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async generateGuard(path?: Uri): Promise<void> {
-    // Check if the path is a file
-    if (path && statSync(path.fsPath).isFile()) {
-      path = Uri.file(resolve(path.fsPath, '..'));
-    }
-
     // Get the relative path
-    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+    let folderPath: string = this.relativePath(path);
 
     if (this.config.cwd) {
       const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
@@ -1028,13 +1050,8 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async generatePipe(path?: Uri): Promise<void> {
-    // Check if the path is a file
-    if (path && statSync(path.fsPath).isFile()) {
-      path = Uri.file(resolve(path.fsPath, '..'));
-    }
-
     // Get the relative path
-    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+    let folderPath: string = this.relativePath(path);
 
     if (this.config.cwd) {
       const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
@@ -1203,13 +1220,8 @@ export class TerminalController {
    * @returns {Promise<void>} - No return value
    */
   async generateService(path?: Uri): Promise<void> {
-    // Check if the path is a file
-    if (path && statSync(path.fsPath).isFile()) {
-      path = Uri.file(resolve(path.fsPath, '..'));
-    }
-
     // Get the relative path
-    let folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+    let folderPath: string = this.relativePath(path);
 
     if (this.config.cwd) {
       const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
@@ -1382,13 +1394,8 @@ export class TerminalController {
    * @returns {Promise<void>} - The result of the operation
    */
   async generateCustomElement(path?: Uri): Promise<void> {
-    // Check if the path is a file
-    if (path && statSync(path.fsPath).isFile()) {
-      path = Uri.file(resolve(path.fsPath, '..'));
-    }
-
     // Get the relative path
-    const folderPath: string = path ? workspace.asRelativePath(path.path) : '';
+    let folderPath: string = this.relativePath(path);
 
     // Confirm or skip folder
     let folder: string | undefined;

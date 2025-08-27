@@ -121,6 +121,18 @@ export class Config {
    * console.log(config.cwd);
    */
   cwd: string | undefined;
+
+  /**
+   * Use root workspace to resolve relative paths.
+   * @type {string | undefined}
+   * @public
+   * @memberof Config
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.useRootWorkspace);
+   */
+  useRootWorkspace: boolean;
+
   /**
    * The custom commands.
    * @type {object[]}
@@ -134,6 +146,7 @@ export class Config {
    * console.log(config.customCommands[0].args);
    */
   customCommands: object[];
+
   /**
    * The custom templates.
    * @type {object[]}
@@ -148,6 +161,7 @@ export class Config {
    * console.log(config.customTemplates[0].template);
    */
   templates: object[];
+
   /**
    * Whether to show the menu or not.
    * @type {MenuInterface}
@@ -159,6 +173,7 @@ export class Config {
    * console.log(config.activateItem.terminal.components);
    */
   activateItem: MenuInterface;
+
   /**
    * Whether to skip the folder confirmation or not.
    * @type {boolean}
@@ -216,6 +231,7 @@ export class Config {
       'terminal.cwd',
       workspace.workspaceFolders?.[0].uri.fsPath,
     );
+    this.useRootWorkspace = config.get<boolean>('useRootWorkspace', false);
     this.customCommands = config.get<object[]>(
       'submenu.customCommands',
       CUSTOM_COMMANDS,
@@ -270,6 +286,10 @@ export class Config {
     this.watch = config.get<string[]>('files.watch', this.watch);
     this.showPath = config.get<boolean>('files.showPath', this.showPath);
     this.cwd = config.get<string | undefined>('terminal.cwd', this.cwd);
+    this.useRootWorkspace = config.get<boolean>(
+      'useRootWorkspace',
+      this.useRootWorkspace,
+    );
     this.customCommands = config.get<object[]>(
       'submenu.customCommands',
       this.customCommands,
