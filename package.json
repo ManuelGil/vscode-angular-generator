@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator",
   "description": "The fastest way to generate Angular files from your editor. Integrates the Angular CLI into the VSCode UI to scaffold components, services, and modules with a simple right-click.",
-  "version": "2.17.0",
+  "version": "2.17.2",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -131,6 +131,12 @@
           "type": "string",
           "scope": "resource",
           "description": "%angular.terminal.cwd%"
+        },
+        "angular.useRootWorkspace": {
+          "type": "boolean",
+          "default": false,
+          "scope": "resource",
+          "description": "%angular.useRootWorkspace%"
         },
         "angular.submenu.customCommands": {
           "type": "array",
