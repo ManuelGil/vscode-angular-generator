@@ -35,6 +35,7 @@
   "angular.submenu.activateItem.file.service": "Activar el elemento de servicio en el submenú de archivo",
   "angular.submenu.activateItem.file.spec": "Activar el elemento de prueba en el submenú de archivo",
   "angular.submenu.activateItem.file.template": "Activar el elemento de plantilla en el submenú de archivo",
+  "angular.fileGenerator.useRootWorkspace": "Usar la carpeta raíz del espacio de trabajo como el directorio de trabajo actual para resolver rutas relativas.",
   "angular.fileGenerator.skipFolderConfirmation": "Omitir confirmación de carpeta al generar un nuevo archivo",
   "angular.fileGenerator.omitSuffix": "Omitir sufijo al generar un nuevo archivo (Solo para Angular versión 20+)",
   "angular.fileGenerator.typeSeparator": "Separador de tipo de archivo (Solo para Angular versión 20+)",

@@ -362,7 +362,7 @@ For optimal performance and to align with project conventions, consider adding t
 
   // 5. Working directory for CLI commands (monorepo)
   "angular.terminal.cwd": "packages/my-angular-app", // adjust to your structure
-  "angular.useRootWorkspace": false, // Use the root workspace folder as the current working directory to resolve relative paths
+  "angular.fileGenerator.useRootWorkspace": false, // Use the root workspace folder as the current working directory to resolve relative paths
 
   // 6. Custom CLI commands
   "angular.submenu.customCommands": [
@@ -413,7 +413,7 @@ For optimal performance and to align with project conventions, consider adding t
 | `angular.files.watch`                          | Folders (by type) to watch in the sidebar (`modules`, `components`, `services`) | `["modules","components","services"]` |
 | `angular.files.showPath`                       | Show file paths in the sidebar                                                  | `true`                                |
 | `angular.terminal.cwd`                         | Absolute path for terminal current working directory                            | `(none)`                              |
-| `angular.useRootWorkspace`                     | Allow using the root workspace folder to resolve relative paths                 | `(none)`                              |
+| `angular.fileGenerator.useRootWorkspace`       | Allow using the root workspace folder to resolve relative paths                 | `(none)`                              |
 | `angular.submenu.customCommands`               | List of custom CLI commands to show under a submenu                             | `[]`                                  |
 | `angular.submenu.templates`                    | List of custom file templates for quick generation                              | `[]`                                  |
 | `angular.submenu.activateItem`                 | Items (by category) to activate in the submenu                                  | `{ see example }`                     |

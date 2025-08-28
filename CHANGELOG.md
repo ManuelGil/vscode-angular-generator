@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.18.0] - 2025-08-28
+
+### Changed
+
+- Replace the deprecated `directoryMap` function with a new `findFiles` helper for improved file searching capabilities
+- Update `ListFilesController` to utilize the new `findFiles` helper, enhancing file retrieval logic and ensuring unique file listings
+- Consolidate file saving logic into `save-file.helper.ts`, ensuring proper directory creation and file handling with user notifications
+- Remove the obsolete `filesystem.helper.ts` file and introduced `relative-path.helper.ts` for better path management
+- Update `FileController` to leverage the new `relativePath` helper for improved path handling
+- Update `TerminalController` to utilize the new `relativePath` helper for consistent path management
+- Enhance error handling and user feedback throughout the file operations
+
 ## [2.17.0] - 2025-08-19
 
 ### Changed
@@ -409,7 +421,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.17.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.18.0...HEAD
+[2.18.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.17.0...v2.18.0
 [2.17.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.2...v2.16.0
 [2.15.2]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.1...v2.15.2

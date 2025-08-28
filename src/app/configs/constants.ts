@@ -302,6 +302,18 @@ export const ACTIVATE_MENU: MenuInterface = {
 };
 
 /**
+ * IS_ROOT_CONTEXT: Whether the current context is the root context or not.
+ * @type {boolean}
+ * @public
+ * @memberof Constants
+ * @example
+ * console.log(IS_ROOT_CONTEXT);
+ *
+ * @returns {boolean} - Whether the current context is the root context or not
+ */
+export const IS_ROOT_CONTEXT: boolean = false;
+
+/**
  * SKIP_FOLDER_CONFIRMATION: Whether to skip the folder confirmation or not.
  * @type {boolean}
  * @public

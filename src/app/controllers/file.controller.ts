@@ -1,6 +1,4 @@
-import { statSync } from 'fs';
-import { relative, resolve } from 'path';
-import { l10n, Uri, window, workspace } from 'vscode';
+import { l10n, Uri, window } from 'vscode';
 
 // Import the Config and helper functions
 import { Config } from '../configs';
@@ -10,6 +8,7 @@ import {
   getPath,
   pickItem,
   pickItemWithIcons,
+  relativePath,
   resolvePlaceholders,
   saveFile,
   showError,
@@ -42,38 +41,6 @@ export class FileController {
    */
   constructor(private readonly config: Config) {}
 
-  /**
-   * Generates a relative path from the workspace root to the specified path.
-   * If the given path is a file, it will be resolved to the parent folder.
-   * If showPath is disabled, it will return the relative path from the workspace root using
-   * {@linkcode Workspace.asRelativePath}.
-   * @param {Uri} [path] - The path to generate the relative path from.
-   * @returns {string} The relative path.
-   * @memberof FileController
-   */
-  relativePath(path?: Uri): string {
-    // Check if the path is a file
-    if (path && statSync(path.fsPath).isFile()) {
-      path = Uri.file(resolve(path.fsPath, '..'));
-    }
-
-    let folderPath: string = '';
-
-    if (this.config.useRootWorkspace) {
-      // First workspace is the root => https://code.visualstudio.com/api/references/vscode-api#workspace
-      const wsFolder = workspace.workspaceFolders
-        ? workspace.workspaceFolders[0]
-        : '';
-      if (wsFolder && path) {
-        folderPath = relative(wsFolder.uri.fsPath, path.fsPath);
-      }
-    } else {
-      folderPath = path ? workspace.asRelativePath(path.fsPath, false) : '';
-    }
-
-    return folderPath;
-  }
-
   // -----------------------------------------------------------------
   // Methods
   // -----------------------------------------------------------------
@@ -86,7 +53,7 @@ export class FileController {
    */
   async generateClass(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -152,7 +119,7 @@ export class FileController {
    */
   async generateComponent(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -228,7 +195,7 @@ export class ${className}${omitSuffix ? '' : 'Component'} {}
    */
   async generateDirective(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -286,7 +253,7 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
    */
   async generateEnum(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -338,7 +305,7 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
    */
   async generateGuard(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -425,7 +392,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
    */
   async generateInterceptor(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -493,7 +460,7 @@ export class ${className}Interceptor implements HttpInterceptor {
    */
   async generateInterface(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -559,7 +526,7 @@ export class ${className}Interceptor implements HttpInterceptor {
    */
   async generateModule(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -617,7 +584,7 @@ export class ${className}Module {}
    */
   async generatePipe(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -677,7 +644,7 @@ export class ${className}Pipe implements PipeTransform {
    */
   async generateResolver(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -747,7 +714,7 @@ export class ${className}Resolver implements Resolve<boolean> {
    */
   async generateService(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -805,7 +772,7 @@ export class ${className}${omitSuffix ? '' : 'Service'} {}
    */
   async generateTest(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -920,7 +887,7 @@ describe('${className}${titleize(type)}', () => {
    */
   async generateCustomElement(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = this.relativePath(path);
+    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
 
     let folder: string | undefined;
 

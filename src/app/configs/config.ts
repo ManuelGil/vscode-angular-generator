@@ -6,6 +6,7 @@ import {
   CUSTOM_TEMPLATES,
   EXCLUDE,
   INCLUDE,
+  IS_ROOT_CONTEXT,
   MenuInterface,
   OMIT_SUFFIX,
   SHOW_PATH,
@@ -129,7 +130,7 @@ export class Config {
    * @memberof Config
    * @example
    * const config = new Config(workspace.getConfiguration());
-   * console.log(config.useRootWorkspace);
+   * console.log(config.fileGenerator.useRootWorkspace);
    */
   useRootWorkspace: boolean;
 
@@ -231,7 +232,6 @@ export class Config {
       'terminal.cwd',
       workspace.workspaceFolders?.[0].uri.fsPath,
     );
-    this.useRootWorkspace = config.get<boolean>('useRootWorkspace', false);
     this.customCommands = config.get<object[]>(
       'submenu.customCommands',
       CUSTOM_COMMANDS,
@@ -243,6 +243,10 @@ export class Config {
     this.activateItem = config.get<MenuInterface>(
       'submenu.activateItem',
       ACTIVATE_MENU,
+    );
+    this.useRootWorkspace = config.get<boolean>(
+      'fileGenerator.useRootWorkspace',
+      IS_ROOT_CONTEXT,
     );
     this.skipFolderConfirmation = config.get<boolean>(
       'fileGenerator.skipFolderConfirmation',
@@ -286,10 +290,6 @@ export class Config {
     this.watch = config.get<string[]>('files.watch', this.watch);
     this.showPath = config.get<boolean>('files.showPath', this.showPath);
     this.cwd = config.get<string | undefined>('terminal.cwd', this.cwd);
-    this.useRootWorkspace = config.get<boolean>(
-      'useRootWorkspace',
-      this.useRootWorkspace,
-    );
     this.customCommands = config.get<object[]>(
       'submenu.customCommands',
       this.customCommands,
@@ -298,6 +298,10 @@ export class Config {
     this.activateItem = config.get<MenuInterface>(
       'submenu.activateItem',
       this.activateItem,
+    );
+    this.useRootWorkspace = config.get<boolean>(
+      'fileGenerator.useRootWorkspace',
+      this.useRootWorkspace,
     );
     this.skipFolderConfirmation = config.get<boolean>(
       'fileGenerator.skipFolderConfirmation',

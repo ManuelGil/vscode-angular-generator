@@ -1,4 +1,5 @@
 import {
+  l10n,
   Position,
   Range,
   Selection,
@@ -10,7 +11,7 @@ import {
 } from 'vscode';
 
 import { Config, EXTENSION_ID } from '../configs';
-import { directoryMap } from '../helpers';
+import { findFiles } from '../helpers';
 import { NodeModel } from '../models';
 
 /**
@@ -64,50 +65,79 @@ export class ListFilesController {
    * @param maxResults Maximum number of results to return.
    * @returns Promise resolved with an array of NodeModel or void if none found.
    */
-  static async getFiles(
-    maxResults: number = Number.MAX_SAFE_INTEGER,
-  ): Promise<NodeModel[] | void> {
-    // Get the files in the folder
-    const files = await directoryMap('/', {
-      extensions: this.config.include,
-      ignore: this.config.exclude,
-      maxResults,
-    });
-
-    if (files.length !== 0) {
-      let nodes: NodeModel[] = [];
-
-      files.sort((a, b) => a.path.localeCompare(b.path));
-
-      for (const file of files) {
-        const path = workspace.asRelativePath(file);
-        let filename = path.split('/').pop();
-
-        if (filename && this.config.showPath) {
-          const folder = path.split('/').slice(0, -1).join('/');
-
-          filename += folder ? ` (${folder})` : ' (root)';
-        }
-
-        nodes.push(
-          new NodeModel(
-            filename ?? 'Untitled',
-            new ThemeIcon('file'),
-            {
-              command: `${EXTENSION_ID}.list.openFile`,
-              title: 'Open File',
-              arguments: [file],
-            },
-            file,
-            file.fsPath,
-          ),
-        );
-      }
-
-      return nodes;
+  static async getFiles(): Promise<NodeModel[] | void> {
+    if (!workspace.workspaceFolders) {
+      window.showErrorMessage(l10n.t('Operation cancelled!'));
+      return;
     }
 
-    return;
+    const folders = workspace.workspaceFolders.map(
+      (folder) => folder.uri.fsPath,
+    );
+    const allFiles: Uri[] = [];
+
+    const { include, exclude } = this.config;
+
+    const includePatterns = include
+      .map((pattern: string) => pattern?.trim())
+      .filter((pattern): pattern is string => !!pattern && pattern.length > 0)
+      .map((pattern: string) => {
+        const hasGlob = /[\*?\[\]\{\}\(\)!]/.test(pattern);
+        const hasSep = /[\\/]/.test(pattern);
+        if (hasGlob || hasSep) {
+          return pattern;
+        }
+        const ext = pattern.startsWith('.') ? pattern.slice(1) : pattern;
+        return `**/*.${ext}`;
+      });
+
+    for (const folder of folders) {
+      const result = await findFiles({
+        baseDirectoryPath: folder,
+        includeFilePatterns: includePatterns,
+        excludedPatterns: exclude,
+        includeDotfiles: false,
+        enableGitignoreDetection: true,
+      });
+      allFiles.push(...result);
+    }
+
+    if (allFiles.length === 0) {
+      return;
+    }
+
+    const uniqueFiles = Array.from(new Set(allFiles.map((f) => f.fsPath))).map(
+      (path) => Uri.file(path),
+    );
+
+    uniqueFiles.sort((a, b) => a.path.localeCompare(b.path));
+
+    const nodes: NodeModel[] = uniqueFiles.map((file) => {
+      const path = workspace.asRelativePath(file);
+      const filename = path.split('/').pop();
+      let label: string = filename ?? l10n.t('Untitled');
+
+      if (filename && this.config.showPath) {
+        const folder = path.split('/').slice(0, -1).join('/');
+        label += folder ? l10n.t(' ({0})', folder) : ` ${l10n.t('(root)')}`;
+      }
+
+      const node = new NodeModel(
+        label,
+        new ThemeIcon('file'),
+        {
+          command: `${EXTENSION_ID}.list.openFile`,
+          title: l10n.t('Open File'),
+          arguments: [file],
+        },
+        file,
+        file.fsPath,
+      );
+      node.tooltip = file.fsPath;
+      return node;
+    });
+
+    return nodes;
   }
 
   /**

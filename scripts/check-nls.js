@@ -1,12 +1,4 @@
 #!/usr/bin/env node
-/*
-  JSON Flow - NLS (package.nls) verification script
-  - Scans package.json for %...% placeholders
-  - Compares used keys with keys present in package.nls*.json (default and locales)
-  - Reports missing and unused keys by bundle
-  - Exits with code 1 if any missing keys are found in any bundle
-*/
-
 const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
