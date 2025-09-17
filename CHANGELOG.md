@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.18.1] - 2025-09-16
+
+### Changed
+
+- Update dependencies to the latest versions available and improve security
+
 ## [2.18.0] - 2025-08-28
 
 ### Changed
@@ -421,7 +427,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.18.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.18.1...HEAD
+[2.18.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.18.0...v2.18.1
 [2.18.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.17.0...v2.18.0
 [2.17.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.15.2...v2.16.0
