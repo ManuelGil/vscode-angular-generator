@@ -1,0 +1,39 @@
+# Dependabot configuration
+# Balanced setup for OSS projects using pnpm.
+# Improves security and predictability while remaining easy to maintain.
+
+version: 2
+
+updates:
+  - package-ecosystem: "pnpm"
+    directory: "/"
+    target-branch: "main"
+
+    # Regular dependency updates
+    schedule:
+      interval: "monthly"
+      time: "09:00"
+      timezone: "UTC"
+
+    # Allow automatic PRs for known security vulnerabilities
+    security-updates: true
+
+    # Limit update noise and cognitive load
+    open-pull-requests-limit: 2
+
+    # Only allow non-breaking updates for regular dependency bumps
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
+    # Metadata for easier triage
+    labels:
+      - "dependencies"
+
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+    # Reduce churn by rebasing instead of recreating PRs
+    rebase-strategy: "auto"

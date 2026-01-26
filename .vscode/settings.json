@@ -10,5 +10,6 @@
   "typescript.tsc.autoDetect": "off",
   "[typescript]": {
     "editor.defaultFormatter": "biomejs.biome"
-  }
+  },
+  "makefile.configureOnOpen": false
 }

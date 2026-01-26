@@ -1,0 +1,56 @@
+# CI for VS Code Extension
+# -----------------------
+# Recommended baseline workflow for VS Code extensions written in TypeScript.
+#
+# Goals:
+# - Validate Pull Requests only (low noise)
+# - Ensure dependencies install correctly using pnpm
+# - Ensure the extension compiles (tsc)
+#
+# This workflow intentionally:
+# - Uses `pnpm compile` (standard for VS Code extensions)
+# - Does not run tests (none exist yet)
+# - Avoids unnecessary steps and complexity
+
+name: CI
+
+# Run CI only on Pull Requests targeting main
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  compile:
+    # Ubuntu is the standard and most stable runner for VS Code extensions
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup Node.js using .nvmrc
+      # This keeps local dev, CI, and Dependabot in sync
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      # Setup pnpm
+      # Pinning the major version avoids unexpected breaking changes
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # Install dependencies
+      # --frozen-lockfile guarantees reproducible installs
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Compile the extension
+      # This typically runs `tsc` and validates the extension code
+      - name: Compile extension
+        run: pnpm compile
