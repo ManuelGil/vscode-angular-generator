@@ -30,7 +30,7 @@ jobs:
 
       # Setup pnpm FIRST (before Node.js setup tries to use it for caching)
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v3
         with:
           version: 10
 
@@ -41,12 +41,17 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
+          # make cache key depend on the lockfile explicitly
           cache-dependency-path: "pnpm-lock.yaml"
 
       # Install dependencies
+      # --frozen-lockfile ensures the lockfile is respected
+      # and fails the CI if dependencies are out of sync
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       # Compile the VS Code extension
+      # This typically runs `tsc` and validates TypeScript correctness
+      # This step is intentionally mandatory
       - name: Compile extension
         run: pnpm compile
