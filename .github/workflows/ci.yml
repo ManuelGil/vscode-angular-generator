@@ -1,14 +1,14 @@
-# Optimized CI for VS Code Extension (pnpm)
-# ---------------------------------------
-# Based on pnpm official CI recommendations:
-# https://pnpm.io/continuous-integration
+# CI for VS Code Extension
+# -----------------------
+# This workflow validates Pull Requests before merging into main.
 #
-# Goals:
-# - Deterministic installs using pnpm-lock.yaml
-# - Explicit and reliable pnpm store caching
-# - Low maintenance, low noise
-# - Compile-only validation (no tests yet)
-
+# Design goals:
+# - Low maintenance and low noise
+# - Deterministic Node version via .nvmrc
+# - pnpm-based dependency management
+# - Compile-only check (no tests yet)
+#
+# This is the recommended baseline CI for a VS Code extension.
 
 name: CI
 
@@ -24,41 +24,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
+      # Checkout repository source code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup pnpm (must come before any pnpm usage)
-      - name: Setup pnpm
+      # Setup pnpm FIRST
+      # This must be installed before setup-node to enable pnpm caching
+      - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
 
-      # Setup Node.js using the exact version from .nvmrc (24.13.0)
+      # Setup Node.js using the exact version defined in .nvmrc (24.13.0)
+      # Enables pnpm caching based on pnpm-lock.yaml
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
+          cache: "pnpm"
 
-      # Resolve pnpm store path (recommended by pnpm docs)
-      - name: Get pnpm store directory
-        shell: bash
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
-        id: pnpm-cache
-
-      # Cache pnpm store (not node_modules)
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      # Install dependencies with strict lockfile enforcement
+      # Install dependencies
+      # --frozen-lockfile ensures the lockfile is respected
+      # and fails the CI if dependencies are out of sync
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Compile the VS Code extension (TypeScript)
+      # Compile the VS Code extension
+      # This typically runs `tsc` and validates TypeScript correctness
+      # This step is intentionally mandatory
       - name: Compile extension
         run: pnpm compile
