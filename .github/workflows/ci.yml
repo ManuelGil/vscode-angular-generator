@@ -28,31 +28,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Recomendado: Asegurar Corepack actualizado para pnpm v10+
-      - name: Install Corepack
-        run: npm install -g corepack@latest
-
-      # Setup pnpm v10 con gestión de caché integrada (más eficiente que setup-node)
+      # Setup pnpm
+      # - Installs a pinned pnpm version
+      # - Enables native pnpm store caching
+      # - More reliable on modern Ubuntu runners than setup-node caching
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
-          # La acción de pnpm ahora maneja el cache-dependency-path automáticamente
           cache: true
 
-      # Setup Node.js desde .nvmrc
+      # Setup Node.js runtime
+      # - Uses .nvmrc as the single source of truth
+      # - No dependency caching here (handled by pnpm)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          # Quitamos 'cache: pnpm' de aquí para evitar conflictos con pnpm/action-setup
 
+      # Install dependencies
+      # - Ensures pnpm-lock.yaml is respected
+      # - Fails fast if the lockfile is out of sync
       - name: Install dependencies
-        # --frozen-lockfile es obligatorio para entornos CI deterministas
         run: pnpm install --frozen-lockfile
 
+      # Compile VS Code extension
+      # - Typically runs TypeScript compilation (tsc)
+      # - Core validation step for this project
       - name: Compile extension
-        # Asegura que tsc no use memoria excesiva en el runner de GitHub
-        run: pnpm run compile
-        env:
-          NODE_OPTIONS: "--max_old_space_size=4096"
+        run: pnpm compile
