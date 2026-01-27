@@ -28,34 +28,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup Node.js using the exact version defined in .nvmrc (24.13.0)
-      # Enables pnpm caching based on pnpm-lock.yaml
+      # Setup Node.js using exact version from .nvmrc (24.13.0)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: "pnpm"
-          # make cache key depend on the lockfile explicitly
-          cache-dependency-path: "pnpm-lock.yaml"
 
-      # Enable and activate pnpm via Corepack (recommended approach)
+      # Enable pnpm via Corepack (official and stable method)
       - name: Enable pnpm via Corepack
         run: |
           corepack enable
           corepack prepare pnpm@10 --activate
 
-      # Optional but useful: verify pnpm is available
-      - name: Verify pnpm installation
+      # Sanity check: ensure pnpm is available
+      - name: Verify pnpm
         run: pnpm --version
 
-      # Install dependencies
-      # --frozen-lockfile ensures the lockfile is respected
-      # and fails the CI if dependencies are out of sync
+      # Install dependencies (strict, reproducible)
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Compile the VS Code extension
-      # This typically runs `tsc` and validates TypeScript correctness
-      # This step is intentionally mandatory
+      # Compile VS Code extension
       - name: Compile extension
         run: pnpm compile
