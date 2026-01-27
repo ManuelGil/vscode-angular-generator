@@ -38,12 +38,15 @@ jobs:
           # make cache key depend on the lockfile explicitly
           cache-dependency-path: "pnpm-lock.yaml"
 
-      # Setup pnpm
-      # Pinning the major version avoids unexpected breaking changes
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
+      # Enable and activate pnpm via Corepack (recommended approach)
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10 --activate
+
+      # Optional but useful: verify pnpm is available
+      - name: Verify pnpm installation
+        run: pnpm --version
 
       # Install dependencies
       # --frozen-lockfile ensures the lockfile is respected
