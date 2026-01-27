@@ -28,31 +28,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup Node.js using the exact version defined in .nvmrc (24.13.0)
-      # Enables pnpm caching based on pnpm-lock.yaml
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
-          # make cache key depend on the lockfile explicitly
-          cache-dependency-path: "pnpm-lock.yaml"
-
       # Setup pnpm
-      # Pinning the major version avoids unexpected breaking changes
+      # - Installs a pinned pnpm version
+      # - Enables native pnpm store caching
+      # - More reliable on modern Ubuntu runners than setup-node caching
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
+          cache: true
+
+      # Setup Node.js runtime
+      # - Uses .nvmrc as the single source of truth
+      # - No dependency caching here (handled by pnpm)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
 
       # Install dependencies
-      # --frozen-lockfile ensures the lockfile is respected
-      # and fails the CI if dependencies are out of sync
+      # - Ensures pnpm-lock.yaml is respected
+      # - Fails fast if the lockfile is out of sync
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Compile the VS Code extension
-      # This typically runs `tsc` and validates TypeScript correctness
-      # This step is intentionally mandatory
+      # Compile VS Code extension
+      # - Typically runs TypeScript compilation (tsc)
+      # - Core validation step for this project
       - name: Compile extension
         run: pnpm compile
