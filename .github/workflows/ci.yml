@@ -28,32 +28,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup pnpm
-      # Pinning the major version avoids unexpected breaking changes
-      # This MUST run before setup-node when using cache: "pnpm"
+      # Recomendado: Asegurar Corepack actualizado para pnpm v10+
+      - name: Install Corepack
+        run: npm install -g corepack@latest
+
+      # Setup pnpm v10 con gestión de caché integrada (más eficiente que setup-node)
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
+          # La acción de pnpm ahora maneja el cache-dependency-path automáticamente
+          cache: true
 
-      # Setup Node.js using the exact version defined in .nvmrc (24.13.0)
-      # Enables pnpm caching based on pnpm-lock.yaml
+      # Setup Node.js desde .nvmrc
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-          cache: "pnpm"
-          # make cache key depend on the lockfile explicitly
-          cache-dependency-path: "pnpm-lock.yaml"
+          # Quitamos 'cache: pnpm' de aquí para evitar conflictos con pnpm/action-setup
 
-      # Install dependencies
-      # --frozen-lockfile ensures the lockfile is respected
-      # and fails the CI if dependencies are out of sync
       - name: Install dependencies
+        # --frozen-lockfile es obligatorio para entornos CI deterministas
         run: pnpm install --frozen-lockfile
 
-      # Compile the VS Code extension
-      # This typically runs `tsc` and validates TypeScript correctness
-      # This step is intentionally mandatory
       - name: Compile extension
-        run: pnpm compile
+        # Asegura que tsc no use memoria excesiva en el runner de GitHub
+        run: pnpm run compile
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
