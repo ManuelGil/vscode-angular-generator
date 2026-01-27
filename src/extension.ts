@@ -82,7 +82,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     // Notify the user which workspace is being used
     vscode.window.showInformationMessage(
-      vscode.l10n.t('Using workspace folder: {0}', [resource.name]),
+      vscode.l10n.t('Using workspace folder: {0}', resource.name),
     );
   } else {
     // Multiple workspace folders and no previous selection
@@ -129,13 +129,14 @@ export async function activate(context: vscode.ExtensionContext) {
         if (isEnabled) {
           const message = vscode.l10n.t(
             'The {0} extension is now enabled and ready to use',
-            [EXTENSION_DISPLAY_NAME],
+            EXTENSION_DISPLAY_NAME,
           );
           vscode.window.showInformationMessage(message);
         } else {
-          const message = vscode.l10n.t('The {0} extension is now disabled', [
+          const message = vscode.l10n.t(
+            'The {0} extension is now disabled',
             EXTENSION_DISPLAY_NAME,
-          ]);
+          );
           vscode.window.showInformationMessage(message);
         }
       }
@@ -159,7 +160,8 @@ export async function activate(context: vscode.ExtensionContext) {
   if (!previousVersion) {
     const message = vscode.l10n.t(
       'Welcome to {0} version {1}! The extension is now active',
-      [EXTENSION_DISPLAY_NAME, currentVersion],
+      EXTENSION_DISPLAY_NAME,
+      currentVersion,
     );
     vscode.window.showInformationMessage(message);
 
@@ -180,7 +182,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const message = vscode.l10n.t(
       "The {0} extension has been updated. Check out what's new in version {1}",
-      [EXTENSION_DISPLAY_NAME, currentVersion],
+      EXTENSION_DISPLAY_NAME,
+      currentVersion,
     );
     vscode.window.showInformationMessage(message, ...actions).then((option) => {
       if (!option) {
@@ -228,7 +231,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
           const message = vscode.l10n.t(
             'A new version of {0} is available. Update to version {1} now',
-            [EXTENSION_DISPLAY_NAME, latestVersion],
+            EXTENSION_DISPLAY_NAME,
+            latestVersion,
           );
           vscode.window
             .showInformationMessage(message, ...actions)
@@ -382,7 +386,7 @@ export async function activate(context: vscode.ExtensionContext) {
         config.update(workspaceConfig);
 
         vscode.window.showInformationMessage(
-          vscode.l10n.t('Switched to workspace folder: {0}', [resource.name]),
+          vscode.l10n.t('Switched to workspace folder: {0}', resource.name),
         );
       }
     },
@@ -402,7 +406,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -418,7 +422,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -434,7 +438,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -450,7 +454,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -466,7 +470,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -482,7 +486,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -498,7 +502,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -514,7 +518,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -530,7 +534,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -546,7 +550,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -562,7 +566,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -578,7 +582,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -594,7 +598,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -618,7 +622,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -634,7 +638,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -650,7 +654,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -666,7 +670,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -682,7 +686,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -698,7 +702,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -714,7 +718,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -730,7 +734,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -746,7 +750,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -762,7 +766,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -778,7 +782,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -794,7 +798,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -810,7 +814,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -826,7 +830,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -842,7 +846,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -858,7 +862,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -874,7 +878,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -890,7 +894,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -906,7 +910,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -922,7 +926,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -946,7 +950,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -970,7 +974,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -987,7 +991,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -1020,7 +1024,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -1053,7 +1057,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
@@ -1086,7 +1090,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!config.enable) {
         const message = vscode.l10n.t(
           'The {0} extension is disabled in settings. Enable it to use its features',
-          [EXTENSION_DISPLAY_NAME],
+          EXTENSION_DISPLAY_NAME,
         );
         vscode.window.showErrorMessage(message);
         return;
