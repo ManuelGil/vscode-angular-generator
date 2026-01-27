@@ -1,6 +1,7 @@
 # Dependabot configuration
-# Full, explicit configuration within Dependabot's actual capabilities.
-# This file controls dependency update behavior, not security policy enforcement.
+# Valid, schema-safe configuration for pnpm-based Node.js projects.
+# Security updates are managed via GitHub repository settings (UI),
+# not via this file.
 
 version: 2
 
@@ -15,13 +16,10 @@ updates:
       time: "09:00"
       timezone: "UTC"
 
-    # Automatically open PRs when a dependency has a known vulnerability
-    security-updates: true
-
-    # Prevent PR overload
+    # Limit noise and cognitive load
     open-pull-requests-limit: 2
 
-    # Avoid breaking changes without maintainer intent
+    # Avoid automatic breaking changes
     ignore:
       - dependency-name: "*"
         update-types:

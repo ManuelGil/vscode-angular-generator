@@ -1,7 +1,14 @@
-# CI for VS Code extension (pnpm + TypeScript)
-# - Runs only on PRs to main
-# - Validates install + lockfile + TypeScript compile step
-# - Uses pnpm with caching optimized via pnpm-lock.yaml
+# CI for VS Code Extension
+# -----------------------
+# This workflow validates Pull Requests before merging into main.
+#
+# Design goals:
+# - Low maintenance and low noise
+# - Deterministic Node version via .nvmrc
+# - pnpm-based dependency management
+# - Compile-only check (no tests yet)
+#
+# This is the recommended baseline CI for a VS Code extension.
 
 name: CI
 
@@ -21,7 +28,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Use Node version from .nvmrc (single source of truth)
+      # Setup Node.js using the exact version defined in .nvmrc (24.13.0)
+      # Enables pnpm caching based on pnpm-lock.yaml
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -30,17 +38,21 @@ jobs:
           # make cache key depend on the lockfile explicitly
           cache-dependency-path: "pnpm-lock.yaml"
 
-      # Install pnpm on the runner (pin major version to avoid surprises)
+      # Setup pnpm
+      # Pinning the major version avoids unexpected breaking changes
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
 
-      # Install dependencies, fail if lockfile is out of sync
+      # Install dependencies
+      # --frozen-lockfile ensures the lockfile is respected
+      # and fails the CI if dependencies are out of sync
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Compile (VS Code extension): must exist in package.json scripts
-      # e.g. "compile": "tsc -p ./"
+      # Compile the VS Code extension
+      # This typically runs `tsc` and validates TypeScript correctness
+      # This step is intentionally mandatory
       - name: Compile extension
         run: pnpm compile
