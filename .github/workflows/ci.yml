@@ -24,28 +24,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout source code
+      # Checkout repository source code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup Node.js from .nvmrc (24.13.0)
+      # Setup pnpm FIRST (before Node.js setup tries to use it for caching)
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      # Setup Node.js using the exact version defined in .nvmrc (24.13.0)
+      # Enables pnpm caching based on pnpm-lock.yaml
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
-      # Install pnpm explicitly (guarantees PATH availability)
-      - name: Install pnpm
-        run: npm install -g pnpm@10
-
-      # Verify pnpm is available (debug + safety)
-      - name: Verify pnpm
-        run: pnpm --version
-
-      # Install dependencies (strict & reproducible)
+      # Install dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Compile VS Code extension
+      # Compile the VS Code extension
       - name: Compile extension
         run: pnpm compile
