@@ -28,34 +28,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Setup pnpm
+      # Pinning the major version avoids unexpected breaking changes
+      # This MUST run before setup-node when using cache: "pnpm"
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       # Setup Node.js using the exact version defined in .nvmrc (24.13.0)
       # Enables pnpm caching based on pnpm-lock.yaml
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
-
-      # Setup pnpm BEFORE enabling cache
-      # Pinning the major version avoids unexpected breaking changes
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      # Enable pnpm cache AFTER pnpm is installed
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          cache: "pnpm"
+          # make cache key depend on the lockfile explicitly
+          cache-dependency-path: "pnpm-lock.yaml"
 
       # Install dependencies
       # --frozen-lockfile ensures the lockfile is respected
