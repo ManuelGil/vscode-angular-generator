@@ -33,7 +33,6 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 10
-          cache: true
 
       # Configure the Node.js runtime using the version
       # specified in the .nvmrc file.
@@ -41,6 +40,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
       # Install dependencies exactly as defined in pnpm-lock.yaml.
       # The workflow will fail if the lockfile and package.json
