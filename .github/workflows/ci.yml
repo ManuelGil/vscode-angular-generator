@@ -24,23 +24,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository source code
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup Node.js using exact version from .nvmrc (24.13.0)
+      # Setup Node.js using the exact version from .nvmrc (24.13.0)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
 
-      # Enable pnpm via Corepack (official and stable method)
-      - name: Enable pnpm via Corepack
-        run: |
-          corepack enable
-          corepack prepare pnpm@10 --activate
+      # Explicitly install pnpm (most reliable approach)
+      # This guarantees pnpm is available in PATH
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      # Sanity check: ensure pnpm is available
+      # Sanity check (optional but useful)
       - name: Verify pnpm
         run: pnpm --version
 
