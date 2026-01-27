@@ -1,11 +1,11 @@
 # Dependabot configuration
-# Balanced setup for OSS projects using pnpm.
-# Improves security and predictability while remaining easy to maintain.
+# Full, explicit configuration within Dependabot's actual capabilities.
+# This file controls dependency update behavior, not security policy enforcement.
 
 version: 2
 
 updates:
-  - package-ecosystem: "pnpm"
+  - package-ecosystem: "npm"        # pnpm is handled via the npm ecosystem
     directory: "/"
     target-branch: "main"
 
@@ -15,19 +15,19 @@ updates:
       time: "09:00"
       timezone: "UTC"
 
-    # Allow automatic PRs for known security vulnerabilities
+    # Automatically open PRs when a dependency has a known vulnerability
     security-updates: true
 
-    # Limit update noise and cognitive load
+    # Prevent PR overload
     open-pull-requests-limit: 2
 
-    # Only allow non-breaking updates for regular dependency bumps
+    # Avoid breaking changes without maintainer intent
     ignore:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
 
-    # Metadata for easier triage
+    # PR hygiene
     labels:
       - "dependencies"
 
@@ -35,5 +35,5 @@ updates:
       prefix: "chore"
       include: "scope"
 
-    # Reduce churn by rebasing instead of recreating PRs
+    # Keep PRs up to date with the base branch
     rebase-strategy: "auto"
