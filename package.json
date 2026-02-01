@@ -943,7 +943,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.3.13",
     "@commitlint/cli": "^20.4.0",
-    "@commitlint/config-conventional": "^20.3.1",
+    "@commitlint/config-conventional": "^20.4.0",
     "@compodoc/compodoc": "^1.2.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.10.9",
