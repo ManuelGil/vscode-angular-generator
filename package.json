@@ -8,15 +8,17 @@
   "publisher": "imgildev",
   "author": {
     "name": "Manuel Gil",
-    "url": "https://github.com/ManuelGil"
+    "email": "support@imgil.dev",
+    "url": "https://imgil.dev/"
   },
   "sponsor": {
     "url": "https://github.com/sponsors/manuelgil"
   },
+  "packageManager": "pnpm@10.0.0",
   "engines": {
     "vscode": "^1.90.0",
     "node": ">=24",
-    "pnpm": ">=9"
+    "pnpm": ">=10"
   },
   "categories": [
     "Programming Languages",
