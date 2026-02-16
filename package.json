@@ -966,7 +966,7 @@
     "ignore": "^7.0.5",
     "json-to-ts": "^2.1.0",
     "json5": "^2.2.3",
-    "p-limit": "^7.2.0",
+    "p-limit": "^7.3.0",
     "vscode-marketplace-client": "^1.1.1"
   }
 }
