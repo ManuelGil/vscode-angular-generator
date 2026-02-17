@@ -9,6 +9,7 @@
 
 import * as assert from 'assert';
 import * as vscode from 'vscode';
+
 // import * as myExtension from '../../extension'; // Uncomment to test extension APIs
 
 suite('Extension Test Suite', () => {
