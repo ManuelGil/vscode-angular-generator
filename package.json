@@ -967,6 +967,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "minimatch": "^10.2.5",
+    "lint-staged": "^16.4.0",
+    "minimatch": "^10.2.5",
     "rimraf": "^6.1.3",
     "typescript": "^5.9.3"
   },
