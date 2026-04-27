@@ -1,48 +1,75 @@
+/**
+ * @fileoverview Core file discovery engine for the extension.
+ *
+ * Provides glob-based file searching with two strategies:
+ * - **Local** (default): uses FastGlob streaming for direct filesystem access.
+ * - **Remote**: falls back to VS Code's `workspace.findFiles` API for virtual
+ *   or remote workspaces where the filesystem isn't directly accessible.
+ *
+ * Includes a shared in-memory cache with TTL-based eviction and deduplication
+ * of concurrent in-flight requests to avoid redundant filesystem scans.
+ * Consumers should invoke `clearCache()` after commands, generators, or file
+ * watchers create, delete, or rename files so discovery data stays current.
+ */
+
 import FastGlob from 'fast-glob';
 import ignore, { type Ignore } from 'ignore';
 import { posix } from 'path';
-import {
-  RelativePattern,
-  Uri,
-  type WorkspaceFolder,
-  window,
-  workspace,
-} from 'vscode';
+import { RelativePattern, Uri, type WorkspaceFolder, workspace } from 'vscode';
+import { toPosixPath } from './path-format.helper';
 
 // Shared cache for all file operations across the extension
-const findFilesCache: Map<string, { files: Uri[]; timestamp: number }> =
+const fileDiscoveryCache: Map<string, { files: Uri[]; timestamp: number }> =
   new Map();
-const findFilesCacheTTL = 5 * 60 * 1000; // 5 minutes
-const findFilesInFlight: Map<string, Promise<Uri[]>> = new Map();
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const inFlightRequests: Map<string, Promise<Uri[]>> = new Map();
 
-const MAX_FILES_TO_INDEX_LIMIT = 5000;
-const MAX_CACHE_SIZE = 100;
+// Hard safety limits to prevent extension host overload on very large repositories
+const MAX_INDEXABLE_FILES = 5000;
+const MAX_CACHE_ENTRIES = 100;
 
+/**
+ * Options for configuring file discovery behavior.
+ */
 export interface FindFilesOptions {
+  /** Absolute path to the directory to search within. */
   baseDirectoryPath: string;
+  /** Glob patterns for files to include (e.g. `["**\/*.controller.ts"]`). */
   includeFilePatterns: string[];
+  /** Glob patterns for files/directories to exclude. */
   excludedPatterns?: string[];
+  /** When `true`, only match files directly inside `baseDirectoryPath` (no subdirectories). */
   disableRecursive?: boolean;
+  /** Maximum folder depth to recurse into (0 = unlimited). */
   maxRecursionDepth?: number;
+  /** When `true`, include files and directories starting with a dot. */
   includeDotfiles?: boolean;
+  /** When `true`, read the workspace `.gitignore` and apply its rules as exclude filters. */
   enableGitignoreDetection?: boolean;
+  /** Optional upper bound for the number of files returned (defaults to MAX_INDEXABLE_FILES). */
+  maxResults?: number;
 }
 
-const toPosix = (filePath: string) => filePath.replace(/\\/g, '/');
-
-const getIgnoreMatcher = async (options: {
+/**
+ * Builds an ignore matcher that combines explicit exclude patterns with
+ * optional `.gitignore` rules from the workspace root.
+ */
+const buildIgnoreMatcher = async (options: {
   baseDirectoryPath: string;
   excludedPatterns: string[];
   enableGitignoreDetection: boolean;
 }): Promise<Ignore> => {
   const { baseDirectoryPath, excludedPatterns, enableGitignoreDetection } =
     options;
+
   const ignoreMatcher = ignore();
 
-  if (excludedPatterns.length) {
-    ignoreMatcher.add(excludedPatterns.map(toPosix));
+  // Add user-provided ignore patterns first
+  if (excludedPatterns.length > 0) {
+    ignoreMatcher.add(excludedPatterns.map(toPosixPath));
   }
 
+  // Optionally merge workspace-level .gitignore rules
   if (enableGitignoreDetection) {
     try {
       const gitignoreUri = Uri.joinPath(
@@ -50,101 +77,133 @@ const getIgnoreMatcher = async (options: {
         '.gitignore',
       );
       await workspace.fs.stat(gitignoreUri);
-      const data = await workspace.fs.readFile(gitignoreUri);
-      const content = new TextDecoder('utf-8').decode(data);
-      ignoreMatcher.add(content);
+      const fileData = await workspace.fs.readFile(gitignoreUri);
+      const fileContent = new TextDecoder('utf-8').decode(fileData);
+      ignoreMatcher.add(fileContent);
     } catch {
-      // no .gitignore or not accessible - ignore
+      // .gitignore missing or unreadable → safe to ignore silently
     }
   }
 
   return ignoreMatcher;
 };
 
-const findFilesRemote = async (
+/**
+ * File discovery strategy for remote/virtual workspaces.
+ * Uses VS Code APIs and applies filtering post-search.
+ */
+const discoverFilesRemotely = async (
   options: FindFilesOptions,
   workspaceFolder: WorkspaceFolder,
   ignoreMatcher?: Ignore,
 ): Promise<Uri[]> => {
   const { includeFilePatterns, excludedPatterns = [] } = options;
-  const seen = new Set<string>();
-  const aggregated: Uri[] = [];
-  const posixExcluded = excludedPatterns.map(toPosix);
-  const combinedExclude =
-    posixExcluded.length > 0 ? `{${posixExcluded.join(',')}}` : undefined;
-  let total = 0;
+  const maxResults = options.maxResults ?? MAX_INDEXABLE_FILES;
 
+  const processedPaths = new Set<string>();
+  const collectedUris: Uri[] = [];
+
+  const posixExcludedPatterns = excludedPatterns.map(toPosixPath);
+  const combinedExcludePattern =
+    posixExcludedPatterns.length > 0
+      ? `{${posixExcludedPatterns.join(',')}}`
+      : undefined;
+
+  let totalCollected = 0;
+
+  // Sequentially execute include patterns to respect file limits
   for (const includePatternGlob of includeFilePatterns) {
-    if (total >= MAX_FILES_TO_INDEX_LIMIT) {
+    if (totalCollected >= maxResults) {
       break;
     }
 
-    const relativePattern = new RelativePattern(
+    const searchPattern = new RelativePattern(
       workspaceFolder,
       includePatternGlob,
     );
-    const found = await workspace.findFiles(
-      relativePattern,
-      combinedExclude,
-      MAX_FILES_TO_INDEX_LIMIT - total,
+
+    const discoveredFiles = await workspace.findFiles(
+      searchPattern,
+      combinedExcludePattern,
+      maxResults - totalCollected,
     );
-    for (const fileUri of found) {
-      if (seen.has(fileUri.fsPath)) {
+
+    for (const fileUri of discoveredFiles) {
+      if (processedPaths.has(fileUri.fsPath)) {
         continue;
       }
-      seen.add(fileUri.fsPath);
-      aggregated.push(fileUri);
-      total++;
-      if (total >= MAX_FILES_TO_INDEX_LIMIT) {
+
+      processedPaths.add(fileUri.fsPath);
+      collectedUris.push(fileUri);
+      totalCollected++;
+
+      if (totalCollected >= maxResults) {
         break;
       }
     }
   }
 
-  const basePosix = toPosix(options.baseDirectoryPath).replace(/\/$/, '');
+  const baseDirectoryPosix = toPosixPath(options.baseDirectoryPath).replace(
+    /\/$/,
+    '',
+  );
 
-  const filterByDepth = (candidateUri: Uri) => {
+  const passesDepthFilter = (candidateUri: Uri) => {
+    const relativePath = toPosixPath(candidateUri.fsPath).slice(
+      baseDirectoryPosix.length + 1,
+    );
+
     if (options.disableRecursive) {
-      const rel = toPosix(candidateUri.fsPath).slice(basePosix.length + 1);
-      return !rel.includes('/');
+      return !relativePath.includes('/');
     }
+
     if (!options.maxRecursionDepth || options.maxRecursionDepth <= 0) {
       return true;
     }
-    const relativeFilePath = toPosix(candidateUri.fsPath).slice(
-      basePosix.length + 1,
-    );
-    const segments = relativeFilePath.split('/');
-    const folderDepth = Math.max(0, segments.length - 1);
+
+    const folderDepth = Math.max(0, relativePath.split('/').length - 1);
     return folderDepth <= options.maxRecursionDepth;
   };
 
-  const filterDotfiles = (candidateUri: Uri) => {
+  const passesDotfileFilter = (candidateUri: Uri) => {
     if (options.includeDotfiles) {
       return true;
     }
-    const relative = workspace.asRelativePath(candidateUri, false);
-    return !relative.split(/[\\\/]/).some((s) => s.startsWith('.'));
+
+    const relativePath = workspace.asRelativePath(candidateUri, false);
+    return !relativePath
+      .split(/[\\\/]/)
+      .some((segment) => segment.startsWith('.'));
   };
 
-  const filterIgnored = (candidateUri: Uri) => {
+  const passesIgnoreFilter = (candidateUri: Uri) => {
     if (!ignoreMatcher) {
       return true;
     }
-    const filePosix = toPosix(candidateUri.fsPath);
-    const relativeFilePath = posix.relative(basePosix, filePosix);
-    return !ignoreMatcher.ignores(relativeFilePath);
+
+    const filePosixPath = toPosixPath(candidateUri.fsPath);
+    const relativePathToEvaluate = posix.relative(
+      baseDirectoryPosix,
+      filePosixPath,
+    );
+
+    return !ignoreMatcher.ignores(relativePathToEvaluate);
   };
 
-  return aggregated
-    .filter(filterByDepth)
-    .filter(filterDotfiles)
-    .filter(filterIgnored)
-    .sort((a, b) => a.fsPath.localeCompare(b.fsPath))
-    .slice(0, MAX_FILES_TO_INDEX_LIMIT);
+  // NOTE: Sorting intentionally removed for performance reasons.
+  // Consumers should not rely on discovery order.
+  return collectedUris
+    .filter(passesDepthFilter)
+    .filter(passesDotfileFilter)
+    .filter(passesIgnoreFilter)
+    .slice(0, maxResults);
 };
 
-const findFilesLocal = async (
+/**
+ * Default file discovery strategy for local workspaces.
+ * Uses FastGlob streaming for high-performance incremental scanning.
+ */
+const discoverFilesLocally = async (
   options: FindFilesOptions,
   ignoreMatcher?: Ignore,
 ): Promise<Uri[]> => {
@@ -153,16 +212,18 @@ const findFilesLocal = async (
     includeFilePatterns,
     excludedPatterns = [],
   } = options;
-  const includeGlobs = includeFilePatterns.map(toPosix);
+  const maxResults = options.maxResults ?? MAX_INDEXABLE_FILES;
 
-  const aggregatedUris: Uri[] = [];
-  const seenPaths = new Set<string>();
+  const normalizedIncludeGlobs = includeFilePatterns.map(toPosixPath);
+
+  const collectedUris: Uri[] = [];
+  const processedPaths = new Set<string>();
   let totalCollected = 0;
 
-  const stream = FastGlob.stream(includeGlobs, {
+  const globStream = FastGlob.stream(normalizedIncludeGlobs, {
     cwd: baseDirectoryPath,
     dot: options.includeDotfiles,
-    ignore: excludedPatterns.map(toPosix),
+    ignore: excludedPatterns.map(toPosixPath),
     onlyFiles: true,
     unique: true,
     followSymbolicLinks: true,
@@ -170,142 +231,136 @@ const findFilesLocal = async (
   });
 
   try {
-    for await (const matchedPath of stream as AsyncIterable<string>) {
-      if (!matchedPath) {
-        continue;
-      }
-      const absolutePosixPath = toPosix(matchedPath);
-      if (seenPaths.has(absolutePosixPath)) {
+    for await (const matchedFilePath of globStream as AsyncIterable<string>) {
+      if (!matchedFilePath) {
         continue;
       }
 
-      const candidateUri = Uri.file(matchedPath);
+      const absolutePosixPath = toPosixPath(matchedFilePath);
+      if (processedPaths.has(absolutePosixPath)) {
+        continue;
+      }
 
-      const basePosix = toPosix(baseDirectoryPath).replace(/\/$/, '');
-      const relPath = absolutePosixPath.startsWith(`${basePosix}/`)
-        ? absolutePosixPath.slice(basePosix.length + 1)
+      const candidateUri = Uri.file(matchedFilePath);
+
+      const baseDirectoryPosix = toPosixPath(baseDirectoryPath).replace(
+        /\/$/,
+        '',
+      );
+
+      const relativePath = absolutePosixPath.startsWith(
+        `${baseDirectoryPosix}/`,
+      )
+        ? absolutePosixPath.slice(baseDirectoryPosix.length + 1)
         : absolutePosixPath;
 
-      if (options.disableRecursive && relPath.includes('/')) {
+      if (options.disableRecursive && relativePath.includes('/')) {
         continue;
       }
+
       if (
         !options.disableRecursive &&
         options.maxRecursionDepth &&
         options.maxRecursionDepth > 0
       ) {
-        const segments = relPath.split('/');
-        const folderDepth = Math.max(0, segments.length - 1);
+        const folderDepth = Math.max(0, relativePath.split('/').length - 1);
         if (folderDepth > options.maxRecursionDepth) {
           continue;
         }
       }
 
       if (!options.includeDotfiles) {
-        const relativeForDot = workspace.asRelativePath(candidateUri, false);
-        if (relativeForDot.split(/[\\\/]/).some((seg) => seg.startsWith('.'))) {
+        const relativePathForDotCheck = workspace.asRelativePath(
+          candidateUri,
+          false,
+        );
+
+        if (
+          relativePathForDotCheck
+            .split(/[\\\/]/)
+            .some((segment) => segment.startsWith('.'))
+        ) {
           continue;
         }
       }
 
       if (ignoreMatcher) {
-        const relativePathForIgnore = posix.relative(
-          basePosix,
+        const relativePathForIgnoreCheck = posix.relative(
+          baseDirectoryPosix,
           absolutePosixPath,
         );
-        if (ignoreMatcher.ignores(relativePathForIgnore)) {
+
+        if (ignoreMatcher.ignores(relativePathForIgnoreCheck)) {
           continue;
         }
       }
 
-      seenPaths.add(absolutePosixPath);
-      aggregatedUris.push(candidateUri);
+      processedPaths.add(absolutePosixPath);
+      collectedUris.push(candidateUri);
       totalCollected++;
 
-      if (totalCollected >= MAX_FILES_TO_INDEX_LIMIT) {
-        if (typeof (stream as any).destroy === 'function') {
+      if (totalCollected >= maxResults) {
+        // Stop stream early once limit is reached
+        if (typeof (globStream as any).destroy === 'function') {
           try {
-            (stream as any).destroy();
+            (globStream as any).destroy();
           } catch {
-            // ignore
+            // Ignore stream destruction errors
           }
         }
         break;
       }
     }
-  } catch (streamErr) {
+  } catch (streamError) {
     try {
-      if (typeof (stream as any).destroy === 'function') {
-        (stream as any).destroy();
+      if (typeof (globStream as any).destroy === 'function') {
+        (globStream as any).destroy();
       }
     } catch {
-      // ignore
+      // Ignore stream destruction errors during error handling
     }
-    throw streamErr;
+    throw streamError;
   }
 
-  return aggregatedUris
-    .sort((a, b) => a.fsPath.localeCompare(b.fsPath))
-    .slice(0, MAX_FILES_TO_INDEX_LIMIT);
+  // NOTE: Sorting intentionally removed for performance reasons.
+  return collectedUris.slice(0, maxResults);
 };
 
-const updateCache = (cacheKey: string, files: Uri[]) => {
-  const now = Date.now();
-  // Evict old entries
-  for (const [key, cachedEntry] of findFilesCache.entries()) {
-    if (now - cachedEntry.timestamp >= findFilesCacheTTL) {
-      findFilesCache.delete(key);
+/**
+ * Stores search results in the shared cache with TTL eviction and size limits.
+ */
+const updateDiscoveryCache = (cacheKey: string, files: Uri[]) => {
+  const currentTime = Date.now();
+
+  for (const [key, cachedEntry] of fileDiscoveryCache.entries()) {
+    if (currentTime - cachedEntry.timestamp >= CACHE_TTL_MS) {
+      fileDiscoveryCache.delete(key);
     }
   }
-  // Evict oldest if cache is full
-  if (findFilesCache.size >= MAX_CACHE_SIZE) {
-    const entriesByAge = Array.from(findFilesCache.entries()).sort(
+
+  if (fileDiscoveryCache.size >= MAX_CACHE_ENTRIES) {
+    const entriesSortedByAge = Array.from(fileDiscoveryCache.entries()).sort(
       (a, b) => a[1].timestamp - b[1].timestamp,
     );
-    const excess = findFilesCache.size - MAX_CACHE_SIZE + 1;
-    for (let i = 0; i < excess; i++) {
-      findFilesCache.delete(entriesByAge[i][0]);
+
+    const excessEntriesCount = fileDiscoveryCache.size - MAX_CACHE_ENTRIES + 1;
+    for (let i = 0; i < excessEntriesCount; i++) {
+      fileDiscoveryCache.delete(entriesSortedByAge[i][0]);
     }
   }
-  findFilesCache.set(cacheKey, { files, timestamp: now });
+
+  fileDiscoveryCache.set(cacheKey, { files, timestamp: currentTime });
 };
 
 /**
  * Clears the shared cache for file operations.
- * Useful when files have been created, deleted, or modified.
- *
- * @function clearCache
- * @public
- * @example
- * clearCache();
- *
- * @returns {void} - No return value
+ * Call this after filesystem mutations (create/delete/rename) or structural
+ * changes triggered by commands, generators, or file watchers so cached search
+ * results and in-flight discoveries reflect the latest workspace state.
  */
 export const clearCache = (): void => {
-  findFilesCache.clear();
-  findFilesInFlight.clear();
-};
-
-/**
- * Gets cache statistics for monitoring and debugging.
- *
- * @function getCacheStats
- * @public
- * @example
- * const stats = getCacheStats();
- *
- * @returns {{ size: number; maxSize: number; ttl: number }} - Cache statistics
- */
-export const getCacheStats = (): {
-  size: number;
-  maxSize: number;
-  ttl: number;
-} => {
-  return {
-    size: findFilesCache.size,
-    maxSize: MAX_CACHE_SIZE,
-    ttl: findFilesCacheTTL,
-  };
+  fileDiscoveryCache.clear();
+  inFlightRequests.clear();
 };
 
 /**
@@ -313,9 +368,8 @@ export const getCacheStats = (): {
  * Uses fast-glob for discovery and applies post-filters for recursion depth, dotfiles, and optional .gitignore rules.
  * Includes shared caching and optimizations for large projects with many files.
  *
- * @param {FindFilesOptions} options - The options for the file search.
- * @returns {Promise<Uri[]>} Array of VS Code Uri objects for the found files.
- * @throws {Error} If an error occurs during file search, it is caught and a message is displayed.
+ * @param options - The options for the file search.
+ * @returns Array of VS Code Uri objects for the found files.
  */
 export const findFiles = async (options: FindFilesOptions): Promise<Uri[]> => {
   const {
@@ -327,33 +381,40 @@ export const findFiles = async (options: FindFilesOptions): Promise<Uri[]> => {
     includeDotfiles = false,
     enableGitignoreDetection = false,
   } = options;
+  const maxResults = options.maxResults ?? MAX_INDEXABLE_FILES;
+
   try {
-    if (!includeFilePatterns.length) {
+    if (includeFilePatterns.length === 0) {
       return [];
     }
 
     const cacheKey = JSON.stringify({
       baseDir: baseDirectoryPath,
-      include: [...includeFilePatterns].map(toPosix).sort(),
-      exclude: [...excludedPatterns].map(toPosix).sort(),
+      include: [...includeFilePatterns].map(toPosixPath).sort(),
+      exclude: [...excludedPatterns].map(toPosixPath).sort(),
       disableRecursive,
       maxRecursionDepth,
       includeDotfiles,
       enableGitignoreDetection,
     });
 
-    const ongoing = findFilesInFlight.get(cacheKey);
-    if (ongoing) {
-      return ongoing;
+    const ongoingRequest = inFlightRequests.get(cacheKey);
+    if (ongoingRequest) {
+      return ongoingRequest;
     }
 
-    const work = (async (): Promise<Uri[]> => {
-      const cached = findFilesCache.get(cacheKey);
-      if (cached && Date.now() - cached.timestamp < findFilesCacheTTL) {
-        return cached.files;
+    const discoveryTask = (async (): Promise<Uri[]> => {
+      const cachedResult = fileDiscoveryCache.get(cacheKey);
+      if (cachedResult) {
+        const cacheAge = Date.now() - cachedResult.timestamp;
+        if (cacheAge < CACHE_TTL_MS) {
+          return cachedResult.files;
+        }
+
+        fileDiscoveryCache.delete(cacheKey);
       }
 
-      const ignoreMatcher = await getIgnoreMatcher({
+      const ignoreMatcher = await buildIgnoreMatcher({
         baseDirectoryPath,
         excludedPatterns,
         enableGitignoreDetection,
@@ -361,40 +422,33 @@ export const findFiles = async (options: FindFilesOptions): Promise<Uri[]> => {
 
       const baseUri = Uri.file(baseDirectoryPath);
       const workspaceFolder = workspace.getWorkspaceFolder(baseUri);
+
       const isRemoteWorkspace =
         !!workspaceFolder?.uri.scheme && workspaceFolder.uri.scheme !== 'file';
 
-      let results: Uri[];
-      if (isRemoteWorkspace) {
-        results = await findFilesRemote(
-          options,
-          workspaceFolder,
-          ignoreMatcher,
-        );
-      } else {
-        results = await findFilesLocal(options, ignoreMatcher);
-      }
+      const discoveredFiles = isRemoteWorkspace
+        ? await discoverFilesRemotely(
+            { ...options, maxResults },
+            workspaceFolder,
+            ignoreMatcher,
+          )
+        : await discoverFilesLocally({ ...options, maxResults }, ignoreMatcher);
 
-      updateCache(cacheKey, results);
-      return results;
+      updateDiscoveryCache(cacheKey, discoveredFiles);
+      return discoveredFiles;
     })();
 
-    findFilesInFlight.set(cacheKey, work);
+    inFlightRequests.set(cacheKey, discoveryTask);
+
     try {
-      return await work;
+      return await discoveryTask;
     } finally {
-      findFilesInFlight.delete(cacheKey);
+      inFlightRequests.delete(cacheKey);
     }
   } catch (error) {
     const errorInstance =
       error instanceof Error ? error : new Error(String(error));
     console.error('findFiles error', errorInstance);
-    try {
-      const errorMessage = errorInstance?.message ?? String(errorInstance);
-      window.showErrorMessage(errorMessage);
-    } catch {
-      // ignore UI errors
-    }
     return [];
   }
 };

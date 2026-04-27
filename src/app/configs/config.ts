@@ -135,6 +135,20 @@ export class Config {
   useRootWorkspace: boolean;
 
   /**
+   * The workspace root path selected by the user via the sidebar.
+   * This is used as the base for all file operations in the extension.
+   * It can be `undefined` if no workspace is open or if the user has not made a selection.
+   *
+   * @type {string | undefined}
+   * @public
+   * @memberof Config
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.workspaceRoot);
+   */
+  workspaceRoot!: string | undefined;
+
+  /**
    * The custom commands.
    * @type {object[]}
    * @public

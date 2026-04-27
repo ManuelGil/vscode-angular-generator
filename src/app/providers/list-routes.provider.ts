@@ -5,11 +5,11 @@ import {
   ThemeIcon,
   TreeDataProvider,
   TreeItem,
-  workspace,
 } from 'vscode';
 
-import { EXTENSION_ID } from '../configs';
+import { CommandIds, EXTENSION_ID } from '../configs';
 import { ListFilesController } from '../controllers';
+import { readFileContent } from '../helpers';
 import { NodeModel } from '../models';
 
 /**
@@ -243,13 +243,12 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
           }
 
           try {
-            const document = await workspace.openTextDocument(file.resourceUri);
-
             const children: NodeModel[] = [];
+            const content = await readFileContent(file.resourceUri!);
+            const lines = content.split(/\r?\n/);
 
-            for (let i = 0; i < document.lineCount; i++) {
-              const text = document.lineAt(i).text;
-              // Skip commented lines (single-line and common block comment markers)
+            for (let i = 0; i < lines.length; i++) {
+              const text = lines[i];
               const trimmed = text.trim();
               if (
                 trimmed.startsWith('//') ||
@@ -259,6 +258,7 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
               ) {
                 continue;
               }
+
               const match = pathPattern.exec(text);
 
               if (match) {
@@ -269,7 +269,7 @@ export class ListRoutesProvider implements TreeDataProvider<NodeModel> {
                     extractedPath,
                     new ThemeIcon('symbol-reference'),
                     {
-                      command: `${EXTENSION_ID}.list.gotoLine`,
+                      command: `${EXTENSION_ID}.${CommandIds.ListGotoLine}`,
                       title: text,
                       arguments: [file.resourceUri, i],
                     },

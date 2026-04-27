@@ -1,3 +1,16 @@
+/**
+ * @fileoverview Executes shell commands via VSCode's Terminal and Task APIs.
+ *
+ * Supports three execution modes:
+ * - **Fire-and-forget** (`captureOutput=false, waitResponse=false`): sends the
+ *   command to a new terminal and returns immediately.
+ * - **Blocking with output capture** (`captureOutput=true`): runs the command
+ *   as a VSCode Task and waits for its exit code before resolving.
+ * - **Non-blocking with completion monitoring** (`waitResponse=true, captureOutput=false`):
+ *   sends the command to a visible terminal while a hidden monitor task tracks
+ *   completion, allowing the user to see output in real time.
+ */
+
 import {
   Disposable,
   EventEmitter,
@@ -15,44 +28,28 @@ import {
 } from 'vscode';
 
 /**
- * Command helpers for executing VSCode and Angular CLI commands.
- * All exported functions are documented with JSDoc for clarity and maintainability.
+ * Represents the result of a command execution.
+ *
+ * @property {boolean} success - Whether the command exited with code 0.
+ * @property {string} [output] - Human-readable success message (when applicable).
+ * @property {string} [error] - Error description on failure or cancellation.
  */
-
-/**
- * Interface for command result event data.
- */
-export interface CommandResultEvent {
-  /**
-   * Whether the command was successful.
-   */
+type CommandResultEvent = {
   success: boolean;
-  /**
-   * Optional output of the command.
-   */
   output?: string;
-  /**
-   * Optional error message of the command.
-   */
   error?: string;
-}
+};
 
 /**
- * Execute a shell command inside VS Code.
+ * Runs a command in the terminal
  *
- * - If `captureOutput` is false: spins up an integrated terminal, sends the command, and resolves immediately.
- * - If `captureOutput` is true: uses the Task API to capture `stdout`, `stderr`, and exit code.
- * - If `waitResponse` is true: returns a Promise that resolves when the command completes without blocking the main thread.
- *
- * @param {string} name - Name of the terminal
+ * @param {string} title - Title of the terminal
  * @param {string} command - Command to run
- * @param {string} [cwdPath] - Working directory path
+ * @param {string} [cwdPath] - Optional working directory path
  * @param {boolean} [captureOutput=false] - Whether to capture command output
  * @param {boolean} [showTerminal=true] - Whether to show the terminal
- * @param {boolean} [waitResponse=false] - Whether to wait for response without blocking main thread
+ * @param {boolean} [waitResponse=false] - Whether to wait for command completion
  * @example
- * runCommand('echo', 'echo "Hello, World!"');
- * // Wait for response asynchronously
  * const result = await runCommand('npm install', 'npm install', undefined, true, true, true);
  *
  * @returns {Promise<{ success: boolean; output?: string; error?: string }>} - Result with success status and optional output/error
@@ -63,7 +60,7 @@ export const runCommand = async (
   cwdPath?: string,
   captureOutput: boolean = false,
   showTerminal: boolean = true,
-  waitResponse: boolean = false,
+  waitResponse: boolean = true,
 ): Promise<{ success: boolean; output?: string; error?: string }> => {
   // Determine a valid workspace URI for cwd (or undefined)
   const cwdUri = cwdPath ? Uri.file(cwdPath) : undefined;
@@ -156,7 +153,10 @@ export const runCommand = async (
         const cancelDisposable = token.onCancellationRequested(() => {
           window.showErrorMessage(l10n.t('Command cancelled: {0}', command));
           terminal.dispose();
-          resultEmitter.fire({ success: false, error: 'Cancelled by user' });
+          resultEmitter.fire({
+            success: false,
+            error: l10n.t('Cancelled by user'),
+          });
         });
 
         // Start a background monitoring process that doesn't block the UI
@@ -165,7 +165,7 @@ export const runCommand = async (
           if (token.isCancellationRequested) {
             resultEmitter.fire({
               success: false,
-              error: 'Cancelled by user before execution',
+              error: l10n.t('Cancelled by user before execution'),
             });
             return;
           }
@@ -188,14 +188,18 @@ export const runCommand = async (
                 hasEmitted = true;
                 const isSuccess = e.exitCode === 0;
                 const errorMsg = !isSuccess
-                  ? `Command '${command}' exited with code ${e.exitCode}`
+                  ? l10n.t(
+                      "Command '{0}' exited with code {1}",
+                      command,
+                      e.exitCode ?? -1,
+                    )
                   : undefined;
 
                 resultEmitter.fire({
                   success: isSuccess,
                   error: errorMsg,
                   output: isSuccess
-                    ? `Command '${command}' executed successfully`
+                    ? l10n.t("Command '{0}' executed successfully", command)
                     : undefined,
                 });
                 disposable.dispose();
@@ -209,7 +213,7 @@ export const runCommand = async (
                 // Task ended but process handler didn't fire - this is a safety net
                 resultEmitter.fire({
                   success: true,
-                  output: `Command '${command}' task completed`,
+                  output: l10n.t("Command '{0}' task completed", command),
                 });
               }
             });
@@ -257,7 +261,7 @@ export const runCommand = async (
           token.onCancellationRequested(() => {
             window.showErrorMessage(l10n.t('Command cancelled: {0}', command));
             cleanupDisposables();
-            resolve({ success: false, error: 'Cancelled by user' });
+            resolve({ success: false, error: l10n.t('Cancelled by user') });
           }),
         );
 
@@ -269,12 +273,19 @@ export const runCommand = async (
               if (isSuccess) {
                 resolve({
                   success: true,
-                  output: `Command '${command}' executed successfully`,
+                  output: l10n.t(
+                    "Command '{0}' executed successfully",
+                    command,
+                  ),
                 });
               } else {
                 // Capture error message without showing it automatically
                 // This allows the controller to show its own custom message
-                const errMsg = `Command '${command}' exited with code ${e.exitCode}`;
+                const errMsg = l10n.t(
+                  "Command '{0}' exited with code {1}",
+                  command,
+                  e.exitCode ?? -1,
+                );
                 resolve({ success: false, error: errMsg });
               }
               // Clean up all disposables

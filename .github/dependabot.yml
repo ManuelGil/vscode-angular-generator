@@ -8,7 +8,7 @@ updates:
     # Weekly updates during low-activity UTC window
     schedule:
       interval: "weekly"
-      day: "tuesday"
+      day: "monday"
       time: "06:00"
       timezone: "Etc/UTC"
 

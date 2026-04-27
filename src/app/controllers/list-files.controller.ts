@@ -10,7 +10,7 @@ import {
   workspace,
 } from 'vscode';
 
-import { Config, EXTENSION_ID } from '../configs';
+import { CommandIds, Config, EXTENSION_ID } from '../configs';
 import { findFiles } from '../helpers';
 import { NodeModel } from '../models';
 
@@ -126,7 +126,7 @@ export class ListFilesController {
         label,
         new ThemeIcon('file'),
         {
-          command: `${EXTENSION_ID}.list.openFile`,
+          command: `${EXTENSION_ID}.${CommandIds.ListOpenFile}`,
           title: l10n.t('Open File'),
           arguments: [file],
         },

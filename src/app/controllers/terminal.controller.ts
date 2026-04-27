@@ -448,7 +448,11 @@ export class TerminalController {
    */
   async generateComponent(path?: Uri): Promise<void> {
     // Get the relative path
-    let folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    let folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     if (this.config.cwd) {
       const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
@@ -752,7 +756,11 @@ export class TerminalController {
    */
   async generateGuard(path?: Uri): Promise<void> {
     // Get the relative path
-    let folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    let folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     if (this.config.cwd) {
       const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
@@ -1018,7 +1026,11 @@ export class TerminalController {
    */
   async generatePipe(path?: Uri): Promise<void> {
     // Get the relative path
-    let folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    let folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     if (this.config.cwd) {
       const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
@@ -1188,7 +1200,11 @@ export class TerminalController {
    */
   async generateService(path?: Uri): Promise<void> {
     // Get the relative path
-    let folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    let folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     if (this.config.cwd) {
       const cwd = workspace.asRelativePath(Uri.file(this.config.cwd).path);
@@ -1362,7 +1378,11 @@ export class TerminalController {
    */
   async generateCustomElement(path?: Uri): Promise<void> {
     // Get the relative path
-    let folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    let folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     // Confirm or skip folder
     let folder: string | undefined;

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Safely writes generated file content to disk within the workspace.
+ * Handles directory creation, secure path validation, duplicate detection,
+ * progress/cancellation UI, and post-creation cache invalidation.
+ */
+
 import { isAbsolute, normalize } from 'path';
 import {
   FileSystemError,
@@ -8,70 +14,61 @@ import {
   workspace,
 } from 'vscode';
 
+import { Config, EXTENSION_DISPLAY_NAME } from '../configs';
 import { clearCache } from './find-files.helper';
+import { getWorkspaceRoot } from './workspace-root.helper';
 
 /**
- * Writes data to the file specified in the path. If the file does not exist then the function will create it.
+ * Writes data to a file inside the current workspace.
+ * If the file does not exist, it will be created safely.
  *
- * @param {string} directoryPath - Relative path (from the workspace folder) where the file will be created
- * @param {string} filename - Name of the file
- * @param {string} fileContent - Data to write to the file
- * @example
- * await saveFile('src', 'file.ts', 'console.log("Hello World")');
- *
- * @returns {Promise<void>} - Confirmation of the write operation
+ * @param directoryPath - Absolute or workspace-relative directory path.
+ * @param filename - Name of the file to create.
+ * @param fileContent - Text content to write.
+ * @param config - Active extension configuration.
  */
 export const saveFile = async (
   directoryPath: string,
   filename: string,
   fileContent: string,
+  config: Config,
 ): Promise<void> => {
-  // Ensure there is an open workspace
-  if (!workspace.workspaceFolders || workspace.workspaceFolders.length === 0) {
+  const workspaceRoot = getWorkspaceRoot(config);
+
+  if (!workspaceRoot) {
     const message = l10n.t(
-      'No workspace folders are open. Please open a workspace folder to use this extension',
+      '{0}: No workspace folders are open. Please open a workspace folder to use this extension',
+      EXTENSION_DISPLAY_NAME,
     );
-    await window.showErrorMessage(message);
+    window.showErrorMessage(message);
     return;
   }
 
-  // Validate and normalize the provided directory path to avoid escaping the workspace root
-  const normalizedRelativeDirectoryPath = normalize(directoryPath || '.');
-  if (
-    isAbsolute(normalizedRelativeDirectoryPath) ||
-    normalizedRelativeDirectoryPath.split(/[\\\/]/).includes('..')
-  ) {
-    await window.showErrorMessage(l10n.t('Invalid directory path'));
+  // Normalize input path to prevent malformed segments
+  const normalizedDirPath = normalize(directoryPath || '.');
+  const workspaceRootUri = Uri.file(workspaceRoot);
+
+  /**
+   * Build the target directory URI safely.
+   *
+   * Absolute paths are used directly.
+   * Relative paths are resolved against the workspace root.
+   */
+  const targetDirectoryUri = isAbsolute(normalizedDirPath)
+    ? Uri.file(normalizedDirPath)
+    : Uri.joinPath(workspaceRootUri, normalizedDirPath);
+
+  /**
+   * Security check:
+   * Ensure the resolved path stays inside the workspace root.
+   * Prevents directory traversal and unintended writes.
+   */
+  const relativeCheck = workspace.asRelativePath(targetDirectoryUri, false);
+  if (relativeCheck.startsWith('..')) {
+    window.showErrorMessage(l10n.t('Invalid directory path'));
     return;
   }
 
-  // Split into path segments in a cross-platform way and remove empty/'./' segments
-  const relativePathSegments = normalizedRelativeDirectoryPath
-    .split(/[\\/]+/)
-    .filter((s) => s !== '' && s !== '.');
-
-  // Disallow parent-directory traversals
-  if (relativePathSegments.includes('..')) {
-    await window.showErrorMessage(l10n.t('Invalid directory path'));
-    return;
-  }
-
-  // Determine base folder (first workspace folder)
-  const workspaceRootUri = workspace.workspaceFolders?.[0]?.uri;
-  if (!workspaceRootUri) {
-    await window.showErrorMessage(
-      l10n.t(
-        'No workspace folders are open. Please open a workspace folder to use this extension',
-      ),
-    );
-    return;
-  }
-
-  // Build directory and file URIs using segments to ensure proper joining on all platforms
-  const targetDirectoryUri =
-    relativePathSegments.length > 0
-      ? Uri.joinPath(workspaceRootUri, ...relativePathSegments)
-      : workspaceRootUri;
   const targetFileUri = Uri.joinPath(targetDirectoryUri, filename);
 
   // Track success to show notification after progress completes
@@ -102,10 +99,7 @@ export const saveFile = async (
             await workspace.fs.stat(targetFileUri);
             targetFileExists = true;
           } catch (error: unknown) {
-            if (error instanceof FileSystemError) {
-              targetFileExists = false;
-            } else {
-              // Unknown error - rethrow so outer catch can show it
+            if (!(error instanceof FileSystemError)) {
               throw error;
             }
           }
@@ -116,15 +110,16 @@ export const saveFile = async (
 
           // If file exists, offer to open it instead of overwriting
           if (targetFileExists) {
-            const openLabel = l10n.t('Open File');
+            const openFileLabel = l10n.t('Open File');
             const choice = await window.showWarningMessage(
               l10n.t('File already exists: {0}', filename),
-              openLabel,
+              openFileLabel,
             );
-            if (choice === openLabel) {
+
+            if (choice === openFileLabel) {
               const textDocument =
                 await workspace.openTextDocument(targetFileUri);
-              await window.showTextDocument(textDocument);
+              window.showTextDocument(textDocument);
             }
             return;
           }
@@ -140,7 +135,7 @@ export const saveFile = async (
           // Open the created file in the editor
           const createdTextDocument =
             await workspace.openTextDocument(targetFileUri);
-          await window.showTextDocument(createdTextDocument);
+          window.showTextDocument(createdTextDocument);
 
           // Mark success; show notification after progress resolves
           createdFileFsPath = targetFileUri.fsPath;
@@ -149,7 +144,7 @@ export const saveFile = async (
           clearCache();
         } catch (error: any) {
           // Show a helpful error message including the underlying error if available
-          await window.showErrorMessage(
+          window.showErrorMessage(
             l10n.t(
               'Error creating file: {0}. Please check the path and try again',
               error?.message ?? String(error),
@@ -158,15 +153,16 @@ export const saveFile = async (
         }
       },
     );
+
     // Show success notification after progress dialog closes
     if (createdFileFsPath) {
-      await window.showInformationMessage(
+      window.showInformationMessage(
         l10n.t('File created successfully: {0}', createdFileFsPath),
       );
     }
   } catch (error: any) {
     // Catch failures from withProgress or other unexpected issues
-    await window.showErrorMessage(
+    window.showErrorMessage(
       l10n.t(
         'Error creating file: {0}. Please check the path and try again',
         error?.message ?? String(error),

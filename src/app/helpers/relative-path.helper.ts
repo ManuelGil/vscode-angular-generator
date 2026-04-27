@@ -1,38 +1,62 @@
-import { statSync } from 'fs';
-import { relative, resolve } from 'path';
+/**
+ * @fileoverview Converts absolute URIs into workspace-relative paths.
+ * Used by controllers when a user right-clicks a file or folder in the
+ * explorer so the extension can determine the target directory for
+ * file generation.
+ */
+
+import { extname, relative, resolve } from 'path';
 import { Uri, workspace } from 'vscode';
 
+import { Config } from '../configs';
+import { getWorkspaceRoot } from './workspace-root.helper';
+
 /**
- * Generates a relative path from the workspace root to the specified path.
- * If the given path is a file, it will be resolved to the parent folder.
- * If showPath is disabled, it will return the relative path from the workspace root using
- * {@linkcode Workspace.asRelativePath}.
- * @param {Uri} [path] - The path to generate the relative path from.
- * @returns {string} The relative path.
- * @memberof TerminalController
+ * Converts a URI to a workspace-relative directory path.
+ *
+ * If the URI points to a file, it automatically resolves to the parent
+ * directory so callers always receive a folder path.
+ *
+ * Supports two resolution modes controlled by `isRootContext`:
+ * - **Root context** (`true`): computes a POSIX-style relative path from
+ *   `config.workspaceSelection` using Node's `path.relative`. Used when the
+ *   extension needs paths relative to the user-selected workspace root
+ *   (e.g., for file generation commands).
+ * - **Standard** (`false`): delegates to VS Code's `workspace.asRelativePath`,
+ *   which resolves relative to the nearest workspace folder. Used for
+ *   display purposes and multi-root workspace scenarios.
+ *
+ * @param targetUri - The URI to convert. When `undefined`, returns an empty string.
+ * @param isRootContext - Selects the resolution mode (see above).
+ * @param config - The extension configuration instance.
+ * @returns The workspace-relative directory path, or an empty string when no path is provided.
  */
 export const relativePath = (
-  path: Uri | undefined,
+  targetUri: Uri | undefined,
   isRootContext: boolean,
+  config: Config,
 ): string => {
-  // Check if the path is a file
-  if (path && statSync(path.fsPath).isFile()) {
-    path = Uri.file(resolve(path.fsPath, '..'));
+  let resolvedUri = targetUri;
+
+  // Resolve to parent directory if the URI appears to point to a file.
+  // Use `path.extname` instead of synchronous fs access so this helper
+  // remains safe in remote workspaces where Node fs isn't available.
+  if (resolvedUri && extname(resolvedUri.fsPath) !== '') {
+    resolvedUri = Uri.file(resolve(resolvedUri.fsPath, '..'));
   }
 
-  let folderPath: string = '';
+  let resultingFolderPath = '';
 
   if (isRootContext) {
-    // First workspace is the root => https://code.visualstudio.com/api/references/vscode-api#workspace
-    const wsFolder = workspace.workspaceFolders
-      ? workspace.workspaceFolders[0]
-      : '';
-    if (wsFolder && path) {
-      folderPath = relative(wsFolder.uri.fsPath, path.fsPath);
+    const activeWorkspaceRoot = getWorkspaceRoot(config);
+    if (activeWorkspaceRoot && resolvedUri) {
+      resultingFolderPath = relative(activeWorkspaceRoot, resolvedUri.fsPath);
     }
   } else {
-    folderPath = path ? workspace.asRelativePath(path.fsPath, false) : '';
+    resultingFolderPath = resolvedUri
+      ? workspace.asRelativePath(resolvedUri.fsPath, false)
+      : '';
   }
 
-  return folderPath;
+  return resultingFolderPath;
 };

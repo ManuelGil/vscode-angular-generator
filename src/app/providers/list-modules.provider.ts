@@ -5,11 +5,11 @@ import {
   ThemeIcon,
   TreeDataProvider,
   TreeItem,
-  workspace,
 } from 'vscode';
 
-import { EXTENSION_ID } from '../configs';
+import { CommandIds, EXTENSION_ID } from '../configs';
 import { ListFilesController } from '../controllers';
+import { readFileContent } from '../helpers';
 import { NodeModel } from '../models';
 
 /**
@@ -233,20 +233,21 @@ export class ListModulesProvider implements TreeDataProvider<NodeModel> {
           }
 
           try {
-            const document = await workspace.openTextDocument(file.resourceUri);
             const children: NodeModel[] = [];
+            const content = await readFileContent(file.resourceUri!);
+            const lines = content.split(/\r?\n/);
 
-            for (let i = 0; i < document.lineCount; i++) {
-              const text = document.lineAt(i).text;
+            for (let i = 0; i < lines.length; i++) {
+              const text = lines[i];
               const match = ngModuleDeclarationRegex.exec(text);
 
               if (match) {
-                const propertyName = match[1]; // 'declarations', 'imports', etc.
+                const propertyName = match[1];
                 const label = `${propertyName}: [`;
 
                 children.push(
                   new NodeModel(label, new ThemeIcon('symbol-module'), {
-                    command: `${EXTENSION_ID}.list.gotoLine`,
+                    command: `${EXTENSION_ID}.${CommandIds.ListGotoLine}`,
                     title: text.trim(),
                     arguments: [file.resourceUri, i],
                   }),

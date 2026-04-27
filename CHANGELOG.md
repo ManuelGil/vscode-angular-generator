@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.19.0] - 2026-04-26
+
+### Changed
+
+- Update the activation function to instantiate `ExtensionRuntime` and handle initialization.
+- Remove redundant workspace folder selection logic and associated error handling.
+
 ## [2.18.1] - 2025-09-16
 
 ### Changed
@@ -427,7 +434,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.18.1...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.19.0...HEAD
+[2.19.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.18.1...v2.19.0
 [2.18.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.18.0...v2.18.1
 [2.18.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.17.0...v2.18.0
 [2.17.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.16.0...v2.17.0

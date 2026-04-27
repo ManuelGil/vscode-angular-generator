@@ -53,7 +53,11 @@ export class FileController {
    */
   async generateClass(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -109,7 +113,7 @@ export class FileController {
 
     const filename = `${dasherize(className)}${type}.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -119,7 +123,11 @@ export class FileController {
    */
   async generateComponent(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -185,7 +193,7 @@ export class ${className}${omitSuffix ? '' : 'Component'} {}
 
     const filename = `${dasherize(className)}${omitSuffix ? '' : '.component'}.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -195,7 +203,11 @@ export class ${className}${omitSuffix ? '' : 'Component'} {}
    */
   async generateDirective(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -243,7 +255,7 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
 
     const filename = `${dasherize(className)}${omitSuffix ? '' : '.directive'}.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -253,7 +265,11 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
    */
   async generateEnum(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -295,7 +311,7 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
     const omitSuffix = this.config.omitSuffix;
     const filename = `${dasherize(className)}${omitSuffix ? '' : '.enum'}.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -305,7 +321,11 @@ export class ${className}${omitSuffix ? '' : 'Directive'} {}
    */
   async generateGuard(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -382,7 +402,7 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
 
     const filename = `${dasherize(entityName)}${this.config.typeSeparator}guard.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -392,7 +412,11 @@ export const ${entityName}Guard: ${guardType}Fn = (${params}) => {
    */
   async generateInterceptor(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -450,7 +474,7 @@ export class ${className}Interceptor implements HttpInterceptor {
 
     const filename = `${dasherize(className)}${this.config.typeSeparator}interceptor.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -460,7 +484,11 @@ export class ${className}Interceptor implements HttpInterceptor {
    */
   async generateInterface(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -516,7 +544,7 @@ export class ${className}Interceptor implements HttpInterceptor {
 
     const filename = `${dasherize(className)}${type}.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -526,7 +554,11 @@ export class ${className}Interceptor implements HttpInterceptor {
    */
   async generateModule(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -574,7 +606,7 @@ export class ${className}Module {}
 
     const filename = `${dasherize(className)}${this.config.typeSeparator}module.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -584,7 +616,11 @@ export class ${className}Module {}
    */
   async generatePipe(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -634,7 +670,7 @@ export class ${className}Pipe implements PipeTransform {
 
     const filename = `${dasherize(className)}${this.config.typeSeparator}pipe.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -644,7 +680,11 @@ export class ${className}Pipe implements PipeTransform {
    */
   async generateResolver(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -704,7 +744,7 @@ export class ${className}Resolver implements Resolve<boolean> {
 
     const filename = `${dasherize(className)}${this.config.typeSeparator}resolver.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -714,7 +754,11 @@ export class ${className}Resolver implements Resolve<boolean> {
    */
   async generateService(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -762,7 +806,7 @@ export class ${className}${omitSuffix ? '' : 'Service'} {}
 
     const filename = `${dasherize(className)}${omitSuffix ? '' : '.service'}.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -772,7 +816,11 @@ export class ${className}${omitSuffix ? '' : 'Service'} {}
    */
   async generateTest(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     const skipFolderConfirmation = this.config.skipFolderConfirmation;
     let folder: string | undefined;
@@ -877,7 +925,7 @@ describe('${className}${titleize(type)}', () => {
 
     const filename = `${dasherize(className)}.spec.ts`;
 
-    saveFile(folder, filename, content);
+    saveFile(folder, filename, content, this.config);
   }
 
   /**
@@ -887,7 +935,11 @@ describe('${className}${titleize(type)}', () => {
    */
   async generateCustomElement(path?: Uri): Promise<void> {
     // Get the relative path
-    const folderPath: string = relativePath(path, this.config.useRootWorkspace);
+    const folderPath: string = relativePath(
+      path,
+      this.config.useRootWorkspace,
+      this.config,
+    );
 
     let folder: string | undefined;
 
@@ -964,6 +1016,6 @@ describe('${className}${titleize(type)}', () => {
     const filename = `${dasherize(classNameMatch[1])}${ext}.ts`;
 
     // Save file
-    saveFile(folder!, filename, content);
+    saveFile(folder!, filename, content, this.config);
   }
 }

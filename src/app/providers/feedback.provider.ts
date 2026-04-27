@@ -8,7 +8,7 @@ import {
   TreeItem,
 } from 'vscode';
 
-import { EXTENSION_ID } from '../configs';
+import { CommandIds, EXTENSION_ID } from '../configs';
 import { FeedbackController } from '../controllers';
 import { NodeModel } from '../models';
 
@@ -183,19 +183,19 @@ export class FeedbackProvider implements TreeDataProvider<NodeModel> {
     return [
       new NodeModel(l10n.t('About Us'), new ThemeIcon('info'), {
         title: 'About Us',
-        command: `${EXTENSION_ID}.feedback.aboutUs`,
+        command: `${EXTENSION_ID}.${CommandIds.FeedbackAboutUs}`,
       }),
       new NodeModel(l10n.t('Report an Issue'), new ThemeIcon('bug'), {
         title: 'Report an Issue',
-        command: `${EXTENSION_ID}.feedback.reportIssues`,
+        command: `${EXTENSION_ID}.${CommandIds.FeedbackReportIssues}`,
       }),
       new NodeModel(l10n.t('Rate Us'), new ThemeIcon('star'), {
         title: 'Rate Us',
-        command: `${EXTENSION_ID}.feedback.rateUs`,
+        command: `${EXTENSION_ID}.${CommandIds.FeedbackRateUs}`,
       }),
       new NodeModel(l10n.t('Support Us'), new ThemeIcon('heart'), {
         title: 'Support Us',
-        command: `${EXTENSION_ID}.feedback.supportUs`,
+        command: `${EXTENSION_ID}.${CommandIds.FeedbackSupportUs}`,
       }),
     ];
   }
