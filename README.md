@@ -4,23 +4,43 @@
 [![GitHub Repo stars](https://img.shields.io/github/stars/ManuelGil/vscode-angular-generator?style=for-the-badge&logo=github)](https://github.com/ManuelGil/vscode-angular-generator)
 [![GitHub license](https://img.shields.io/github/license/ManuelGil/vscode-angular-generator?style=for-the-badge&logo=github)](https://github.com/ManuelGil/vscode-angular-generator/blob/main/LICENSE)
 
-**The fastest way to generate Angular files, right from your editor.**
+This extension provides a focused, editor-first interface to scaffold Angular artifacts and invoke Angular CLI commands from within VS Code.
 
-Stop memorizing CLI commands and switching contexts. This extension integrates the Angular CLI into the VSCode UI, letting you scaffold components, services, and modules with a simple right-click.
+Who it's for:
 
-<p align="center">
-  <a href="https://youtu.be/4UW8UQly4v0" title="Watch the Angular File Generator demo">
-      <img src="https://raw.githubusercontent.com/ManuelGil/vscode-angular-generator/main/docs/demo.gif" alt="Angular File Generator Demo">
-  </a>
-</p>
+- Angular developers who routinely scaffold components, services, modules, and other artifacts.
+- Teams that prefer editor-driven scaffolding or want quick access to common `ng` commands without switching contexts.
 
-## Key Features
+When to use it:
 
-- **Accelerate Development:** Quickly scaffold components, services, and other schematics directly from the editor.
-- **Enforce Project Standards:** Ensure consistency with standardized file structures and support for custom templates.
-- **Reduce Command-Line Errors:** Guided UI minimizes mistakes and forgotten flags in `ng generate` commands.
-- **Maintain Focus:** Scaffold, code, and test without leaving your development environment.
-- **Stay Up-to-Date:** Full compatibility with the latest Angular features, including standalone components and signals.
+- Generate files or run `ng` commands while editing code in VS Code.
+- Apply or reuse custom templates for project-specific boilerplate.
+
+## What this extension does
+
+- Generate Angular files (components, services, modules, pipes, guards, interceptors, resolvers, etc.) from the Explorer or Command Palette.
+- Run Angular CLI commands (`ng`), including project start, test, e2e, and generate workflows, from the editor.
+- Support custom templates via the `angular.submenu.templates` setting for repeatable team boilerplate.
+- Provide read-only project navigation lists (files, routes, modules) in a dedicated activity-bar view.
+
+## What this extension does NOT do
+
+- It does NOT replace the Angular CLI; the extension invokes or mirrors CLI behavior where appropriate.
+- It does NOT modify or override `angular.json` or other workspace configuration files.
+- It does NOT silently change project source files beyond the explicit generated artifacts.
+- It does NOT assume workspace layout; it respects the project's configuration and `angular.terminal.cwd` when configured.
+
+## When to use this extension
+
+- When you prefer working from VS Code instead of the terminal
+- When you want faster access to Angular generators
+- When you need consistent file generation with templates
+
+## Usage
+
+- Right-click a folder in the Explorer → choose the `Angular` submenu → pick an artifact to generate.
+- Open the Command Palette (Ctrl/Cmd+Shift+P) → type `Angular` → select a command (Generate Component, Run Tests, Start Server, etc.).
+- Configure custom templates and commands in workspace settings via `angular.submenu.templates` and `angular.submenu.customCommands`.
 
 ## Workflow Comparison: UI vs. CLI
 
@@ -43,7 +63,10 @@ The extension then creates all necessary files with the correct boilerplate and 
 ## Table of Contents
 
 - [Angular File Generator](#angular-file-generator)
-  - [Key Features](#key-features)
+  - [What this extension does](#what-this-extension-does)
+  - [What this extension does NOT do](#what-this-extension-does-not-do)
+  - [When to use this extension](#when-to-use-this-extension)
+  - [Usage](#usage)
   - [Workflow Comparison: UI vs. CLI](#workflow-comparison-ui-vs-cli)
     - [The Old Way (CLI)](#the-old-way-cli)
     - [The Fast Way (This Extension)](#the-fast-way-this-extension)
@@ -65,7 +88,7 @@ The extension then creates all necessary files with the correct boilerplate and 
     - [Settings Options](#settings-options)
     - [Placeholders in customCommands and templates](#placeholders-in-customcommands-and-templates)
     - [File Naming Without Suffixes](#file-naming-without-suffixes)
-  - [Usage](#usage)
+  - [Usage](#usage-1)
   - [Installation](#installation)
   - [Resources](#resources)
   - [Contributing](#contributing)

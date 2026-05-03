@@ -119,7 +119,7 @@ export class ListFilesController {
 
       if (filename && this.config.showPath) {
         const folder = path.split('/').slice(0, -1).join('/');
-        label += folder ? l10n.t(' ({0})', folder) : ` ${l10n.t('(root)')}`;
+        label += folder ? l10n.t(' ({0})', folder) : l10n.t(' (root)');
       }
 
       const node = new NodeModel(

@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.20.0] - 2026-05-02
+
+### Added
+
+- Support Angular project detection in monorepos (including Nx workspaces)
+
+### Changed
+
+- Improve Angular workspace detection using `workspace.findFiles`
+- Centralize command validation in runtime
+- Reduce intrusive behavior by showing contextual hints only when needed
+- Improve command logging clarity
+- Update README for clarity and usage guidance
+
+### Fixed
+
+- Fix Angular workspace detection in certain project structures
+- Fix missing localization entries detected by l10n validation
+
 ## [2.19.0] - 2026-04-26
 
 ### Changed
@@ -434,7 +453,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.19.0...HEAD
+[unreleased]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.20.0...HEAD
+[2.20.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.19.0...v2.20.0
 [2.19.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.18.1...v2.19.0
 [2.18.1]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.18.0...v2.18.1
 [2.18.0]: https://github.com/ManuelGil/vscode-angular-generator/compare/v2.17.0...v2.18.0

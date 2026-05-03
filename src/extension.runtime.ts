@@ -13,6 +13,7 @@ import {
   env,
   l10n,
   MessageItem,
+  OutputChannel,
   Uri,
   WorkspaceFolder,
   window,
@@ -59,6 +60,9 @@ export class ExtensionRuntime {
   private warningShown = false;
   private config!: Config;
   private readonly providers: Array<{ refresh: () => void }> = [];
+  private outputChannel: OutputChannel | undefined;
+  private contextHintShown = false;
+  private angularWorkspaceDetected?: boolean;
 
   constructor(private readonly context: ExtensionContext) {}
 
@@ -117,6 +121,116 @@ export class ExtensionRuntime {
    */
   private getCurrentVersion(): string {
     return this.context.extension.packageJSON?.version ?? '0.0.0';
+  }
+
+  /**
+   * Lazy-initializes and returns the extension's OutputChannel.
+   * Created only on first use to avoid overhead if never needed.
+   */
+  private getOutputChannel(): OutputChannel {
+    if (!this.outputChannel) {
+      this.outputChannel = window.createOutputChannel(EXTENSION_DISPLAY_NAME);
+      this.context.subscriptions.push(this.outputChannel);
+    }
+    return this.outputChannel;
+  }
+
+  /**
+   * Logs a meaningful event to the OutputChannel.
+   * Only logs user-triggered actions, not internal operations.
+   */
+  private logEvent(message: string): void {
+    this.getOutputChannel().appendLine(
+      `[${new Date().toLocaleTimeString()}] ${message}`,
+    );
+  }
+
+  /**
+   * Detects whether the current workspace contains an Angular project.
+   * Searches the whole workspace so nested apps and monorepos are supported.
+   */
+  private async hasAngularWorkspace(): Promise<boolean> {
+    if (this.angularWorkspaceDetected !== undefined) {
+      return this.angularWorkspaceDetected;
+    }
+
+    const [angularFiles, projectFiles] = await Promise.all([
+      workspace.findFiles('**/angular.json', '**/node_modules/**'),
+      workspace.findFiles('**/project.json', '**/node_modules/**'),
+    ]);
+
+    if (angularFiles.length > 0) {
+      this.angularWorkspaceDetected = true;
+      return true;
+    }
+
+    for (const file of projectFiles) {
+      try {
+        const doc = await workspace.openTextDocument(file);
+        const content = JSON.parse(doc.getText());
+
+        const isAngularProject =
+          content?.targets?.build?.executor?.includes('@angular') ||
+          content?.targets?.build?.builder?.includes('@angular');
+
+        if (isAngularProject) {
+          this.angularWorkspaceDetected = true;
+          return true;
+        }
+      } catch {
+        // ignore invalid JSON
+      }
+    }
+
+    this.angularWorkspaceDetected = false;
+    return false;
+  }
+
+  /**
+   * Validates that Angular-specific commands can run in the current workspace.
+   */
+  private async canExecuteAngularContext(): Promise<boolean> {
+    if (!this.config) {
+      return false;
+    }
+
+    if (!this.config?.enable) {
+      window.showErrorMessage(
+        l10n.t(
+          'The {0} extension is disabled in settings. Enable it to use its features',
+          EXTENSION_DISPLAY_NAME,
+        ),
+      );
+
+      return false;
+    }
+
+    const angularDetected = await this.hasAngularWorkspace();
+
+    if (!angularDetected) {
+      window.showWarningMessage(
+        l10n.t('Angular project not detected (angular.json not found)'),
+      );
+
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Displays a context-aware hint only once when appropriate.
+   * Hint explains how to use the extension when user hasn't selected a folder.
+   */
+  private showContextHintOnce(): void {
+    if (this.contextHintShown) {
+      return;
+    }
+
+    const hint = l10n.t('Right-click a folder → Angular → Generate files');
+
+    window.showInformationMessage(hint);
+    this.contextHintShown = true;
   }
 
   /**
@@ -347,7 +461,7 @@ export class ExtensionRuntime {
    * @returns true if the extension is enabled, false otherwise
    */
   private isExtensionEnabled(): boolean {
-    const isEnabled = this.config.enable;
+    const isEnabled = this.config?.enable;
 
     if (isEnabled) {
       this.warningShown = false;
@@ -518,11 +632,6 @@ export class ExtensionRuntime {
   private registerFileCommands(): void {
     const fileController = new FileController(this.config);
 
-    const disabledMessage = l10n.t(
-      'The {0} extension is disabled in settings. Enable it to use its features',
-      EXTENSION_DISPLAY_NAME,
-    );
-
     const fileCommands = [
       {
         id: CommandIds.FileClass,
@@ -579,26 +688,31 @@ export class ExtensionRuntime {
     ];
 
     const fileDisposables = fileCommands.map(({ id, handler }) => {
-      return commands.registerCommand(`${EXTENSION_ID}.${id}`, (args: any) => {
-        if (!this.config.enable) {
-          window.showErrorMessage(disabledMessage);
-          return;
-        }
-        handler(args);
-      });
+      return commands.registerCommand(
+        `${EXTENSION_ID}.${id}`,
+        async (args: any) => {
+          if (!(await this.canExecuteAngularContext())) {
+            return;
+          }
+
+          if (!(args instanceof Uri)) {
+            this.showContextHintOnce();
+          }
+
+          this.logEvent(`Generate ${id.replace('File', '')}`);
+          handler(args);
+        },
+      );
     });
 
     this.context.subscriptions.push(...fileDisposables);
   }
 
-  /** Registers all NestJS CLI terminal commands (generate, start, etc.). */
+  /**
+   * Registers all Angular CLI terminal commands (generate, start, etc.).
+   */
   private registerTerminalCommands(): void {
     const terminalController = new TerminalController(this.config);
-
-    const disabledMessage = l10n.t(
-      'The {0} extension is disabled in settings. Enable it to use its features',
-      EXTENSION_DISPLAY_NAME,
-    );
 
     const terminalCommands = [
       {
@@ -684,19 +798,38 @@ export class ExtensionRuntime {
     ];
 
     const terminalDisposables = terminalCommands.map(({ id, handler }) => {
-      return commands.registerCommand(`${EXTENSION_ID}.${id}`, (args?: any) => {
-        if (!this.config.enable) {
-          window.showErrorMessage(disabledMessage);
-          return;
-        }
-        handler(args);
-      });
+      return commands.registerCommand(
+        `${EXTENSION_ID}.${id}`,
+        async (args?: any) => {
+          const generationCommands = [
+            CommandIds.TerminalComponent,
+            CommandIds.TerminalGuard,
+            CommandIds.TerminalPipe,
+            CommandIds.TerminalService,
+            CommandIds.TerminalCustom,
+            CommandIds.TerminalEnvironments,
+            CommandIds.TerminalLibrary,
+          ];
+
+          if (
+            generationCommands.includes(id as any) &&
+            !(await this.canExecuteAngularContext())
+          ) {
+            return;
+          }
+
+          this.logEvent(`CLI ${id.replace(/Terminal/, '')}: initiated`);
+          handler(args);
+        },
+      );
     });
 
     this.context.subscriptions.push(...terminalDisposables);
   }
 
-  /** Registers data-transformation commands (e.g. JSON to TypeScript). */
+  /**
+   * Registers data-transformation commands (e.g. JSON to TypeScript).
+   */
   private registerTransformCommands(): void {
     const transformController = new TransformController();
 
@@ -714,10 +847,12 @@ export class ExtensionRuntime {
 
     const transformDisposables = transformCommands.map(({ id, handler }) => {
       return commands.registerCommand(`${EXTENSION_ID}.${id}`, () => {
-        if (!this.config.enable) {
+        if (!this.config?.enable) {
           window.showErrorMessage(disabledMessage);
           return;
         }
+        // Log the command execution
+        this.logEvent(`Transform ${id}: JSON to TypeScript`);
         handler();
       });
     });
@@ -725,7 +860,9 @@ export class ExtensionRuntime {
     this.context.subscriptions.push(...transformDisposables);
   }
 
-  /** Registers commands for opening files and navigating to lines from tree views. */
+  /**
+   * Registers commands for opening files and navigating to lines from tree views.
+   */
   private registerListCommands(): void {
     const listFilesController = new ListFilesController(this.config);
 
@@ -737,7 +874,7 @@ export class ExtensionRuntime {
     const disposableListOpenFile = commands.registerCommand(
       `${EXTENSION_ID}.${CommandIds.ListOpenFile}`,
       (uri: any) => {
-        if (!this.config.enable) {
+        if (!this.config?.enable) {
           window.showErrorMessage(disabledMessage);
           return;
         }
@@ -748,7 +885,7 @@ export class ExtensionRuntime {
     const disposableListGotoLine = commands.registerCommand(
       `${EXTENSION_ID}.${CommandIds.ListGotoLine}`,
       (uri: any, line: any) => {
-        if (!this.config.enable) {
+        if (!this.config?.enable) {
           window.showErrorMessage(disabledMessage);
           return;
         }
@@ -762,7 +899,9 @@ export class ExtensionRuntime {
     );
   }
 
-  /** Creates sidebar tree views (files, modules, entities, DTOs, methods) and their refresh commands. */
+  /**
+   * Creates sidebar tree views (files, modules, entities, DTOs, methods) and their refresh commands.
+   */
   private registerTreeViews(): void {
     const listFilesProvider = new ListFilesProvider();
 
@@ -817,7 +956,7 @@ export class ExtensionRuntime {
     const viewRefreshDisposables = viewRefreshCommands.map(
       ({ id, handler }) => {
         return commands.registerCommand(`${EXTENSION_ID}.${id}`, () => {
-          if (!this.config.enable) {
+          if (!this.config?.enable) {
             window.showErrorMessage(disabledMessage);
             return;
           }
@@ -859,7 +998,9 @@ export class ExtensionRuntime {
     );
   }
 
-  /** Watches for file creation and save events to auto-refresh all tree-view providers. */
+  /**
+   * Watches for file creation and save events to auto-refresh all tree-view providers.
+   */
   private registerFileWatchers(): void {
     /**
      * Debounced refresh to avoid excessive UI updates when multiple events fire.
@@ -915,7 +1056,9 @@ export class ExtensionRuntime {
     this.context.subscriptions.push(watcher, disposableSave, disposableCreate);
   }
 
-  /** Registers the feedback tree view and its action commands (about, report, rate, support). */
+  /**
+   * Registers the feedback tree view and its action commands (about, report, rate, support).
+   */
   private registerFeedbackCommands(): void {
     const feedbackProvider = new FeedbackProvider(new FeedbackController());
 
