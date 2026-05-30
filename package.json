@@ -2,7 +2,7 @@
   "name": "vscode-angular-generator",
   "displayName": "Angular File Generator",
   "description": "Generate Angular files and run Angular CLI commands directly from VS Code. Supports custom templates and integrates with your existing project structure.",
-  "version": "2.20.0",
+  "version": "2.20.1",
   "icon": "icon.png",
   "license": "MIT",
   "publisher": "imgildev",
@@ -941,7 +941,7 @@
   },
   "scripts": {
     "vscode:prepublish": "pnpm compile",
-    "compile": "rimraf out && esbuild src/extension.ts --bundle --platform=node --target=node22 --format=cjs --external:vscode --outfile=out/extension.js --minify",
+    "compile": "rimraf out && tsc --noEmit && esbuild src/extension.ts --bundle --platform=node --target=node22 --format=cjs --external:vscode --outfile=out/extension.js && cpy \"src/assets/**/*\" out/assets",
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm compile && pnpm lint",
     "format": "biome format --write .",
@@ -955,7 +955,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.15",
+    "@biomejs/biome": "2.4.16",
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
     "@types/mocha": "^10.0.10",
@@ -983,15 +983,12 @@
   },
   "pnpm": {
     "overrides": {
-      "@conventional-changelog/git-client": "^2.0.0",
-      "brace-expansion": "^5.0.5",
-      "diff": "^8.0.3",
-      "follow-redirects": "^1.16.0",
-      "markdown-it": "^14.1.1",
-      "minimatch": "^9.0.7",
-      "picomatch": "^2.3.2",
-      "serialize-javascript": "^7.0.5",
-      "yaml": "^2.8.3"
+      "@conventional-changelog/git-client@<2.0.0": ">=2.0.0",
+      "diff@>=6.0.0 <8.0.3": ">=8.0.3",
+      "serialize-javascript@<=7.0.2": ">=7.0.3",
+      "fast-uri@<=3.1.1": ">=3.1.2",
+      "brace-expansion@>=5.0.0 <5.0.6": ">=5.0.6",
+      "serialize-javascript@>=5.0.0 <7.0.5": ">=7.0.5"
     },
     "onlyBuiltDependencies": [
       "esbuild"
