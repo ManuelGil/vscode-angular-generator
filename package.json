@@ -955,7 +955,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.4",
+    "@biomejs/biome": "2.5.5",
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
     "@types/mocha": "^10.0.10",
@@ -978,7 +978,7 @@
     "ignore": "^7.0.6",
     "json-to-ts": "^2.1.0",
     "json5": "^2.2.3",
-    "p-limit": "^7.3.0",
+    "p-limit": "^7.3.1",
     "vscode-marketplace-client": "^1.2.4"
   },
   "pnpm": {
